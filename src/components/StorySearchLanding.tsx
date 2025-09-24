@@ -147,7 +147,7 @@ const StorySearchLanding = () => {
               transition={{ delay: 0.5 }}
               className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12"
             >
-              <button className="group btn-ai-primary flex items-center">
+              <button className="group btn-ai-primary flex items-center" onClick={() => window.location.href = '/app'}>
                 Start Free Trial
                 <Rocket className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
               </button>
@@ -341,7 +341,7 @@ const StorySearchLanding = () => {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
-              <button className="btn-ai-primary">
+              <button className="btn-ai-primary" onClick={() => window.location.href = '/app'}>
                 Start Your Free Trial
               </button>
               <button className="btn-ai-ghost">
