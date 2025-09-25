@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { SearchProvider } from '../contexts/SearchContext';
-import Header from './UI/Header';
+import Header from './ui/Header';
 import SearchInterface from './Search/SearchInterface';
 import ResultsGrid from './Results/ResultsGrid';
 import AISidebar from './AIFeatures/AISidebar';
 import SearchAnalytics from './AIFeatures/SearchAnalytics';
-import Onboarding, { QuickTips } from './UI/Onboarding';
+import Onboarding, { QuickTips } from './ui/Onboarding';
 import { useSearchShortcuts, KeyboardShortcutsHelp } from '../hooks/useKeyboardShortcuts';
-import { Toast } from './UI/Skeleton';
+import { Toast } from './ui/Skeleton';
 
 const StorySearchApp: React.FC = () => {
   const [isAISidebarOpen, setAISidebarOpen] = useState(false);

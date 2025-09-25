@@ -9,7 +9,7 @@ import NotFound from "./pages/NotFound";
 import AnalyticsDashboard from "./components/AIFeatures/AnalyticsDashboard";
 import TestPage from "./pages/TestPage";
 import DiagnosticPage from "./pages/DiagnosticPage";
-import FloatingAIChatbot from "./components/UI/FloatingAIChatbot";
+import FloatingAIChatbot from "./components/ui/FloatingAIChatbot";
 import { AIContextProvider } from "./contexts/AIContext";
 
 const queryClient = new QueryClient();

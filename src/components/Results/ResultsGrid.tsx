@@ -19,7 +19,8 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import ResultCard from './ResultCard';
-import { SearchResultSkeleton, SearchProgressBar, EmptyState } from '../UI/Skeleton';
+import LoadingSpinner from '../ui/LoadingSpinner';
+import EmptyState from '../ui/EmptyState';
 import type { SearchResult } from '../../services/storyblokService';
 
 const ResultsGrid: React.FC = () => {
@@ -126,25 +127,32 @@ const ResultsGrid: React.FC = () => {
         className="space-y-6"
       >
         {/* Loading Header */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <h2 className="text-2xl font-bold text-foreground">Searching...</h2>
-            <SearchProgressBar progress={75} text="Finding relevant content" />
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <h2 className="text-2xl font-bold text-foreground">Searching...</h2>
+              <div className="w-32 h-2 bg-muted rounded-full overflow-hidden">
+                <div className="h-full bg-primary animate-pulse" style={{width: '75%'}}></div>
+              </div>
+              <span className="text-sm text-muted-foreground">Finding relevant content</span>
+            </div>
           </div>
-        </div>
 
-        {/* Skeleton Results */}
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {[1, 2, 3, 4, 5, 6].map((index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-            >
-              <SearchResultSkeleton />
-            </motion.div>
-          ))}
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {[1, 2, 3, 4, 5, 6].map((index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                className="bg-card border rounded-lg p-4 space-y-3"
+              >
+                <div className="h-4 bg-muted rounded animate-pulse"></div>
+                <div className="h-3 bg-muted rounded animate-pulse w-3/4"></div>
+                <div className="h-3 bg-muted rounded animate-pulse w-1/2"></div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </motion.div>
     );

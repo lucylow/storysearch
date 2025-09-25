@@ -1,7 +1,6 @@
 import { useCallback, useState, useEffect } from 'react';
 import { useSearchContext } from '../contexts/SearchContext';
 import { storyblokService } from '../services/storyblokService';
-import { algoliaService } from '../services/algoliaService';
 
 export const useSearch = () => {
   const {
@@ -37,15 +36,19 @@ export const useSearch = () => {
   useEffect(() => {
     const loadInitialData = async () => {
       try {
-        const [suggestionsData, historyData, popularData] = await Promise.all([
-          algoliaService.getSuggestions(''),
-          algoliaService.getSearchHistory(),
-          algoliaService.getPopularSearches()
+        const [suggestionsData, historyData] = await Promise.all([
+          storyblokService.getSuggestions(''),
+          Promise.resolve([]) // Replace with actual history when implemented
         ]);
         
-        setSuggestions(suggestionsData);
+        setSuggestions({
+          suggestions: suggestionsData,
+          popular: [],
+          trending: [],
+          categories: []
+        });
         setSearchHistory(historyData);
-        setPopularSearches(popularData);
+        setPopularSearches([]);
       } catch (err) {
         console.error('Failed to load initial search data:', err);
       }
@@ -59,8 +62,13 @@ export const useSearch = () => {
     const updateSuggestions = async () => {
       if (query.length > 0) {
         try {
-          const suggestionsData = await algoliaService.getSuggestions(query);
-          setSuggestions(suggestionsData);
+          const suggestionsData = await storyblokService.getSuggestions(query);
+          setSuggestions({
+            suggestions: suggestionsData,
+            popular: [],
+            trending: [],
+            categories: []
+          });
           setShowSuggestions(true);
         } catch (err) {
           console.error('Failed to get suggestions:', err);
@@ -89,25 +97,14 @@ export const useSearch = () => {
     setShowSuggestions(false);
 
     try {
-      // Use enhanced Algolia search with filters
-      const searchFilters_ = searchFilters || filters;
-      const searchResults = await algoliaService.search(queryToSearch, {
-        type: searchFilters_?.type,
-        dateRange: searchFilters_?.dateRange,
-        tags: searchFilters_?.tags,
-        sortBy: searchFilters_?.sortBy || 'relevance',
-        limit: searchFilters_?.limit || 50
-      });
-
+      // Use Storyblok service for search
+      const searchResults = await storyblokService.search(queryToSearch);
       setResults(searchResults);
       
       if (searchQuery) {
         setQuery(searchQuery);
       }
 
-      // Save search query to history
-      await algoliaService.saveSearchQuery(queryToSearch);
-      
       // Update search history
       setSearchHistory(prev => {
         const newHistory = [queryToSearch, ...prev.filter(item => item !== queryToSearch)];
@@ -136,9 +133,15 @@ export const useSearch = () => {
 
   const getSearchSuggestions = useCallback(async (query: string) => {
     try {
-      const suggestionsData = await algoliaService.getSuggestions(query);
-      setSuggestions(suggestionsData);
-      return suggestionsData;
+      const suggestionsData = await storyblokService.getSuggestions(query);
+      const formattedSuggestions = {
+        suggestions: suggestionsData,
+        popular: [],
+        trending: [],
+        categories: []
+      };
+      setSuggestions(formattedSuggestions);
+      return formattedSuggestions;
     } catch (err) {
       console.error('Failed to get suggestions:', err);
       return { suggestions: [], popular: [], trending: [], categories: [] };

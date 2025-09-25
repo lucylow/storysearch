@@ -119,7 +119,6 @@ export const useAIChat = () => {
 
     try {
       const response = await storyblokService.generateContextualResponse(message, {
-        currentContent: context.currentContent,
         searchHistory: memory.conversationHistory.map(c => c.query),
         userPreferences: memory.userPreferences
       });

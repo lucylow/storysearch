@@ -111,6 +111,31 @@ class StoryblokService {
     return response.stories || [];
   }
 
+  async generateContextualResponse(message: string, context?: any) {
+    try {
+      const response = await this.callAIFunction('ai-contextual-response', {
+        message,
+        context: context || {}
+      });
+      
+      return {
+        response: response.response || 'I understand your request. How can I help you with your content?',
+        suggestions: response.suggestions || [],
+        relatedContent: response.relatedContent || [],
+        confidence: response.confidence || 0.8
+      };
+    } catch (error) {
+      console.error('Contextual response generation failed:', error);
+      // Fallback response
+      return {
+        response: 'I understand your request. How can I help you with your content?',
+        suggestions: [],
+        relatedContent: [],
+        confidence: 0.5
+      };
+    }
+  }
+
   async search(query: string, spaceId?: number): Promise<SearchResult[]> {
     try {
       // If no spaceId provided, get the first available space
