@@ -63,6 +63,25 @@ class StoryblokService {
     return data;
   }
 
+  private async callAIFunction(functionName: string, params: Record<string, unknown> = {}) {
+    try {
+      const { data, error } = await supabase.functions.invoke('ai-chat', {
+        body: { function: functionName, params }
+      });
+
+      if (error) {
+        console.error('AI Function error:', error);
+        throw new Error(`AI Function error: ${error.message}`);
+      }
+
+      return data;
+    } catch (error) {
+      console.error('AI Function call failed:', error);
+      // Return empty response for fallback
+      return {};
+    }
+  }
+
   async getSpaces(): Promise<StoryblokSpace[]> {
     const response = await this.callStoryblokAPI('getSpaces');
     return response.spaces || [];

@@ -106,11 +106,12 @@ const StorySearchLanding = () => {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2 }}
-              className="inline-flex items-center px-4 py-2 glass rounded-full mb-6 hover:scale-105 transition-transform cursor-pointer"
+              whileHover={{ scale: 1.05, y: -2 }}
+              className="inline-flex items-center px-6 py-3 glass rounded-full mb-8 hover:shadow-[0_0_30px_hsl(var(--primary)/0.3)] transition-all duration-300 cursor-pointer group"
             >
-              <Sparkles className="w-4 h-4 text-accent mr-2" />
-              <span className="text-sm font-medium text-foreground">AI-Powered Content Discovery</span>
-              <ArrowRight className="w-4 h-4 ml-2 text-primary" />
+              <Sparkles className="w-5 h-5 text-accent mr-3 group-hover:animate-spin" />
+              <span className="text-sm font-semibold text-foreground">AI-Powered Content Discovery</span>
+              <ArrowRight className="w-4 h-4 ml-3 text-primary group-hover:translate-x-1 transition-transform" />
             </motion.div>
 
             {/* Main Heading */}
@@ -118,15 +119,37 @@ const StorySearchLanding = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="text-5xl md:text-7xl font-bold mb-6 leading-tight"
+              className="text-6xl md:text-8xl font-bold mb-8 leading-tight"
             >
-              <span className="text-gradient-hero">
+              <motion.span 
+                className="text-gradient-hero block"
+                animate={{ 
+                  backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
+                }}
+                transition={{ 
+                  duration: 8, 
+                  repeat: Infinity, 
+                  ease: "linear" 
+                }}
+                style={{ backgroundSize: '200% 200%' }}
+              >
                 Intelligent Content
-              </span>
-              <br />
-              <span className="text-gradient">
+              </motion.span>
+              <motion.span 
+                className="text-gradient block"
+                animate={{ 
+                  backgroundPosition: ['100% 50%', '0% 50%', '100% 50%']
+                }}
+                transition={{ 
+                  duration: 8, 
+                  repeat: Infinity, 
+                  ease: "linear",
+                  delay: 1
+                }}
+                style={{ backgroundSize: '200% 200%' }}
+              >
                 Discovery for Storyblok
-              </span>
+              </motion.span>
             </motion.h1>
 
             {/* Subheading */}
@@ -134,10 +157,12 @@ const StorySearchLanding = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-4xl mx-auto leading-relaxed"
+              className="text-xl md:text-3xl text-muted-foreground mb-12 max-w-5xl mx-auto leading-relaxed"
             >
-              Transform how users discover your Storyblok content with AI-powered search, 
-              natural language understanding, and intelligent recommendations powered by Algolia.
+              Transform how users discover your Storyblok content with{' '}
+              <span className="text-primary font-semibold">AI-powered search</span>,{' '}
+              <span className="text-secondary font-semibold">natural language understanding</span>, and{' '}
+              <span className="text-accent font-semibold">intelligent recommendations</span> powered by Algolia.
             </motion.p>
 
             {/* CTA Buttons */}
@@ -145,25 +170,35 @@ const StorySearchLanding = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12"
+              className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16"
             >
-              <button className="group btn-ai-primary flex items-center" onClick={() => window.location.href = '/app'}>
+              <motion.button 
+                className="group btn-ai-primary flex items-center text-lg px-10 py-5" 
+                onClick={() => window.location.href = '/app'}
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Zap className="w-6 h-6 mr-3 group-hover:animate-pulse" />
                 Start Free Trial
-                <Rocket className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-              </button>
+                <Rocket className="w-6 h-6 ml-3 group-hover:translate-x-1 transition-transform" />
+              </motion.button>
               
-              <button className="group btn-ai-ghost flex items-center">
-                <Play className="w-5 h-5 mr-2" />
+              <motion.button 
+                className="group btn-ai-ghost flex items-center text-lg px-10 py-5"
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Play className="w-6 h-6 mr-3 group-hover:scale-110 transition-transform" />
                 Watch Demo
-              </button>
+              </motion.button>
             </motion.div>
 
-            {/* Stats */}
+            {/* Enhanced Stats */}
             <motion.div 
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
-              className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-2xl mx-auto"
+              className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto"
             >
               {stats.map((stat, index) => (
                 <motion.div
@@ -171,10 +206,23 @@ const StorySearchLanding = () => {
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: index * 0.1 + 0.7 }}
-                  className="text-center"
+                  whileHover={{ scale: 1.05, y: -5 }}
+                  className="text-center p-6 glass rounded-2xl border border-border/50 hover:border-primary/30 hover:shadow-[0_0_30px_hsl(var(--primary)/0.2)] transition-all duration-300"
                 >
-                  <div className="text-2xl md:text-3xl font-bold text-gradient mb-1">{stat.number}</div>
-                  <div className="text-sm text-muted-foreground">{stat.label}</div>
+                  <motion.div 
+                    className="text-3xl md:text-4xl font-bold text-gradient mb-2"
+                    animate={{ 
+                      scale: [1, 1.1, 1],
+                    }}
+                    transition={{ 
+                      duration: 2,
+                      repeat: Infinity,
+                      delay: index * 0.2
+                    }}
+                  >
+                    {stat.number}
+                  </motion.div>
+                  <div className="text-sm text-muted-foreground font-medium">{stat.label}</div>
                 </motion.div>
               ))}
             </motion.div>

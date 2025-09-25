@@ -5,8 +5,6 @@ import { useSearch } from '../../hooks/useSearch';
 import { useVoiceSearch } from '../../hooks/useVoiceSearch';
 import { storyblokService, SearchEnhancement } from '../../services/storyblokService';
 import AIChatInterface from './AIChatInterface';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 
 interface SearchInterfaceProps {
   mode: 'standard' | 'ai-chat';
@@ -91,9 +89,14 @@ const SearchInterface: React.FC<SearchInterfaceProps> = ({ mode }) => {
             exit={{ opacity: 0, y: -20 }}
             className="relative"
           >
-            <div className={`relative transition-all duration-300 ${
-              isFocused ? 'scale-105' : 'scale-100'
-            }`}>
+            <motion.div 
+              className="relative"
+              animate={{ 
+                scale: isFocused ? 1.02 : 1,
+                y: isFocused ? -2 : 0
+              }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+            >
               <input
                 ref={inputRef}
                 type="text"
@@ -103,37 +106,41 @@ const SearchInterface: React.FC<SearchInterfaceProps> = ({ mode }) => {
                 onBlur={() => setIsFocused(false)}
                 onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
                 placeholder="Ask anything about your Storyblok content..."
-                className="w-full px-6 py-4 text-lg glass rounded-2xl border-2 border-border focus:border-primary focus:outline-none focus:shadow-[0_0_30px_hsl(var(--primary)/0.2)] transition-all duration-300"
+                className="w-full px-8 py-6 text-xl glass rounded-3xl border-2 border-border focus:border-primary focus:outline-none focus:shadow-[0_0_40px_hsl(var(--primary)/0.3)] transition-all duration-500 bg-gradient-to-r from-background/50 to-background/30 backdrop-blur-xl"
               />
               
               {/* Search Actions */}
-              <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex gap-2">
-                <button
+              <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex gap-3">
+                <motion.button
                   onClick={handleVoiceSearch}
-                  className={`p-2 rounded-full transition-all ${
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  className={`p-3 rounded-full transition-all duration-300 ${
                     isListening 
-                      ? 'bg-destructive/10 text-destructive animate-pulse-glow' 
-                      : 'glass text-muted-foreground hover:text-foreground'
+                      ? 'bg-destructive/20 text-destructive animate-pulse-glow shadow-[0_0_20px_hsl(var(--destructive)/0.4)]' 
+                      : 'glass text-muted-foreground hover:text-foreground hover:bg-primary/10 hover:shadow-[0_0_15px_hsl(var(--primary)/0.2)]'
                   }`}
                   title="Voice Search"
                 >
-                  <Mic className="w-5 h-5" />
-                </button>
+                  <Mic className="w-6 h-6" />
+                </motion.button>
                 
-                <button
+                <motion.button
                   onClick={() => handleSearch()}
                   disabled={isLoading}
-                  className="p-2 bg-ai-gradient text-white rounded-full hover:shadow-[0_0_20px_hsl(var(--primary)/0.4)] disabled:opacity-50 transition-all"
+                  whileHover={{ scale: isLoading ? 1 : 1.1 }}
+                  whileTap={{ scale: isLoading ? 1 : 0.9 }}
+                  className="p-3 bg-ai-gradient text-white rounded-full hover:shadow-[0_0_30px_hsl(var(--primary)/0.5)] disabled:opacity-50 transition-all duration-300"
                   title="Search"
                 >
                   {isLoading ? (
-                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
                   ) : (
-                    <Search className="w-5 h-5" />
+                    <Search className="w-6 h-6" />
                   )}
-                </button>
+                </motion.button>
               </div>
-            </div>
+            </motion.div>
 
             {/* AI Enhancement Suggestions */}
             <AnimatePresence>
@@ -150,14 +157,12 @@ const SearchInterface: React.FC<SearchInterfaceProps> = ({ mode }) => {
                         <Brain className="w-4 h-4 text-purple-600" />
                         AI Enhanced Search
                       </div>
-                      <Button
-                        variant="ghost"
-                        size="sm"
+                      <button
                         onClick={() => setShowEnhancement(false)}
-                        className="text-xs h-6 px-2"
+                        className="text-xs h-6 px-2 text-muted-foreground hover:text-foreground transition-colors"
                       >
                         ✕
-                      </Button>
+                      </button>
                     </div>
 
                     {/* Enhanced Query */}
@@ -168,16 +173,15 @@ const SearchInterface: React.FC<SearchInterfaceProps> = ({ mode }) => {
                           <span className="text-sm font-medium text-purple-800 dark:text-purple-200">Enhanced Query</span>
                         </div>
                         <p className="text-sm text-purple-700 dark:text-purple-300 mb-2">{enhancement.enhancedQuery}</p>
-                        <Button
-                          size="sm"
+                        <button
                           onClick={() => {
                             setQuery(enhancement.enhancedQuery);
                             handleSearch(enhancement.enhancedQuery);
                           }}
-                          className="h-7 px-3 text-xs bg-purple-600 hover:bg-purple-700"
+                          className="h-7 px-3 text-xs bg-purple-600 hover:bg-purple-700 text-white rounded transition-colors"
                         >
                           Use Enhanced Query
-                        </Button>
+                        </button>
                       </div>
                     )}
 
@@ -187,9 +191,9 @@ const SearchInterface: React.FC<SearchInterfaceProps> = ({ mode }) => {
                         <Target className="w-4 h-4 text-blue-600" />
                         <span className="text-sm font-medium text-foreground">Search Intent</span>
                       </div>
-                      <Badge variant="outline" className="text-xs">
+                      <span className="text-xs px-2 py-1 bg-primary/10 text-primary rounded-full border border-primary/20">
                         {enhancement.intent}
-                      </Badge>
+                      </span>
                     </div>
 
                     {/* Suggestions */}

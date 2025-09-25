@@ -13,7 +13,8 @@ import {
   ThumbsUp,
   RefreshCw,
   Sparkles,
-  Lightbulb
+  Lightbulb,
+  Activity
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -22,46 +23,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
 import { storyblokService, ContentInsight } from '../../services/storyblokService';
-
-interface AnalyticsData {
-  totalSearches: number;
-  successRate: number;
-  avgResponseTime: number;
-  userSatisfaction: number;
-  topQueries: Array<{
-    query: string;
-    count: number;
-    intent: string;
-  }>;
-  contentPerformance: Array<{
-    title: string;
-    views: number;
-    engagement: number;
-    type: string;
-  }>;
-  aiInsights: {
-    intentAccuracy: number;
-    semanticMatching: number;
-    personalizationScore: number;
-    contentRecommendations: number;
-  };
-  trends: {
-    searchVolume: Array<{
-      period: string;
-      searches: number;
-    }>;
-    popularTopics: Array<{
-      topic: string;
-      growth: number;
-    }>;
-  };
-}
+import { aiAnalyticsService, AIAnalyticsInsight, AIAnalyticsReport, AnalyticsData } from '../../services/aiAnalyticsService';
 
 const AnalyticsDashboard: React.FC = () => {
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [aiInsights, setAiInsights] = useState<ContentInsight[]>([]);
   const [insightsLoading, setInsightsLoading] = useState(false);
+  const [aiAnalyticsInsights, setAiAnalyticsInsights] = useState<AIAnalyticsInsight[]>([]);
+  const [aiReport, setAiReport] = useState<AIAnalyticsReport | null>(null);
+  const [aiLoading, setAiLoading] = useState(false);
+  const [selectedInsightType, setSelectedInsightType] = useState<'all' | 'trend' | 'anomaly' | 'recommendation' | 'prediction' | 'optimization'>('all');
 
   const generateAIInsights = async () => {
     setInsightsLoading(true);
@@ -108,6 +80,51 @@ const AnalyticsDashboard: React.FC = () => {
     }
   };
 
+  const generateAIAnalytics = async () => {
+    if (!analytics) return;
+    
+    setAiLoading(true);
+    try {
+      const [insights, report] = await Promise.all([
+        aiAnalyticsService.generateAnalyticsInsights(analytics),
+        aiAnalyticsService.generateAnalyticsReport(analytics)
+      ]);
+      
+      setAiAnalyticsInsights(insights);
+      setAiReport(report);
+    } catch (error) {
+      console.error('Failed to generate AI analytics:', error);
+      // Set fallback data
+      setAiAnalyticsInsights([]);
+      setAiReport(null);
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
+  const generatePredictions = async () => {
+    if (!analytics) return;
+    
+    try {
+      const predictions = await aiAnalyticsService.generateTrendPredictions(analytics);
+      // You can add predictions to the report or display them separately
+      console.log('Generated predictions:', predictions);
+    } catch (error) {
+      console.error('Failed to generate predictions:', error);
+    }
+  };
+
+  const generateAnomalyDetection = async () => {
+    if (!analytics) return;
+    
+    try {
+      const anomalies = await aiAnalyticsService.detectAnomalies(analytics);
+      console.log('Detected anomalies:', anomalies);
+    } catch (error) {
+      console.error('Failed to detect anomalies:', error);
+    }
+  };
+
   useEffect(() => {
     // Simulate loading analytics data
     const loadAnalytics = async () => {
@@ -118,48 +135,75 @@ const AnalyticsDashboard: React.FC = () => {
         successRate: 94.2,
         avgResponseTime: 0.23,
         userSatisfaction: 4.8,
+        bounceRate: 12.3,
+        avgSessionDuration: 4.2,
+        uniqueVisitors: 8947,
+        returningVisitors: 6900,
         topQueries: [
-          { query: "headless cms benefits", count: 1247, intent: "Educational" },
-          { query: "storyblok vs wordpress", count: 892, intent: "Comparison" },
-          { query: "how to migrate cms", count: 734, intent: "Tutorial" },
-          { query: "api integration guide", count: 623, intent: "Implementation" },
-          { query: "content modeling best practices", count: 567, intent: "Best Practices" }
+          { query: "headless cms benefits", count: 1247, intent: "Educational", successRate: 96.2, avgTime: 2.3 },
+          { query: "storyblok vs wordpress", count: 892, intent: "Comparison", successRate: 94.8, avgTime: 3.1 },
+          { query: "how to migrate cms", count: 734, intent: "Tutorial", successRate: 97.1, avgTime: 4.2 },
+          { query: "api integration guide", count: 623, intent: "Implementation", successRate: 93.5, avgTime: 2.8 },
+          { query: "content modeling best practices", count: 567, intent: "Best Practices", successRate: 95.7, avgTime: 3.5 }
         ],
         contentPerformance: [
-          { title: "Getting Started Guide", views: 3421, engagement: 87, type: "Tutorial" },
-          { title: "Migration Case Study", views: 2876, engagement: 92, type: "Case Study" },
-          { title: "API Documentation", views: 2543, engagement: 78, type: "Documentation" },
-          { title: "Best Practices", views: 2198, engagement: 85, type: "Guide" }
+          { title: "Getting Started Guide", views: 3421, engagement: 87, type: "Tutorial", conversionRate: 12.3, avgTimeOnPage: 4.2 },
+          { title: "Migration Case Study", views: 2876, engagement: 92, type: "Case Study", conversionRate: 15.7, avgTimeOnPage: 5.8 },
+          { title: "API Documentation", views: 2543, engagement: 78, type: "Documentation", conversionRate: 8.9, avgTimeOnPage: 3.1 },
+          { title: "Best Practices", views: 2198, engagement: 85, type: "Guide", conversionRate: 11.2, avgTimeOnPage: 4.7 }
         ],
-        aiInsights: {
-          intentAccuracy: 96.8,
-          semanticMatching: 94.1,
-          personalizationScore: 89.3,
-          contentRecommendations: 91.7
-        },
+        deviceBreakdown: [
+          { device: "Desktop", percentage: 45.2, searches: 7163 },
+          { device: "Mobile", percentage: 38.7, searches: 6133 },
+          { device: "Tablet", percentage: 16.1, searches: 2551 }
+        ],
+        geographicData: [
+          { country: "United States", searches: 4234, percentage: 26.7 },
+          { country: "United Kingdom", searches: 2876, percentage: 18.1 },
+          { country: "Germany", searches: 1987, percentage: 12.5 },
+          { country: "Canada", searches: 1654, percentage: 10.4 },
+          { country: "Australia", searches: 1234, percentage: 7.8 }
+        ],
         trends: {
           searchVolume: [
-            { period: "Week 1", searches: 2341 },
-            { period: "Week 2", searches: 2876 },
-            { period: "Week 3", searches: 3421 },
-            { period: "Week 4", searches: 4123 },
-            { period: "Week 5", searches: 3086 }
+            { period: "Week 1", searches: 2341, successRate: 92.1 },
+            { period: "Week 2", searches: 2876, successRate: 94.3 },
+            { period: "Week 3", searches: 3421, successRate: 95.7 },
+            { period: "Week 4", searches: 4123, successRate: 96.2 },
+            { period: "Week 5", searches: 3086, successRate: 94.8 }
           ],
           popularTopics: [
-            { topic: "Headless CMS", growth: 23.4 },
-            { topic: "API Integration", growth: 18.7 },
-            { topic: "Migration", growth: 15.2 },
-            { topic: "Performance", growth: 12.8 }
+            { topic: "Headless CMS", growth: 23.4, searches: 3421 },
+            { topic: "API Integration", growth: 18.7, searches: 2876 },
+            { topic: "Migration", growth: 15.2, searches: 1987 },
+            { topic: "Performance", growth: 12.8, searches: 1654 }
+          ],
+          hourlyActivity: [
+            { hour: "00:00", searches: 234 },
+            { hour: "06:00", searches: 456 },
+            { hour: "09:00", searches: 1234 },
+            { hour: "12:00", searches: 1876 },
+            { hour: "15:00", searches: 1654 },
+            { hour: "18:00", searches: 1432 },
+            { hour: "21:00", searches: 987 }
           ]
-        }
+        },
+        realTimeActivity: [
+          { query: "best headless cms 2024", intent: "Comparison", time: "2s ago", location: "San Francisco, CA", device: "Desktop" },
+          { query: "how to setup storyblok", intent: "Tutorial", time: "5s ago", location: "London, UK", device: "Mobile" },
+          { query: "content modeling guide", intent: "Educational", time: "8s ago", location: "Berlin, DE", device: "Desktop" },
+          { query: "api rate limits", intent: "Documentation", time: "12s ago", location: "Toronto, CA", device: "Tablet" },
+          { query: "migration checklist", intent: "Implementation", time: "15s ago", location: "Sydney, AU", device: "Mobile" }
+        ]
       });
       
       setLoading(false);
     };
 
-    loadAnalytics();
-    generateAIInsights();
-  }, []);
+      loadAnalytics();
+      generateAIInsights();
+      generateAIAnalytics();
+    }, []);
 
   if (loading) {
     return (
@@ -276,16 +320,26 @@ const AnalyticsDashboard: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {Object.entries(analytics.aiInsights).map(([key, value], index) => (
-                  <div key={index} className="text-center">
-                    <div className="text-2xl font-bold text-purple-600 mb-1">
-                      {value}%
-                    </div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400 capitalize">
-                      {key.replace(/([A-Z])/g, ' $1').trim()}
-                    </div>
-                  </div>
-                ))}
+                <div className="text-center p-6 bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-lg">
+                  <div className="text-3xl font-bold text-purple-600 mb-2">96.8%</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400 capitalize mb-3">Intent Accuracy</div>
+                  <Progress value={96.8} className="h-2" />
+                </div>
+                <div className="text-center p-6 bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-lg">
+                  <div className="text-3xl font-bold text-purple-600 mb-2">94.1%</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400 capitalize mb-3">Semantic Matching</div>
+                  <Progress value={94.1} className="h-2" />
+                </div>
+                <div className="text-center p-6 bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-lg">
+                  <div className="text-3xl font-bold text-purple-600 mb-2">89.3%</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400 capitalize mb-3">Personalization Score</div>
+                  <Progress value={89.3} className="h-2" />
+                </div>
+                <div className="text-center p-6 bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-lg">
+                  <div className="text-3xl font-bold text-purple-600 mb-2">91.7%</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400 capitalize mb-3">Content Recommendations</div>
+                  <Progress value={91.7} className="h-2" />
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -358,6 +412,265 @@ const AnalyticsDashboard: React.FC = () => {
                       )}
                     </motion.div>
                   ))}
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
+
+        {/* AI Analytics Insights */}
+        {aiAnalyticsInsights.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6 }}
+            className="mb-8"
+          >
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <Brain className="h-5 w-5 mr-2 text-purple-600" />
+                    AI Analytics Insights
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={generateAIAnalytics}
+                      disabled={aiLoading}
+                      className="text-xs"
+                    >
+                      {aiLoading ? (
+                        <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin mr-2" />
+                      ) : (
+                        <RefreshCw className="w-4 h-4 mr-2" />
+                      )}
+                      Refresh AI Analytics
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={generatePredictions}
+                      className="text-xs"
+                    >
+                      <TrendingUp className="w-4 h-4 mr-2" />
+                      Predictions
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={generateAnomalyDetection}
+                      className="text-xs"
+                    >
+                      <Activity className="w-4 h-4 mr-2" />
+                      Anomalies
+                    </Button>
+                  </div>
+                </CardTitle>
+                <CardDescription>
+                  Advanced AI-powered analytics and insights generated from your data
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {aiAnalyticsInsights.map((insight, index) => (
+                    <motion.div
+                      key={insight.id}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: index * 0.1 }}
+                      className="p-4 glass rounded-lg border border-border/50 hover:border-primary/30 transition-colors"
+                    >
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex-1">
+                          <div className="flex items-center space-x-2 mb-2">
+                            <h4 className="font-medium text-sm text-foreground">
+                              {insight.title}
+                            </h4>
+                            <Badge 
+                              variant={insight.priority === 'high' ? 'destructive' : insight.priority === 'medium' ? 'default' : 'secondary'}
+                              className="text-xs"
+                            >
+                              {insight.priority}
+                            </Badge>
+                          </div>
+                          <div className="text-2xl font-bold text-purple-600 mb-1">
+                            {typeof insight.metrics.current === 'number' 
+                              ? insight.metrics.current.toLocaleString() 
+                              : insight.metrics.current}
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <div className={`text-xs font-medium ${
+                              insight.metrics.trend === 'up' ? 'text-green-600' :
+                              insight.metrics.trend === 'down' ? 'text-red-600' :
+                              'text-gray-600'
+                            }`}>
+                              {insight.metrics.trend === 'up' ? '↗' : insight.metrics.trend === 'down' ? '↘' : '→'}
+                              {insight.metrics.trend}
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              {Math.round(insight.confidence * 100)}% confidence
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <p className="text-sm text-muted-foreground mb-3">
+                        {insight.description}
+                      </p>
+                      
+                      <div className="mb-3">
+                        <div className="text-xs font-medium text-gray-600 mb-1">Impact</div>
+                        <p className="text-xs text-gray-700 dark:text-gray-300">
+                          {insight.impact}
+                        </p>
+                      </div>
+                      
+                      {insight.actionable && insight.recommendation && (
+                        <div className="p-2 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-800">
+                          <div className="flex items-start gap-2">
+                            <Lightbulb className="w-4 h-4 text-purple-600 mt-0.5 flex-shrink-0" />
+                            <div>
+                              <p className="text-xs font-medium text-purple-800 dark:text-purple-200 mb-1">
+                                AI Recommendation
+                              </p>
+                              <p className="text-xs text-purple-700 dark:text-purple-300">
+                                {insight.recommendation}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </motion.div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
+
+        {/* AI Analytics Report */}
+        {aiReport && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7 }}
+            className="mb-8"
+          >
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Sparkles className="h-5 w-5 mr-2 text-blue-600" />
+                  AI Analytics Report
+                </CardTitle>
+                <CardDescription>
+                  Comprehensive AI-generated analysis of your platform performance
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-6">
+                  {/* Executive Summary */}
+                  <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                    <h4 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">Executive Summary</h4>
+                    <p className="text-sm text-blue-800 dark:text-blue-200">{aiReport.summary}</p>
+                  </div>
+
+                  {/* Key Findings */}
+                  <div>
+                    <h4 className="font-semibold mb-3">Key Findings</h4>
+                    <div className="space-y-2">
+                      {aiReport.keyFindings.map((finding, index) => (
+                        <div key={index} className="flex items-start space-x-2">
+                          <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0"></div>
+                          <p className="text-sm text-gray-700 dark:text-gray-300">{finding}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Predictions */}
+                  {aiReport.predictions.length > 0 && (
+                    <div>
+                      <h4 className="font-semibold mb-3">AI Predictions (Next 30 Days)</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {aiReport.predictions.map((prediction, index) => (
+                          <div key={index} className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                            <div className="flex items-center justify-between mb-2">
+                              <span className="font-medium text-sm">{prediction.metric}</span>
+                              <Badge variant="outline" className="text-xs">
+                                {Math.round(prediction.confidence * 100)}% confidence
+                              </Badge>
+                            </div>
+                            <div className="text-lg font-bold text-blue-600 mb-1">
+                              {prediction.predictedValue.toLocaleString()}
+                            </div>
+                            <p className="text-xs text-gray-600 dark:text-gray-400">
+                              {prediction.reasoning}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Recommendations */}
+                  {aiReport.recommendations.length > 0 && (
+                    <div>
+                      <h4 className="font-semibold mb-3">AI Recommendations</h4>
+                      <div className="space-y-3">
+                        {aiReport.recommendations.map((rec, index) => (
+                          <div key={index} className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                            <div className="flex items-start justify-between mb-2">
+                              <h5 className="font-medium text-sm">{rec.title}</h5>
+                              <div className="flex items-center space-x-2">
+                                <Badge 
+                                  variant={rec.priority === 'high' ? 'destructive' : rec.priority === 'medium' ? 'default' : 'secondary'}
+                                  className="text-xs"
+                                >
+                                  {rec.priority}
+                                </Badge>
+                                <Badge variant="outline" className="text-xs">
+                                  {rec.effort} effort
+                                </Badge>
+                              </div>
+                            </div>
+                            <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">
+                              {rec.description}
+                            </p>
+                            <p className="text-xs text-blue-600 dark:text-blue-400">
+                              Expected Impact: {rec.expectedImpact}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Risk Factors */}
+                  {aiReport.riskFactors.length > 0 && (
+                    <div>
+                      <h4 className="font-semibold mb-3">Risk Assessment</h4>
+                      <div className="space-y-3">
+                        {aiReport.riskFactors.map((risk, index) => (
+                          <div key={index} className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+                            <div className="flex items-start justify-between mb-2">
+                              <h5 className="font-medium text-sm text-red-900 dark:text-red-100">{risk.risk}</h5>
+                              <Badge variant="destructive" className="text-xs">
+                                {Math.round(risk.probability * 100)}% probability
+                              </Badge>
+                            </div>
+                            <p className="text-sm text-red-800 dark:text-red-200 mb-2">
+                              Impact: {risk.impact}
+                            </p>
+                            <p className="text-xs text-red-700 dark:text-red-300">
+                              Mitigation: {risk.mitigation}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>
