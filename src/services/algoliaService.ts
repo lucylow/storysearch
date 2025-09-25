@@ -86,7 +86,11 @@ const mockResults: SearchResult[] = [
 class AlgoliaService {
   private mockDelay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-  async search(query: string, filters?: any): Promise<SearchResult[]> {
+  async search(query: string, filters?: {
+    type?: string[];
+    dateRange?: string;
+    tags?: string[];
+  }): Promise<SearchResult[]> {
     // Simulate network delay
     await this.mockDelay(800);
     

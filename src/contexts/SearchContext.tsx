@@ -17,7 +17,11 @@ interface SearchContextType {
     dateRange: string;
     tags: string[];
   };
-  setFilters: (filters: any) => void;
+  setFilters: (filters: {
+    type: string[];
+    dateRange: string;
+    tags: string[];
+  }) => void;
 }
 
 const SearchContext = createContext<SearchContextType | undefined>(undefined);

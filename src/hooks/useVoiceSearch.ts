@@ -56,7 +56,17 @@ export const useVoiceSearch = () => {
 // Extend Window interface for TypeScript
 declare global {
   interface Window {
-    webkitSpeechRecognition: any;
-    SpeechRecognition: any;
+    webkitSpeechRecognition: typeof SpeechRecognition;
+    SpeechRecognition: {
+      new (): {
+        continuous: boolean;
+        interimResults: boolean;
+        lang: string;
+        onresult: ((event: SpeechRecognitionEvent) => void) | null;
+        onerror: ((event: SpeechRecognitionErrorEvent) => void) | null;
+        onend: (() => void) | null;
+        start: () => void;
+      };
+    };
   }
 }

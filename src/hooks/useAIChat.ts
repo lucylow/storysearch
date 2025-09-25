@@ -48,9 +48,24 @@ export const useAIChat = () => {
 
       return response;
     } catch (err) {
+      let errorContent = 'Sorry, I encountered an error processing your request. Please try again.';
+      
+      if (err instanceof Error) {
+        // Provide more specific error messages based on the error
+        if (err.message.includes('busy') || err.message.includes('rate limit')) {
+          errorContent = 'I\'m currently processing many requests. Please wait a moment and try again.';
+        } else if (err.message.includes('quota') || err.message.includes('exceeded')) {
+          errorContent = 'I\'ve reached my usage limit for today. Please try again tomorrow or contact support.';
+        } else if (err.message.includes('authentication')) {
+          errorContent = 'There\'s a configuration issue with my AI service. Please contact support.';
+        } else if (err.message.includes('technical difficulties')) {
+          errorContent = 'I\'m experiencing technical difficulties. Please try again in a few minutes.';
+        }
+      }
+      
       const errorMessage = {
         id: (Date.now() + 1).toString(),
-        content: 'Sorry, I encountered an error processing your request. Please try again.',
+        content: errorContent,
         role: 'assistant' as const,
         timestamp: new Date()
       };

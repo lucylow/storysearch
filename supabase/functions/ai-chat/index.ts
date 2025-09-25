@@ -54,7 +54,20 @@ Always provide helpful, accurate information about Storyblok and content managem
     if (!response.ok) {
       const errorText = await response.text();
       console.error(`OpenAI API error: ${response.status} ${errorText}`);
-      throw new Error(`OpenAI API error: ${response.status}`);
+      
+      let errorMessage = 'AI service temporarily unavailable';
+      
+      if (response.status === 429) {
+        errorMessage = 'AI service is currently busy. Please try again in a few moments.';
+      } else if (response.status === 401) {
+        errorMessage = 'AI service authentication failed. Please contact support.';
+      } else if (response.status === 402) {
+        errorMessage = 'AI service quota exceeded. Please contact support.';
+      } else if (response.status >= 500) {
+        errorMessage = 'AI service is experiencing technical difficulties. Please try again later.';
+      }
+      
+      throw new Error(errorMessage);
     }
 
     const data = await response.json();
@@ -69,10 +82,10 @@ Always provide helpful, accurate information about Storyblok and content managem
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error in ai-chat function:', error);
     return new Response(JSON.stringify({ 
-      error: error.message || 'Unknown error occurred',
+      error: error instanceof Error ? error.message : 'Unknown error occurred',
       details: 'Check function logs for more information'
     }), {
       status: 500,

@@ -41,7 +41,7 @@ export const useSearch = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [query, filters, setQuery, setResults, setIsLoading, setError, setHasSearched]);
+  }, [query, setQuery, setResults, setIsLoading, setError, setHasSearched]);
 
   const clearSearch = useCallback(() => {
     setQuery('');

@@ -6,7 +6,7 @@ export interface StoryblokStory {
   name: string;
   slug: string;
   full_slug: string;
-  content: any;
+  content: Record<string, unknown>;
   created_at: string;
   updated_at: string;
   published_at?: string;
@@ -14,8 +14,8 @@ export interface StoryblokStory {
   is_folder: boolean;
   parent_id?: number;
   group_id?: string;
-  alternates: any[];
-  translated_slugs?: any[];
+  alternates: Array<Record<string, unknown>>;
+  translated_slugs?: Array<Record<string, unknown>>;
   lang: string;
   content_type?: string;
   path?: string;
@@ -50,7 +50,7 @@ export interface SearchResult {
 }
 
 class StoryblokService {
-  private async callStoryblokAPI(action: string, params: any = {}) {
+  private async callStoryblokAPI(action: string, params: Record<string, unknown> = {}) {
     const { data, error } = await supabase.functions.invoke('storyblok-api', {
       body: { action, params }
     });
@@ -136,7 +136,7 @@ class StoryblokService {
     };
   }
 
-  private extractTextContent(content: any): string {
+  private extractTextContent(content: Record<string, unknown> | string | Array<unknown>): string {
     if (typeof content === 'string') {
       return content;
     }
@@ -158,7 +158,7 @@ class StoryblokService {
     return '';
   }
 
-  private extractThumbnail(content: any): string | undefined {
+  private extractThumbnail(content: Record<string, unknown>): string | undefined {
     // Look for common image field names
     const imageFields = ['image', 'thumbnail', 'hero_image', 'featured_image', 'cover'];
     
@@ -175,7 +175,7 @@ class StoryblokService {
     return undefined;
   }
 
-  async askAI(question: string, context?: any): Promise<string> {
+  async askAI(question: string, context?: Record<string, unknown>): Promise<string> {
     try {
       const messages = [
         { role: 'user', content: question }

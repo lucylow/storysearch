@@ -22,8 +22,8 @@ serve(async (req) => {
 
     const baseUrl = 'https://mapi.storyblok.com/v1';
     let endpoint = '';
-    let method = 'GET';
-    let body = null;
+    const method = 'GET';
+    const body = null;
 
     switch (action) {
       case 'getSpaces':
@@ -38,13 +38,14 @@ serve(async (req) => {
       case 'getStory':
         endpoint = `/spaces/${params.spaceId}/stories/${params.storyId}`;
         break;
-      case 'searchStories':
+      case 'searchStories': {
         const searchParams = new URLSearchParams();
         if (params.search) searchParams.append('search', params.search);
         if (params.per_page) searchParams.append('per_page', params.per_page);
         if (params.page) searchParams.append('page', params.page);
         endpoint = `/spaces/${params.spaceId}/stories?${searchParams.toString()}`;
         break;
+      }
       case 'getComponents':
         endpoint = `/spaces/${params.spaceId}/components`;
         break;
@@ -76,10 +77,10 @@ serve(async (req) => {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error in storyblok-api function:', error);
     return new Response(JSON.stringify({ 
-      error: error.message || 'Unknown error occurred',
+      error: error instanceof Error ? error.message : 'Unknown error occurred',
       details: 'Check function logs for more information'
     }), {
       status: 500,

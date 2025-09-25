@@ -24,6 +24,7 @@ const AIChatInterface: React.FC = () => {
       setInput('');
     } catch (err) {
       // Error is handled in the hook
+      console.error('Failed to send message:', err);
     }
   };
 
@@ -105,6 +106,17 @@ const AIChatInterface: React.FC = () => {
                       : 'glass border border-border rounded-bl-none'
                   }`}>
                     <p className="text-sm leading-relaxed">{message.content}</p>
+                    
+                    {/* Show retry button for error messages */}
+                    {message.role === 'assistant' && message.content.includes('error') && (
+                      <button
+                        onClick={() => handleSend()}
+                        className="mt-2 px-3 py-1 text-xs bg-primary/10 hover:bg-primary/20 text-primary rounded-lg transition-colors"
+                      >
+                        Try Again
+                      </button>
+                    )}
+                    
                     <span className={`text-xs mt-2 block ${
                       message.role === 'user' ? 'text-primary-foreground/70' : 'text-muted-foreground'
                     }`}>
