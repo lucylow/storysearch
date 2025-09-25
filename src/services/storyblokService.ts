@@ -111,7 +111,7 @@ class StoryblokService {
     return response.stories || [];
   }
 
-  async generateContextualResponse(message: string, context?: any) {
+  async generateContextualResponse(message: string, context?: Record<string, unknown>) {
     try {
       const response = await this.callAIFunction('ai-contextual-response', {
         message,
@@ -505,7 +505,7 @@ class StoryblokService {
     crossModalRecommendations: ContentRecommendation[];
   }> {
     try {
-      const analysis: any = {};
+      const analysis: Record<string, unknown> = {};
       let searchQuery = searchData.text || '';
 
       // Process text if provided
@@ -654,7 +654,7 @@ class StoryblokService {
   /**
    * Generate cross-modal content recommendations
    */
-  private async getCrossModalRecommendations(analysis: any): Promise<ContentRecommendation[]> {
+  private async getCrossModalRecommendations(analysis: Record<string, unknown>): Promise<ContentRecommendation[]> {
     try {
       const response = await this.callAIFunction('ai-cross-modal-recommendations', {
         analysis

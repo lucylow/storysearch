@@ -73,12 +73,13 @@ const ResultsGrid: React.FC = () => {
         case 'title':
           comparison = a.title.localeCompare(b.title);
           break;
-        case 'popularity':
+        case 'popularity': {
           // Mock popularity based on relevance score and content length
           const aPopularity = a.relevanceScore * (a.content.length / 100);
           const bPopularity = b.relevanceScore * (b.content.length / 100);
           comparison = bPopularity - aPopularity;
           break;
+        }
       }
 
       return sortOrder === 'asc' ? -comparison : comparison;
@@ -223,7 +224,7 @@ const ResultsGrid: React.FC = () => {
           </div>
 
           {/* Sort Controls */}
-          <Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
+          <Select value={sortBy} onValueChange={(value: string) => setSortBy(value as SortOption)}>
             <SelectTrigger className="w-32 h-8">
               <SelectValue />
             </SelectTrigger>

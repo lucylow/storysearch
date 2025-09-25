@@ -234,7 +234,7 @@ class AlgoliaService {
     return finalResults;
   }
 
-  private calculateRelevanceScore(result: SearchResult, queryTerms: string[], filters?: any): number {
+  private calculateRelevanceScore(result: SearchResult, queryTerms: string[], filters?: Record<string, unknown>): number {
     let score = 0;
     const title = result.title.toLowerCase();
     const content = result.content.toLowerCase();
@@ -509,7 +509,7 @@ class AlgoliaService {
     }
   }
 
-  private generateCacheKey(query: string, filters?: any): string {
+  private generateCacheKey(query: string, filters?: Record<string, unknown>): string {
     return `${query.toLowerCase()}-${JSON.stringify(filters || {})}`;
   }
 
@@ -629,9 +629,9 @@ class AlgoliaService {
 
   // Enhanced AskAI with comprehensive responses
   async askAIAdvanced(question: string, context?: {
-    userProfile?: any;
+    userProfile?: Record<string, unknown>;
     searchHistory?: string[];
-    currentContent?: any;
+    currentContent?: Record<string, unknown>;
   }): Promise<AskAIResponse> {
     await this.mockDelay(1500);
     
@@ -858,7 +858,7 @@ class AlgoliaService {
 
   // ===== AGENT STUDIO: Proactive Content Recommendations =====
 
-  async getAgentRecommendations(userId?: string, context?: any): Promise<any[]> {
+  async getAgentRecommendations(userId?: string, context?: Record<string, unknown>): Promise<AgentRecommendation[]> {
     await this.mockDelay(800);
     
     const recommendations = [
@@ -907,14 +907,14 @@ class AlgoliaService {
     return recommendations;
   }
 
-  async updateUserBehavior(userId: string, action: 'search' | 'click' | 'time', data: any): Promise<void> {
+  async updateUserBehavior(userId: string, action: 'search' | 'click' | 'time', data: Record<string, unknown>): Promise<void> {
     // Mock user behavior tracking
     console.log(`User ${userId} performed ${action}:`, data);
   }
 
   // ===== LOOKING SIMILAR: Intelligent Content Relationships =====
 
-  async findSimilarContent(contentId: string, limit: number = 5): Promise<any[]> {
+  async findSimilarContent(contentId: string, limit: number = 5): Promise<SearchResult[]> {
     await this.mockDelay(600);
     
     const targetContent = mockResults.find(r => r.id === contentId);
@@ -1000,7 +1000,7 @@ class AlgoliaService {
 
   // ===== CUSTOM RELEVANCE: Tailored Ranking Algorithms =====
 
-  async searchWithCustomRelevance(query: string, userId?: string, filters?: any): Promise<SearchResult[]> {
+  async searchWithCustomRelevance(query: string, userId?: string, filters?: Record<string, unknown>): Promise<SearchResult[]> {
     // Use custom relevance configuration for enhanced search
     const results = await this.search(query, filters);
     

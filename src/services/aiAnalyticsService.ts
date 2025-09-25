@@ -129,7 +129,7 @@ class AIAnalyticsService {
     try {
       const stored = localStorage.getItem('storysearch_analytics');
       if (stored) {
-        this.analytics = JSON.parse(stored).map((item: any) => ({
+        this.analytics = JSON.parse(stored).map((item: Record<string, unknown>) => ({
           ...item,
           timestamp: new Date(item.timestamp)
         }));

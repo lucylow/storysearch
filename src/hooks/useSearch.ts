@@ -82,7 +82,7 @@ export const useSearch = () => {
     return () => clearTimeout(timeoutId);
   }, [query]);
 
-  const search = useCallback(async (searchQuery?: string, searchFilters?: any) => {
+  const search = useCallback(async (searchQuery?: string, searchFilters?: Record<string, unknown>) => {
     const queryToSearch = searchQuery || query;
     
     if (!queryToSearch.trim()) {
@@ -127,7 +127,7 @@ export const useSearch = () => {
     setShowSuggestions(false);
   }, [setQuery, setResults, setHasSearched, setError]);
 
-  const searchWithFilters = useCallback(async (searchQuery: string, customFilters: any) => {
+  const searchWithFilters = useCallback(async (searchQuery: string, customFilters: Record<string, unknown>) => {
     await search(searchQuery, customFilters);
   }, [search]);
 

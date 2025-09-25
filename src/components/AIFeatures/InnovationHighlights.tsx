@@ -30,7 +30,7 @@ interface TimelineNode {
   year: string;
   title: string;
   description: string;
-  icon: React.ComponentType<any>;
+  icon: React.ComponentType<Record<string, unknown>>;
   color: string;
   isActive?: boolean;
 }

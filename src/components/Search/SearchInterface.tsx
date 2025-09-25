@@ -297,9 +297,11 @@ const SearchInterface: React.FC<SearchInterfaceProps> = ({ mode }) => {
     return analysis;
   };
 
-  const generateSearchQueryFromFile = (analysis: any) => {
-    const primaryTags = analysis.tags.slice(0, 2).join(' ');
-    return `${analysis.description} ${primaryTags}`;
+  const generateSearchQueryFromFile = (analysis: Record<string, unknown>) => {
+    const tags = analysis.tags as string[];
+    const description = analysis.description as string;
+    const primaryTags = tags.slice(0, 2).join(' ');
+    return `${description} ${primaryTags}`;
   };
 
   const handleFileInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -486,7 +488,7 @@ const SearchInterface: React.FC<SearchInterfaceProps> = ({ mode }) => {
                             <motion.button
                               key={mode}
                               onClick={() => {
-                                setSearchMode(mode as any);
+                                setSearchMode(mode as 'text' | 'voice' | 'image' | 'video' | 'audio');
                                 setShowModeSelector(false);
                               }}
                               whileHover={{ x: 4 }}

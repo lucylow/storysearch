@@ -127,7 +127,7 @@ const AdvancedSearchInterface: React.FC<AdvancedSearchInterfaceProps> = ({
     }
   };
 
-  const handleFilterChange = (filterType: keyof SearchFilters, value: any) => {
+  const handleFilterChange = (filterType: keyof SearchFilters, value: string | string[]) => {
     setFilters(prev => ({
       ...prev,
       [filterType]: value

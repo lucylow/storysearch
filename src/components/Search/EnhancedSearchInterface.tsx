@@ -73,7 +73,7 @@ const EnhancedSearchInterface: React.FC = () => {
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [aiResponse, setAiResponse] = useState<AIResponse | null>(null);
   const [agentRecommendations, setAgentRecommendations] = useState<AgentRecommendation[]>([]);
-  const [similarContent, setSimilarContent] = useState<any[]>([]);
+  const [similarContent, setSimilarContent] = useState<Record<string, unknown>[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('search');
   const [customRelevanceEnabled, setCustomRelevanceEnabled] = useState(true);

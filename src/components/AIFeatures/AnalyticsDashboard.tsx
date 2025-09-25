@@ -45,7 +45,7 @@ const AnalyticsDashboard: React.FC = () => {
         { id: 3, name: 'Content Modeling', content: 'Best practices for structuring your content in Storyblok' }
       ];
       
-      const insights = await storyblokService.generateContentInsights(mockContent as any);
+      const insights = await storyblokService.generateContentInsights(mockContent as Record<string, unknown>);
       setAiInsights(insights);
     } catch (error) {
       console.error('Failed to generate AI insights:', error);

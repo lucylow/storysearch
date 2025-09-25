@@ -34,7 +34,7 @@ interface StoryblokWebhookPayload {
     id: string;
     name: string;
     slug: string;
-    content: any;
+    content: Record<string, unknown>;
     published_at: string;
     created_at: string;
     updated_at: string;
@@ -65,10 +65,10 @@ interface AlgoliaRecord {
 }
 
 // Helper function to convert Storyblok rich text to plain text
-function convertRichTextToPlainText(richTextBlok: any): string {
+function convertRichTextToPlainText(richTextBlok: Record<string, unknown>): string {
   if (!richTextBlok?.content) return '';
   
-  return richTextBlok.content.map((element: any) => {
+  return (richTextBlok.content as Array<Record<string, unknown>>).map((element: Record<string, unknown>) => {
     if (element.text) return element.text;
     if (element.content) return convertRichTextToPlainText({ content: element.content });
     return '';
@@ -143,32 +143,33 @@ function extractEntities(content: string): string[] {
 }
 
 // Transform Storyblok story to Algolia record
-async function transformStoryToAlgoliaRecord(story: any): Promise<AlgoliaRecord> {
-  const contentText = convertRichTextToPlainText(story.content.long_text || story.content.content);
+async function transformStoryToAlgoliaRecord(story: Record<string, unknown>): Promise<AlgoliaRecord> {
+  const contentText = convertRichTextToPlainText((story.content as Record<string, unknown>).long_text || (story.content as Record<string, unknown>).content);
   
   // Perform AI analysis
-  const aiAnalysis = await analyzeContentWithAI(contentText, story.name);
+  const aiAnalysis = await analyzeContentWithAI(contentText, story.name as string);
   
   // Extract tags from content
+  const content = story.content as Record<string, unknown>;
   const tags = [
-    ...(story.content.tags || []),
+    ...((content.tags as string[]) || []),
     ...aiAnalysis.keyTopics,
-    story.content.component || 'article'
+    (content.component as string) || 'article'
   ];
 
   return {
-    objectID: story.id.toString(),
-    title: story.name,
+    objectID: (story.id as string).toString(),
+    title: story.name as string,
     content_text: contentText,
-    slug: story.slug,
+    slug: story.slug as string,
     tags: [...new Set(tags)], // Remove duplicates
-    image: story.content.featured_image?.filename || story.content.image?.filename || '',
-    published_at: story.published_at,
-    created_at: story.created_at,
-    updated_at: story.updated_at,
-    content_type: story.content.component || 'article',
+    image: (content.featured_image as Record<string, unknown>)?.filename || (content.image as Record<string, unknown>)?.filename || '',
+    published_at: story.published_at as string,
+    created_at: story.created_at as string,
+    updated_at: story.updated_at as string,
+    content_type: (content.component as string) || 'article',
     _ai_analysis_fields: {
-      title: story.name,
+      title: story.name as string,
       text: contentText,
       tags: [...new Set(tags)],
       ...aiAnalysis
@@ -221,7 +222,7 @@ async function syncToAlgolia(record: AlgoliaRecord, action: string): Promise<voi
 }
 
 // Fetch story from Storyblok Management API
-async function fetchStoryFromStoryblok(spaceId: string, storyId: string): Promise<any> {
+async function fetchStoryFromStoryblok(spaceId: string, storyId: string): Promise<Record<string, unknown>> {
   try {
     const response = await fetch(`https://mapi.storyblok.com/v1/spaces/${spaceId}/stories/${storyId}`, {
       headers: {
@@ -234,8 +235,8 @@ async function fetchStoryFromStoryblok(spaceId: string, storyId: string): Promis
       throw new Error(`Storyblok API error: ${response.statusText}`);
     }
 
-    const data = await response.json();
-    return data.story;
+    const data = await response.json() as Record<string, unknown>;
+    return data.story as Record<string, unknown>;
   } catch (error) {
     console.error('Storyblok API error:', error);
     throw error;

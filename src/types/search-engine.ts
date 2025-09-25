@@ -429,7 +429,7 @@ export type Personalizable<T> = T & {
   affinityScoring: AffinityScoringConfig<T>;
 };
 
-export interface FacetConfiguration<T> {
+export type FacetConfiguration<T> = {
   [K in keyof T]?: {
     type: 'string' | 'number' | 'boolean' | 'date';
     searchable: boolean;
@@ -438,15 +438,15 @@ export interface FacetConfiguration<T> {
     facetable: boolean;
     ranking: number;
   };
-}
+};
 
-export interface AffinityScoringConfig<T> {
+export type AffinityScoringConfig<T> = {
   [K in keyof T]?: {
     weight: number;
     decay_factor: number;
     interaction_types: string[];
   };
-}
+};
 
 export interface FacetStats {
   min: number;
@@ -461,7 +461,7 @@ export interface UserEvent {
   timestamp: string;
   user_id: string;
   session_id: string;
-  data: Record<string, any>;
+  data: Record<string, unknown>;
   context: UserContext;
 }
 
@@ -528,7 +528,7 @@ export interface CacheConfiguration {
 // Error handling types
 export interface SearchError extends Error {
   code: string;
-  context: Record<string, any>;
+  context: Record<string, unknown>;
   retryable: boolean;
   fallbackStrategy?: string;
 }

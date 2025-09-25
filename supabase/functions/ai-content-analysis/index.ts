@@ -13,7 +13,7 @@ const supabase = createClient(
 interface ContentAnalysisRequest {
   content: string;
   title: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 interface ContentAnalysisResponse {
