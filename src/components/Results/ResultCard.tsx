@@ -72,102 +72,180 @@ const ResultCard: React.FC<ResultCardProps> = ({ result }) => {
 
   return (
     <motion.div
-      whileHover={{ y: -8, scale: 1.03 }}
+      whileHover={{ y: -8, scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      className="glass rounded-3xl overflow-hidden border border-border/50 hover:border-primary/40 hover:shadow-[0_20px_40px_hsl(var(--primary)/0.15)] transition-all duration-500 group cursor-pointer backdrop-blur-xl"
+      className="group cursor-pointer"
       onClick={() => window.open(result.url, '_blank')}
     >
-      {/* Thumbnail */}
-      {result.thumbnail && (
-        <div className="relative h-56 overflow-hidden">
-          <img
-            src={result.thumbnail}
-            alt={result.title}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/30 to-transparent" />
-          
-          {/* Type Badge */}
-          <motion.div 
-            className="absolute top-4 left-4"
-            whileHover={{ scale: 1.05 }}
-          >
-            <span className={`inline-flex items-center px-3 py-2 rounded-xl text-sm font-semibold border backdrop-blur-sm ${typeColors[result.type]}`}>
-              <span className="mr-2 text-lg">{typeIcons[result.type]}</span>
-              {result.type}
-            </span>
-          </motion.div>
+      <Card className="h-full overflow-hidden border-2 border-border/50 hover:border-primary/40 hover:shadow-[0_20px_40px_hsl(var(--primary)/0.15)] transition-all duration-500 backdrop-blur-xl bg-background/80">
+        {/* Thumbnail Section */}
+        {result.thumbnail && (
+          <div className="relative h-64 overflow-hidden">
+            <img
+              src={result.thumbnail}
+              alt={result.title}
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/30 to-transparent" />
+            
+            {/* Type Badge */}
+            <motion.div 
+              className="absolute top-4 left-4"
+              whileHover={{ scale: 1.05 }}
+            >
+              <Badge className={`inline-flex items-center px-3 py-2 rounded-xl text-sm font-semibold border backdrop-blur-sm ${typeColors[result.type as keyof typeof typeColors] || typeColors.story}`}>
+                <span className="mr-2 text-lg">{typeIcons[result.type as keyof typeof typeIcons] || typeIcons.story}</span>
+                {result.type}
+              </Badge>
+            </motion.div>
 
-          {/* Relevance Score */}
-          <motion.div 
-            className="absolute top-4 right-4 flex items-center space-x-2 bg-background/95 backdrop-blur-md px-3 py-2 rounded-xl border border-border/50"
-            whileHover={{ scale: 1.05 }}
-          >
-            <Star className="w-4 h-4 text-accent fill-current animate-pulse-glow" />
-            <span className="text-sm font-bold text-foreground">
-              {Math.round(result.relevanceScore * 100)}%
-            </span>
-          </motion.div>
-        </div>
-      )}
-
-      {/* Content */}
-      <div className="p-8">
-        <div className="flex items-start justify-between mb-4">
-          <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors leading-tight">
-            {result.title}
-          </h3>
-          <motion.div
-            whileHover={{ scale: 1.1, rotate: 5 }}
-            className="flex-shrink-0 ml-3"
-          >
-            <ExternalLink className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
-          </motion.div>
-        </div>
-
-        <p className="text-muted-foreground text-base leading-relaxed mb-6 line-clamp-3">
-          {result.content}
-        </p>
-
-        {/* Tags */}
-        {result.tags && result.tags.length > 0 && (
-          <div className="flex flex-wrap gap-3 mb-6">
-            {result.tags.slice(0, 3).map((tag, index) => (
-              <motion.span
-                key={index}
-                whileHover={{ scale: 1.05 }}
-                className="inline-flex items-center px-3 py-2 bg-primary/15 text-primary rounded-xl text-sm font-medium border border-primary/20 hover:bg-primary/25 transition-colors"
-              >
-                <Tag className="w-4 h-4 mr-2" />
-                {tag}
-              </motion.span>
-            ))}
-            {result.tags.length > 3 && (
-              <span className="text-sm text-muted-foreground px-3 py-2">
-                +{result.tags.length - 3} more
+            {/* Relevance Score */}
+            <motion.div 
+              className="absolute top-4 right-4 flex items-center space-x-2 bg-background/95 backdrop-blur-md px-3 py-2 rounded-xl border border-border/50"
+              whileHover={{ scale: 1.05 }}
+            >
+              <Star className={`w-4 h-4 ${getRelevanceColor(relevanceScore)} fill-current animate-pulse-glow`} />
+              <span className="text-sm font-bold text-foreground">
+                {relevanceScore}%
               </span>
-            )}
+            </motion.div>
+
+            {/* Action Buttons */}
+            <div className="absolute bottom-4 right-4 flex items-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsBookmarked(!isBookmarked);
+                }}
+                className="h-8 w-8 p-0 bg-background/90 backdrop-blur-sm hover:bg-background"
+              >
+                <Bookmark className={`w-4 h-4 ${isBookmarked ? 'fill-current text-primary' : ''}`} />
+              </Button>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsLiked(!isLiked);
+                }}
+                className="h-8 w-8 p-0 bg-background/90 backdrop-blur-sm hover:bg-background"
+              >
+                <ThumbsUp className={`w-4 h-4 ${isLiked ? 'fill-current text-primary' : ''}`} />
+              </Button>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigator.share?.({ title: result.title, url: result.url });
+                }}
+                className="h-8 w-8 p-0 bg-background/90 backdrop-blur-sm hover:bg-background"
+              >
+                <Share2 className="w-4 h-4" />
+              </Button>
+            </div>
           </div>
         )}
 
-        {/* Footer */}
-        <div className="flex items-center justify-between text-sm text-muted-foreground pt-4 border-t border-border/30">
-          <div className="flex items-center space-x-2">
-            <Calendar className="w-4 h-4" />
-            <span className="font-medium">
-              {new Date(result.updatedAt || result.createdAt).toLocaleDateString()}
-            </span>
+        {/* Content Section */}
+        <CardContent className="p-6">
+          {/* Header */}
+          <div className="flex items-start justify-between mb-4">
+            <div className="flex-1">
+              <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors leading-tight mb-2">
+                {result.title}
+              </h3>
+              <div className="flex items-center space-x-3 mb-3">
+                <Badge variant="outline" className={`text-xs ${relevanceBadge.color}`}>
+                  {relevanceBadge.text}
+                </Badge>
+                <div className="flex items-center space-x-1 text-sm text-muted-foreground">
+                  <Clock className="w-3 h-3" />
+                  <span>{estimatedReadTime} min read</span>
+                </div>
+              </div>
+            </div>
+            <motion.div
+              whileHover={{ scale: 1.1, rotate: 5 }}
+              className="flex-shrink-0 ml-3"
+            >
+              <ExternalLink className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+            </motion.div>
           </div>
-          <div className="flex items-center space-x-3">
-            <div className="flex items-center space-x-1">
-              <Star className="w-4 h-4 text-accent fill-current" />
-              <span className="font-semibold">
-                {Math.round(result.relevanceScore * 100)}% match
-              </span>
+
+          {/* Content Preview */}
+          <div className="mb-6">
+            <p className="text-muted-foreground text-base leading-relaxed line-clamp-3">
+              {showFullContent ? result.content : result.content.substring(0, 200) + (result.content.length > 200 ? '...' : '')}
+            </p>
+            {result.content.length > 200 && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowFullContent(!showFullContent);
+                }}
+                className="mt-2 p-0 h-auto text-primary hover:text-primary/80"
+              >
+                {showFullContent ? 'Show less' : 'Read more'}
+              </Button>
+            )}
+          </div>
+
+          {/* Tags */}
+          {result.tags && result.tags.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-6">
+              {result.tags.slice(0, 4).map((tag, index) => (
+                <motion.span
+                  key={index}
+                  whileHover={{ scale: 1.05 }}
+                  className="inline-flex items-center px-3 py-1 bg-primary/15 text-primary rounded-lg text-sm font-medium border border-primary/20 hover:bg-primary/25 transition-colors"
+                >
+                  <Tag className="w-3 h-3 mr-1" />
+                  {tag}
+                </motion.span>
+              ))}
+              {result.tags.length > 4 && (
+                <span className="text-sm text-muted-foreground px-3 py-1">
+                  +{result.tags.length - 4} more
+                </span>
+              )}
+            </div>
+          )}
+
+          {/* Stats and Footer */}
+          <div className="flex items-center justify-between pt-4 border-t border-border/30">
+            <div className="flex items-center space-x-4 text-sm text-muted-foreground">
+              <div className="flex items-center space-x-1">
+                <Calendar className="w-4 h-4" />
+                <span className="font-medium">
+                  {new Date(result.updatedAt || result.createdAt).toLocaleDateString()}
+                </span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <Eye className="w-4 h-4" />
+                <span>{mockViews.toLocaleString()}</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <ThumbsUp className="w-4 h-4" />
+                <span>{mockLikes}</span>
+              </div>
+            </div>
+            
+            <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-1">
+                <Star className={`w-4 h-4 ${getRelevanceColor(relevanceScore)} fill-current`} />
+                <span className={`font-semibold text-sm ${getRelevanceColor(relevanceScore)}`}>
+                  {relevanceScore}% match
+                </span>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </motion.div>
   );
 };

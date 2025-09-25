@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, TrendingUp, Clock, Users, Zap, BarChart3, Lightbulb, Tag, FolderOpen, Brain, Sparkles, Target, CheckCircle } from 'lucide-react';
+import { X, TrendingUp, Clock, Users, Zap, BarChart3, Lightbulb, Tag, FolderOpen, Brain, Sparkles, Target, CheckCircle, RefreshCw } from 'lucide-react';
 import { storyblokService } from '../../services/storyblokService';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';

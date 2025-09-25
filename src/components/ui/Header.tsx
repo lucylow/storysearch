@@ -9,19 +9,28 @@ import {
   Menu,
   X,
   Sparkles,
-  Zap
+  Zap,
+  HelpCircle,
+  Lightbulb,
+  Keyboard
 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 
 interface HeaderProps {
   onAIToggle: () => void;
   searchMode: 'standard' | 'ai-chat';
   onSearchModeChange: (mode: 'standard' | 'ai-chat') => void;
+  onShowTips?: () => void;
+  onShowHelp?: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ 
   onAIToggle, 
   searchMode, 
-  onSearchModeChange 
+  onSearchModeChange,
+  onShowTips,
+  onShowHelp
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
@@ -82,6 +91,28 @@ const Header: React.FC<HeaderProps> = ({
 
           {/* Right Side Actions */}
           <div className="flex items-center space-x-3">
+            {/* Help Actions */}
+            <div className="hidden md:flex items-center space-x-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={onShowTips}
+                className="text-muted-foreground hover:text-foreground"
+                title="Quick Tips"
+              >
+                <Lightbulb className="w-4 h-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={onShowHelp}
+                className="text-muted-foreground hover:text-foreground"
+                title="Keyboard Shortcuts"
+              >
+                <Keyboard className="w-4 h-4" />
+              </Button>
+            </div>
+
             {/* AI Assistant Toggle */}
             <motion.button
               whileHover={{ scale: 1.05 }}

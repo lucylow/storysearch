@@ -297,4 +297,63 @@ All colors MUST be HSL for consistency
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: hsl(var(--primary-glow));
   }
+
+  /* Floating Chatbot Styles */
+  .floating-chatbot {
+    @apply fixed bottom-6 right-6 z-50;
+    @apply w-96 h-[500px] glass rounded-2xl border border-border/50;
+    @apply shadow-2xl backdrop-blur-xl overflow-hidden;
+  }
+
+  .floating-chatbot-button {
+    @apply group relative w-16 h-16 bg-ai-gradient rounded-full;
+    @apply shadow-2xl hover:shadow-[0_0_40px_hsl(var(--primary)/0.5)];
+    @apply transition-all duration-300 flex items-center justify-center;
+  }
+
+  .floating-chatbot-button::before {
+    content: '';
+    @apply absolute inset-0 bg-primary rounded-full opacity-30;
+    animation: pulse-ring 2s infinite;
+  }
+
+  @keyframes pulse-ring {
+    0% {
+      transform: scale(1);
+      opacity: 0.3;
+    }
+    50% {
+      transform: scale(1.2);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 0.3;
+    }
+  }
+
+  /* Chat message animations */
+  .chat-message-enter {
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+  }
+
+  .chat-message-enter-active {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    transition: all 0.3s ease-out;
+  }
+
+  /* Minimize animation */
+  .chat-minimize {
+    transform: translateY(100%);
+    opacity: 0;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .chat-expand {
+    transform: translateY(0);
+    opacity: 1;
+    transition: all 0.3s ease-in-out;
+  }
 }

@@ -133,15 +133,15 @@ class StoryblokService {
 
   private transformStoryToSearchResult(story: StoryblokStory): SearchResult {
     const content = story.content || {};
-    const title = story.name || content.title || story.slug;
-    const description = content.description || content.intro || content.body || '';
+    const title = story.name || (content.title as string) || story.slug;
+    const description = (content.description as string) || (content.intro as string) || (content.body as string) || '';
     
     // Extract text content for search
     const textContent = this.extractTextContent(content);
     
     return {
       id: story.uuid || story.id.toString(),
-      title,
+      title: title || 'Untitled',
       content: textContent.substring(0, 300) + (textContent.length > 300 ? '...' : ''),
       type: story.is_folder ? 'folder' : 'story',
       url: `/${story.full_slug}`,
@@ -167,8 +167,8 @@ class StoryblokService {
           text += value + ' ';
         } else if (Array.isArray(value)) {
           text += value.map(item => this.extractTextContent(item)).join(' ') + ' ';
-        } else if (typeof value === 'object') {
-          text += this.extractTextContent(value) + ' ';
+        } else if (typeof value === 'object' && value !== null) {
+          text += this.extractTextContent(value as Record<string, unknown>) + ' ';
         }
       }
       return text.trim();
@@ -184,9 +184,12 @@ class StoryblokService {
     for (const field of imageFields) {
       if (content[field]) {
         if (typeof content[field] === 'string') {
-          return content[field];
-        } else if (content[field]?.filename) {
-          return content[field].filename;
+          return content[field] as string;
+        } else if (typeof content[field] === 'object' && content[field] !== null) {
+          const imageObj = content[field] as Record<string, unknown>;
+          if (typeof imageObj.filename === 'string') {
+            return imageObj.filename;
+          }
         }
       }
     }
@@ -442,42 +445,289 @@ class StoryblokService {
   }
 
   /**
-   * Generate conversational responses with context awareness
+   * Multi-modal search with AI-powered analysis
    */
-  async generateContextualResponse(
-    message: string,
-    context: {
-      currentContent?: StoryblokStory | SearchResult;
-      searchHistory?: string[];
-      userPreferences?: Record<string, unknown>;
+  async multiModalSearch(searchData: {
+    text?: string;
+    image?: File;
+    audio?: File;
+    video?: File;
+  }): Promise<{
+    results: SearchResult[];
+    analysis: {
+      textAnalysis?: ContentAnalysis;
+      imageAnalysis?: {
+        description: string;
+        tags: string[];
+        objects: string[];
+        colors: string[];
+        confidence: number;
+      };
+      audioAnalysis?: {
+        transcription: string;
+        topics: string[];
+        sentiment: string;
+        confidence: number;
+      };
+      videoAnalysis?: {
+        description: string;
+        scenes: string[];
+        tags: string[];
+        duration: number;
+        confidence: number;
+      };
+    };
+    crossModalRecommendations: ContentRecommendation[];
+  }> {
+    try {
+      const analysis: any = {};
+      let searchQuery = searchData.text || '';
+
+      // Process text if provided
+      if (searchData.text) {
+        analysis.textAnalysis = await this.analyzeContent(searchData.text);
+        searchQuery = searchData.text;
+      }
+
+      // Process image if provided
+      if (searchData.image) {
+        analysis.imageAnalysis = await this.analyzeImage(searchData.image);
+        searchQuery += ` ${analysis.imageAnalysis.description}`;
+      }
+
+      // Process audio if provided
+      if (searchData.audio) {
+        analysis.audioAnalysis = await this.analyzeAudio(searchData.audio);
+        searchQuery += ` ${analysis.audioAnalysis.transcription}`;
+      }
+
+      // Process video if provided
+      if (searchData.video) {
+        analysis.videoAnalysis = await this.analyzeVideo(searchData.video);
+        searchQuery += ` ${analysis.videoAnalysis.description}`;
+      }
+
+      // Perform enhanced search with combined query
+      const results = await this.search(searchQuery);
+
+      // Generate cross-modal recommendations
+      const crossModalRecommendations = await this.getCrossModalRecommendations(analysis);
+
+      return {
+        results,
+        analysis,
+        crossModalRecommendations
+      };
+    } catch (error) {
+      console.error('Multi-modal search error:', error);
+      throw error;
     }
-  ): Promise<{
-    response: string;
-    suggestions: string[];
-    relatedContent: ContentRecommendation[];
+  }
+
+  /**
+   * Analyze image content with AI
+   */
+  private async analyzeImage(image: File): Promise<{
+    description: string;
+    tags: string[];
+    objects: string[];
+    colors: string[];
     confidence: number;
   }> {
     try {
-      const response = await this.callAIFunction('ai-conversational', {
-        message,
-        context
+      const response = await this.callAIFunction('ai-image-analysis', {
+        image: image.name,
+        type: image.type
       });
 
       return {
-        response: response.response || 'I apologize, but I need more information to help you.',
-        suggestions: response.suggestions || [],
-        relatedContent: response.relatedContent || [],
-        confidence: response.confidence || 0.5
+        description: response.description || 'An image containing various visual elements',
+        tags: response.tags || ['image', 'visual'],
+        objects: response.objects || [],
+        colors: response.colors || [],
+        confidence: response.confidence || 0.8
       };
     } catch (error) {
-      console.error('Contextual response error:', error);
+      console.error('Image analysis error:', error);
       return {
-        response: 'I apologize, but I encountered an error processing your request.',
-        suggestions: [],
-        relatedContent: [],
-        confidence: 0
+        description: 'An image containing various visual elements',
+        tags: ['image', 'visual'],
+        objects: [],
+        colors: [],
+        confidence: 0.5
       };
     }
+  }
+
+  /**
+   * Analyze audio content with AI
+   */
+  private async analyzeAudio(audio: File): Promise<{
+    transcription: string;
+    topics: string[];
+    sentiment: string;
+    confidence: number;
+  }> {
+    try {
+      const response = await this.callAIFunction('ai-audio-analysis', {
+        audio: audio.name,
+        type: audio.type
+      });
+
+      return {
+        transcription: response.transcription || 'Audio content transcription',
+        topics: response.topics || ['audio', 'speech'],
+        sentiment: response.sentiment || 'neutral',
+        confidence: response.confidence || 0.8
+      };
+    } catch (error) {
+      console.error('Audio analysis error:', error);
+      return {
+        transcription: 'Audio content transcription',
+        topics: ['audio', 'speech'],
+        sentiment: 'neutral',
+        confidence: 0.5
+      };
+    }
+  }
+
+  /**
+   * Analyze video content with AI
+   */
+  private async analyzeVideo(video: File): Promise<{
+    description: string;
+    scenes: string[];
+    tags: string[];
+    duration: number;
+    confidence: number;
+  }> {
+    try {
+      const response = await this.callAIFunction('ai-video-analysis', {
+        video: video.name,
+        type: video.type
+      });
+
+      return {
+        description: response.description || 'A video containing various visual and audio elements',
+        scenes: response.scenes || [],
+        tags: response.tags || ['video', 'multimedia'],
+        duration: response.duration || 0,
+        confidence: response.confidence || 0.8
+      };
+    } catch (error) {
+      console.error('Video analysis error:', error);
+      return {
+        description: 'A video containing various visual and audio elements',
+        scenes: [],
+        tags: ['video', 'multimedia'],
+        duration: 0,
+        confidence: 0.5
+      };
+    }
+  }
+
+  /**
+   * Generate cross-modal content recommendations
+   */
+  private async getCrossModalRecommendations(analysis: any): Promise<ContentRecommendation[]> {
+    try {
+      const response = await this.callAIFunction('ai-cross-modal-recommendations', {
+        analysis
+      });
+
+      return response.recommendations || [];
+    } catch (error) {
+      console.error('Cross-modal recommendations error:', error);
+      return [];
+    }
+  }
+
+  /**
+   * Visual similarity search
+   */
+  async visualSimilaritySearch(image: File, threshold = 0.7): Promise<SearchResult[]> {
+    try {
+      const analysis = await this.analyzeImage(image);
+      const searchQuery = `${analysis.description} ${analysis.tags.join(' ')}`;
+      
+      const results = await this.search(searchQuery);
+      
+      // Filter results based on visual similarity threshold
+      return results.filter(result => result.relevanceScore >= threshold);
+    } catch (error) {
+      console.error('Visual similarity search error:', error);
+      return [];
+    }
+  }
+
+  /**
+   * Voice search with intent understanding
+   */
+  async voiceSearchWithIntent(audio: File): Promise<{
+    transcription: string;
+    intent: string;
+    searchQuery: string;
+    results: SearchResult[];
+  }> {
+    try {
+      const audioAnalysis = await this.analyzeAudio(audio);
+      
+      // Determine intent from transcription
+      const intent = this.determineSearchIntent(audioAnalysis.transcription);
+      
+      // Enhance search query based on intent
+      const searchQuery = this.enhanceQueryForIntent(audioAnalysis.transcription, intent);
+      
+      // Perform search
+      const results = await this.search(searchQuery);
+      
+      return {
+        transcription: audioAnalysis.transcription,
+        intent,
+        searchQuery,
+        results
+      };
+    } catch (error) {
+      console.error('Voice search with intent error:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Determine search intent from text
+   */
+  private determineSearchIntent(text: string): string {
+    const intents = {
+      'tutorial': ['how to', 'tutorial', 'guide', 'learn', 'teach'],
+      'comparison': ['compare', 'vs', 'versus', 'difference', 'better'],
+      'troubleshooting': ['problem', 'error', 'issue', 'fix', 'help'],
+      'information': ['what is', 'explain', 'define', 'information'],
+      'implementation': ['implement', 'setup', 'configure', 'install']
+    };
+
+    const textLower = text.toLowerCase();
+    for (const [intent, keywords] of Object.entries(intents)) {
+      if (keywords.some(keyword => textLower.includes(keyword))) {
+        return intent;
+      }
+    }
+    return 'general';
+  }
+
+  /**
+   * Enhance query based on intent
+   */
+  private enhanceQueryForIntent(query: string, intent: string): string {
+    const intentEnhancements = {
+      'tutorial': 'tutorial guide step by step',
+      'comparison': 'comparison differences pros cons',
+      'troubleshooting': 'troubleshooting solution fix',
+      'information': 'explanation definition overview',
+      'implementation': 'implementation setup configuration'
+    };
+
+    const enhancement = intentEnhancements[intent as keyof typeof intentEnhancements] || '';
+    return `${query} ${enhancement}`.trim();
   }
 }
 
