@@ -216,6 +216,295 @@ class StoryblokService {
       suggestion.toLowerCase().includes(query.toLowerCase())
     ).slice(0, 4);
   }
+
+  // AI Enhancement Methods
+
+  /**
+   * Analyze content and extract insights using AI
+   */
+  async analyzeContent(content: string, metadata?: Record<string, unknown>): Promise<ContentAnalysis> {
+    try {
+      const response = await this.callAIFunction('ai-content-analysis', {
+        content,
+        metadata
+      });
+
+      return {
+        summary: response.summary || '',
+        keyTopics: response.keyTopics || [],
+        sentiment: response.sentiment || 'neutral',
+        readabilityScore: response.readabilityScore || 0,
+        seoScore: response.seoScore || 0,
+        suggestedTags: response.suggestedTags || [],
+        contentType: response.contentType || 'article',
+        wordCount: response.wordCount || 0,
+        estimatedReadTime: response.estimatedReadTime || 0
+      };
+    } catch (error) {
+      console.error('Content analysis error:', error);
+      // Return fallback analysis
+      return {
+        summary: content.substring(0, 200) + '...',
+        keyTopics: [],
+        sentiment: 'neutral',
+        readabilityScore: 50,
+        seoScore: 50,
+        suggestedTags: [],
+        contentType: 'article',
+        wordCount: content.split(' ').length,
+        estimatedReadTime: Math.ceil(content.split(' ').length / 200)
+      };
+    }
+  }
+
+  /**
+   * Generate intelligent content recommendations
+   */
+  async getContentRecommendations(
+    currentContent: StoryblokStory | SearchResult,
+    userHistory?: string[],
+    limit = 5
+  ): Promise<ContentRecommendation[]> {
+    try {
+      const response = await this.callAIFunction('ai-recommendations', {
+        currentContent,
+        userHistory,
+        limit
+      });
+
+      return response.recommendations || [];
+    } catch (error) {
+      console.error('Content recommendations error:', error);
+      return [];
+    }
+  }
+
+  /**
+   * Enhance search queries with AI-powered suggestions
+   */
+  async enhanceSearchQuery(query: string, context?: Record<string, unknown>): Promise<SearchEnhancement> {
+    try {
+      const response = await this.callAIFunction('ai-search-enhancement', {
+        query,
+        context
+      });
+
+      return {
+        originalQuery: query,
+        enhancedQuery: response.enhancedQuery || query,
+        intent: response.intent || 'search',
+        suggestions: response.suggestions || [],
+        relatedQueries: response.relatedQueries || [],
+        filters: response.filters || []
+      };
+    } catch (error) {
+      console.error('Search enhancement error:', error);
+      return {
+        originalQuery: query,
+        enhancedQuery: query,
+        intent: 'search',
+        suggestions: [],
+        relatedQueries: [],
+        filters: []
+      };
+    }
+  }
+
+  /**
+   * Generate content insights and analytics
+   */
+  async generateContentInsights(content: StoryblokStory[]): Promise<ContentInsight[]> {
+    try {
+      const response = await this.callAIFunction('ai-content-insights', {
+        content
+      });
+
+      return response.insights || [];
+    } catch (error) {
+      console.error('Content insights error:', error);
+      return [];
+    }
+  }
+
+  /**
+   * Auto-categorize and tag content
+   */
+  async categorizeContent(content: string, existingTags?: string[]): Promise<{
+    category: string;
+    tags: string[];
+    confidence: number;
+  }> {
+    try {
+      const response = await this.callAIFunction('ai-categorization', {
+        content,
+        existingTags
+      });
+
+      return {
+        category: response.category || 'general',
+        tags: response.tags || [],
+        confidence: response.confidence || 0.5
+      };
+    } catch (error) {
+      console.error('Content categorization error:', error);
+      return {
+        category: 'general',
+        tags: [],
+        confidence: 0.5
+      };
+    }
+  }
+
+  /**
+   * Generate content suggestions for improvement
+   */
+  async generateContentSuggestions(content: string, type: string): Promise<{
+    suggestions: Array<{
+      type: 'seo' | 'readability' | 'engagement' | 'structure';
+      title: string;
+      description: string;
+      priority: 'high' | 'medium' | 'low';
+      actionable: boolean;
+    }>;
+    overallScore: number;
+  }> {
+    try {
+      const response = await this.callAIFunction('ai-content-suggestions', {
+        content,
+        type
+      });
+
+      return {
+        suggestions: response.suggestions || [],
+        overallScore: response.overallScore || 50
+      };
+    } catch (error) {
+      console.error('Content suggestions error:', error);
+      return {
+        suggestions: [],
+        overallScore: 50
+      };
+    }
+  }
+
+  /**
+   * Extract key information from content
+   */
+  async extractKeyInformation(content: string): Promise<{
+    entities: Array<{
+      name: string;
+      type: 'person' | 'organization' | 'location' | 'date' | 'product';
+      confidence: number;
+    }>;
+    keyPhrases: string[];
+    summary: string;
+    questions: string[];
+  }> {
+    try {
+      const response = await this.callAIFunction('ai-extraction', {
+        content
+      });
+
+      return {
+        entities: response.entities || [],
+        keyPhrases: response.keyPhrases || [],
+        summary: response.summary || '',
+        questions: response.questions || []
+      };
+    } catch (error) {
+      console.error('Key information extraction error:', error);
+      return {
+        entities: [],
+        keyPhrases: [],
+        summary: '',
+        questions: []
+      };
+    }
+  }
+
+  /**
+   * Generate conversational responses with context awareness
+   */
+  async generateContextualResponse(
+    message: string,
+    context: {
+      currentContent?: StoryblokStory | SearchResult;
+      searchHistory?: string[];
+      userPreferences?: Record<string, unknown>;
+    }
+  ): Promise<{
+    response: string;
+    suggestions: string[];
+    relatedContent: ContentRecommendation[];
+    confidence: number;
+  }> {
+    try {
+      const response = await this.callAIFunction('ai-conversational', {
+        message,
+        context
+      });
+
+      return {
+        response: response.response || 'I apologize, but I need more information to help you.',
+        suggestions: response.suggestions || [],
+        relatedContent: response.relatedContent || [],
+        confidence: response.confidence || 0.5
+      };
+    } catch (error) {
+      console.error('Contextual response error:', error);
+      return {
+        response: 'I apologize, but I encountered an error processing your request.',
+        suggestions: [],
+        relatedContent: [],
+        confidence: 0
+      };
+    }
+  }
+}
+
+// AI Enhancement Interfaces
+export interface ContentAnalysis {
+  summary: string;
+  keyTopics: string[];
+  sentiment: 'positive' | 'neutral' | 'negative';
+  readabilityScore: number;
+  seoScore: number;
+  suggestedTags: string[];
+  contentType: string;
+  wordCount: number;
+  estimatedReadTime: number;
+}
+
+export interface ContentRecommendation {
+  id: string;
+  title: string;
+  reason: string;
+  confidence: number;
+  type: 'related' | 'trending' | 'personalized' | 'complementary';
+  url: string;
+  thumbnail?: string;
+}
+
+export interface SearchEnhancement {
+  originalQuery: string;
+  enhancedQuery: string;
+  intent: string;
+  suggestions: string[];
+  relatedQueries: string[];
+  filters: Array<{
+    field: string;
+    value: string;
+    type: 'content_type' | 'tag' | 'date' | 'author';
+  }>;
+}
+
+export interface ContentInsight {
+  metric: string;
+  value: number | string;
+  trend: 'up' | 'down' | 'stable';
+  description: string;
+  actionable: boolean;
+  recommendation?: string;
 }
 
 export const storyblokService = new StoryblokService();

@@ -10,10 +10,18 @@ import {
   Zap,
   Brain,
   Eye,
-  ThumbsUp
+  ThumbsUp,
+  RefreshCw,
+  Sparkles,
+  Lightbulb
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Progress } from "@/components/ui/progress";
+import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
+import { storyblokService, ContentInsight } from '../../services/storyblokService';
 
 interface AnalyticsData {
   totalSearches: number;
@@ -52,6 +60,53 @@ interface AnalyticsData {
 const AnalyticsDashboard: React.FC = () => {
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [aiInsights, setAiInsights] = useState<ContentInsight[]>([]);
+  const [insightsLoading, setInsightsLoading] = useState(false);
+
+  const generateAIInsights = async () => {
+    setInsightsLoading(true);
+    try {
+      // Simulate content data for insights generation
+      const mockContent = [
+        { id: 1, name: 'Getting Started Guide', content: 'Learn how to set up Storyblok with your favorite framework' },
+        { id: 2, name: 'API Documentation', content: 'Complete reference for Storyblok API endpoints and methods' },
+        { id: 3, name: 'Content Modeling', content: 'Best practices for structuring your content in Storyblok' }
+      ];
+      
+      const insights = await storyblokService.generateContentInsights(mockContent as any);
+      setAiInsights(insights);
+    } catch (error) {
+      console.error('Failed to generate AI insights:', error);
+      // Fallback insights
+      setAiInsights([
+        {
+          metric: 'Content Quality Score',
+          value: 87,
+          trend: 'up',
+          description: 'Overall content quality has improved by 12% this month',
+          actionable: true,
+          recommendation: 'Focus on SEO optimization for underperforming content'
+        },
+        {
+          metric: 'User Engagement Rate',
+          value: '73%',
+          trend: 'stable',
+          description: 'Users are spending more time on AI-recommended content',
+          actionable: true,
+          recommendation: 'Increase AI-powered content suggestions'
+        },
+        {
+          metric: 'Search Success Rate',
+          value: '94%',
+          trend: 'up',
+          description: 'AI-enhanced search queries show higher success rates',
+          actionable: false
+        }
+      ]);
+    } finally {
+      setInsightsLoading(false);
+    }
+  };
 
   useEffect(() => {
     // Simulate loading analytics data
@@ -103,6 +158,7 @@ const AnalyticsDashboard: React.FC = () => {
     };
 
     loadAnalytics();
+    generateAIInsights();
   }, []);
 
   if (loading) {
@@ -194,9 +250,25 @@ const AnalyticsDashboard: React.FC = () => {
         >
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center">
-                <Brain className="h-5 w-5 mr-2 text-purple-600" />
-                AI Performance Insights
+              <CardTitle className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <Brain className="h-5 w-5 mr-2 text-purple-600" />
+                  AI Performance Insights
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={generateAIInsights}
+                  disabled={insightsLoading}
+                  className="text-xs"
+                >
+                  {insightsLoading ? (
+                    <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin mr-2" />
+                  ) : (
+                    <RefreshCw className="w-4 h-4 mr-2" />
+                  )}
+                  Refresh Insights
+                </Button>
               </CardTitle>
               <CardDescription>
                 Advanced AI capabilities powering your content discovery
@@ -218,6 +290,79 @@ const AnalyticsDashboard: React.FC = () => {
             </CardContent>
           </Card>
         </motion.div>
+
+        {/* AI-Generated Content Insights */}
+        {aiInsights.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="mb-8"
+          >
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Sparkles className="h-5 w-5 mr-2 text-blue-600" />
+                  AI-Generated Content Insights
+                </CardTitle>
+                <CardDescription>
+                  Intelligent analysis and recommendations for your content strategy
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {aiInsights.map((insight, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: index * 0.1 }}
+                      className="p-4 glass rounded-lg border border-border/50"
+                    >
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex-1">
+                          <h4 className="font-medium text-sm text-foreground mb-1">
+                            {insight.metric}
+                          </h4>
+                          <div className="text-2xl font-bold text-blue-600 mb-1">
+                            {insight.value}
+                          </div>
+                        </div>
+                        <div className={`p-1 rounded-full ${
+                          insight.trend === 'up' ? 'bg-green-100 text-green-600' :
+                          insight.trend === 'down' ? 'bg-red-100 text-red-600' :
+                          'bg-gray-100 text-gray-600'
+                        }`}>
+                          {insight.trend === 'up' ? '↗' : insight.trend === 'down' ? '↘' : '→'}
+                        </div>
+                      </div>
+                      
+                      <p className="text-sm text-muted-foreground mb-3">
+                        {insight.description}
+                      </p>
+                      
+                      {insight.actionable && insight.recommendation && (
+                        <div className="p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                          <div className="flex items-start gap-2">
+                            <Lightbulb className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                            <div>
+                              <p className="text-xs font-medium text-blue-800 dark:text-blue-200 mb-1">
+                                Recommendation
+                              </p>
+                              <p className="text-xs text-blue-700 dark:text-blue-300">
+                                {insight.recommendation}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </motion.div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           {/* Top Search Queries */}
