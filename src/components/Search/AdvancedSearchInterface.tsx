@@ -166,13 +166,13 @@ const AdvancedSearchInterface: React.FC<AdvancedSearchInterfaceProps> = ({
   }, []);
 
   return (
-    <div className="relative w-full max-w-4xl mx-auto">
+    <div className="relative w-full max-w-4xl mx-auto px-4 sm:px-6">
       {/* Search Input */}
       <div className="relative">
-        <div className={`relative flex items-center bg-white/90 backdrop-blur-sm border-2 rounded-2xl shadow-lg transition-all duration-300 ${
+        <div className={`relative flex items-center bg-white/90 backdrop-blur-sm border-2 rounded-xl sm:rounded-2xl shadow-lg transition-all duration-300 ${
           isFocused ? 'border-primary shadow-xl shadow-primary/20' : 'border-gray-200'
         }`}>
-          <Search className="absolute left-4 w-5 h-5 text-gray-400" />
+          <Search className="absolute left-3 sm:left-4 w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
           
           <input
             ref={inputRef}
@@ -186,36 +186,36 @@ const AdvancedSearchInterface: React.FC<AdvancedSearchInterfaceProps> = ({
             onBlur={() => setIsFocused(false)}
             onKeyDown={handleKeyDown}
             placeholder="Search your Storyblok content with AI..."
-            className="flex-1 px-12 py-4 text-lg bg-transparent border-none outline-none placeholder:text-gray-400"
+            className="flex-1 px-10 sm:px-12 py-3 sm:py-4 text-base sm:text-lg bg-transparent border-none outline-none placeholder:text-gray-400"
           />
 
-          <div className="flex items-center gap-2 pr-4">
+          <div className="flex items-center gap-1 sm:gap-2 pr-2 sm:pr-4">
             {/* Voice Search Button */}
             <button
               onClick={handleVoiceSearch}
-              className={`p-2 rounded-full transition-colors ${
+              className={`p-1.5 sm:p-2 rounded-full transition-colors ${
                 isListening 
                   ? 'bg-red-100 text-red-600 animate-pulse' 
                   : 'hover:bg-gray-100 text-gray-500'
               }`}
               title={isListening ? 'Stop listening' : 'Voice search'}
             >
-              {isListening ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+              {isListening ? <MicOff className="w-4 h-4 sm:w-5 sm:h-5" /> : <Mic className="w-4 h-4 sm:w-5 sm:h-5" />}
             </button>
 
             {/* Filter Button */}
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className={`p-2 rounded-full transition-colors relative ${
+              className={`p-1.5 sm:p-2 rounded-full transition-colors relative ${
                 hasActiveFilters 
                   ? 'bg-primary/10 text-primary' 
                   : 'hover:bg-gray-100 text-gray-500'
               }`}
               title="Search filters"
             >
-              <Filter className="w-5 h-5" />
+              <Filter className="w-4 h-4 sm:w-5 sm:h-5" />
               {hasActiveFilters && (
-                <div className="absolute -top-1 -right-1 w-3 h-3 bg-primary rounded-full"></div>
+                <div className="absolute -top-1 -right-1 w-2 h-2 sm:w-3 sm:h-3 bg-primary rounded-full"></div>
               )}
             </button>
 
@@ -223,12 +223,15 @@ const AdvancedSearchInterface: React.FC<AdvancedSearchInterfaceProps> = ({
             <button
               onClick={() => handleSearch()}
               disabled={isLoading}
-              className="px-6 py-2 bg-primary text-white rounded-xl hover:bg-primary/90 disabled:opacity-50 transition-colors"
+              className="px-3 sm:px-6 py-1.5 sm:py-2 bg-primary text-white rounded-lg sm:rounded-xl hover:bg-primary/90 disabled:opacity-50 transition-colors text-sm sm:text-base"
             >
               {isLoading ? (
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
               ) : (
-                'Search'
+                <>
+                  <span className="hidden sm:inline">Search</span>
+                  <Search className="w-4 h-4 sm:hidden" />
+                </>
               )}
             </button>
           </div>
@@ -242,7 +245,7 @@ const AdvancedSearchInterface: React.FC<AdvancedSearchInterfaceProps> = ({
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden z-50"
+              className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl sm:rounded-2xl shadow-xl border border-gray-200 overflow-hidden z-50 max-h-[70vh] overflow-y-auto"
             >
               {/* Search Suggestions */}
               {suggestions.suggestions.length > 0 && (
@@ -323,7 +326,7 @@ const AdvancedSearchInterface: React.FC<AdvancedSearchInterfaceProps> = ({
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="mt-4 bg-white/90 backdrop-blur-sm rounded-2xl border border-gray-200 p-6"
+            className="mt-4 bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-gray-200 p-4 sm:p-6"
           >
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-gray-800">Search Filters</h3>
@@ -335,7 +338,7 @@ const AdvancedSearchInterface: React.FC<AdvancedSearchInterfaceProps> = ({
               </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {/* Content Type Filter */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">

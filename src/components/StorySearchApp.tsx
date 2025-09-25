@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { SearchProvider } from '../contexts/SearchContext';
 import Header from './ui/Header';
 import SearchInterface from './Search/SearchInterface';
+import MobileSearchInterface from './Search/MobileSearchInterface';
 import ResultsGrid from './Results/ResultsGrid';
 import AISidebar from './AIFeatures/AISidebar';
 import SearchAnalytics from './AIFeatures/SearchAnalytics';
 import Onboarding, { QuickTips } from './ui/Onboarding';
+import MobileNavigation from './ui/MobileNavigation';
 import { useSearchShortcuts, KeyboardShortcutsHelp } from '../hooks/useKeyboardShortcuts';
+import { useMobile } from '../hooks/useMobile';
 import { Toast } from './ui/Skeleton';
 
 const StorySearchApp: React.FC = () => {
@@ -15,7 +18,11 @@ const StorySearchApp: React.FC = () => {
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [showQuickTips, setShowQuickTips] = useState(false);
   const [showKeyboardHelp, setShowKeyboardHelp] = useState(false);
+  const [showMobileSearch, setShowMobileSearch] = useState(false);
   const [toasts, setToasts] = useState<Array<{ id: string; message: string; type: 'success' | 'error' | 'info' | 'warning' }>>([]);
+  
+  // Mobile detection
+  const { isMobile, isTablet } = useMobile();
 
   // Check if user has completed onboarding
   useEffect(() => {
@@ -82,31 +89,62 @@ const StorySearchApp: React.FC = () => {
           onShowTips={() => setShowQuickTips(true)}
           onShowHelp={() => setShowKeyboardHelp(true)}
         />
+
+        {/* Mobile Navigation */}
+        {isMobile && (
+          <MobileNavigation
+            onSearchFocus={() => setShowMobileSearch(true)}
+            onAIChatOpen={() => setAISidebarOpen(true)}
+            onAnalyticsOpen={() => {}}
+            currentPage={searchMode}
+          />
+        )}
         
+        {/* Mobile Search Overlay */}
+        {isMobile && showMobileSearch && (
+          <div className="fixed inset-0 z-50 bg-background">
+            <MobileSearchInterface 
+              isFullscreen={true}
+              onBack={() => setShowMobileSearch(false)}
+            />
+          </div>
+        )}
+
         {/* Main Content */}
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex gap-8">
+        <div className="container mx-auto px-4 py-4 sm:py-8">
+          <div className={`${isMobile ? 'block' : 'flex gap-8'}`}>
             {/* Search & Results Area */}
-            <div className={`flex-1 transition-all duration-300 ${
-              isAISidebarOpen ? 'lg:mr-80' : ''
+            <div className={`${isMobile ? 'w-full' : 'flex-1 transition-all duration-300'} ${
+              !isMobile && isAISidebarOpen ? 'lg:mr-80' : ''
             }`}>
-              {/* Search Interface */}
-              <SearchInterface mode={searchMode} />
-              
-              {/* Results Area */}
-              <div className="mt-8">
-                <ResultsGrid />
-              </div>
-              
-              {/* Search Analytics */}
-              <SearchAnalytics />
+              {isMobile ? (
+                <div className="space-y-6">
+                  <MobileSearchInterface />
+                  <ResultsGrid />
+                </div>
+              ) : (
+                <>
+                  {/* Search Interface */}
+                  <SearchInterface mode={searchMode} />
+                  
+                  {/* Results Area */}
+                  <div className="mt-8">
+                    <ResultsGrid />
+                  </div>
+                  
+                  {/* Search Analytics */}
+                  <SearchAnalytics />
+                </>
+              )}
             </div>
             
-            {/* AI Sidebar */}
-            <AISidebar 
-              isOpen={isAISidebarOpen}
-              onClose={() => setAISidebarOpen(false)}
-            />
+            {/* AI Sidebar - Desktop Only */}
+            {!isMobile && (
+              <AISidebar 
+                isOpen={isAISidebarOpen}
+                onClose={() => setAISidebarOpen(false)}
+              />
+            )}
           </div>
         </div>
 

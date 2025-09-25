@@ -31,17 +31,17 @@ const StorySearchLanding = () => {
       </div>
 
       {/* Navigation */}
-      <nav className="relative z-50 px-6 py-4">
+      <nav className="relative z-50 px-4 sm:px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             className="flex items-center space-x-3"
           >
-            <div className="w-10 h-10 bg-ai-gradient rounded-xl flex items-center justify-center shadow-lg animate-glow">
-              <Search className="w-6 h-6 text-white" />
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-ai-gradient rounded-lg sm:rounded-xl flex items-center justify-center shadow-lg animate-glow">
+              <Search className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
             </div>
-            <span className="text-2xl font-bold text-gradient-hero">
+            <span className="text-xl sm:text-2xl font-bold text-gradient-hero">
               StorySearch AI
             </span>
           </motion.div>
@@ -55,6 +55,9 @@ const StorySearchLanding = () => {
           
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center space-x-4">
+            <a href="/search" className="px-4 py-2 text-muted-foreground hover:text-primary transition-colors font-medium">
+              Try AI Search
+            </a>
             <button className="px-4 py-2 text-muted-foreground hover:text-foreground transition-colors">
               Sign In
             </button>
@@ -84,6 +87,9 @@ const StorySearchLanding = () => {
               <a href="#how-it-works" className="block text-foreground hover:text-primary">How it Works</a>
               <a href="#testimonials" className="block text-foreground hover:text-primary">Testimonials</a>
               <div className="pt-4 border-t border-border space-y-3">
+                <a href="/search" className="w-full px-4 py-2 bg-primary/10 text-primary hover:bg-primary/20 rounded-lg font-medium text-center block">
+                  Try AI Search
+                </a>
                 <button className="w-full px-4 py-2 text-muted-foreground hover:text-foreground">Sign In</button>
                 <button className="w-full btn-ai-primary">Get Started Free</button>
               </div>

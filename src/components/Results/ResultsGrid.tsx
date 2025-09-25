@@ -20,7 +20,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import ResultCard from './ResultCard';
 import LoadingSpinner from '../ui/LoadingSpinner';
-import EmptyState from '../ui/EmptyState';
+import { EmptyState } from '../ui/Skeleton';
 import type { SearchResult } from '../../services/storyblokService';
 
 const ResultsGrid: React.FC = () => {
@@ -361,8 +361,8 @@ const ResultsGrid: React.FC = () => {
       {/* Results Grid/List */}
       <motion.div
         className={viewMode === 'grid' 
-          ? "grid gap-6 md:grid-cols-2 lg:grid-cols-3" 
-          : "space-y-4"
+          ? "grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" 
+          : "space-y-3 sm:space-y-4"
         }
         layout
       >

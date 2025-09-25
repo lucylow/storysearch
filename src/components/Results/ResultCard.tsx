@@ -80,7 +80,7 @@ const ResultCard: React.FC<ResultCardProps> = ({ result }) => {
       <Card className="h-full overflow-hidden border-2 border-border/50 hover:border-primary/40 hover:shadow-[0_20px_40px_hsl(var(--primary)/0.15)] transition-all duration-500 backdrop-blur-xl bg-background/80">
         {/* Thumbnail Section */}
         {result.thumbnail && (
-          <div className="relative h-64 overflow-hidden">
+          <div className="relative h-48 sm:h-64 overflow-hidden">
             <img
               src={result.thumbnail}
               alt={result.title}
@@ -90,22 +90,22 @@ const ResultCard: React.FC<ResultCardProps> = ({ result }) => {
             
             {/* Type Badge */}
             <motion.div 
-              className="absolute top-4 left-4"
+              className="absolute top-2 left-2 sm:top-4 sm:left-4"
               whileHover={{ scale: 1.05 }}
             >
-              <Badge className={`inline-flex items-center px-3 py-2 rounded-xl text-sm font-semibold border backdrop-blur-sm ${typeColors[result.type as keyof typeof typeColors] || typeColors.story}`}>
-                <span className="mr-2 text-lg">{typeIcons[result.type as keyof typeof typeIcons] || typeIcons.story}</span>
-                {result.type}
+              <Badge className={`inline-flex items-center px-2 py-1 sm:px-3 sm:py-2 rounded-lg sm:rounded-xl text-xs sm:text-sm font-semibold border backdrop-blur-sm ${typeColors[result.type as keyof typeof typeColors] || typeColors.story}`}>
+                <span className="mr-1 sm:mr-2 text-sm sm:text-lg">{typeIcons[result.type as keyof typeof typeIcons] || typeIcons.story}</span>
+                <span className="hidden sm:inline">{result.type}</span>
               </Badge>
             </motion.div>
 
             {/* Relevance Score */}
             <motion.div 
-              className="absolute top-4 right-4 flex items-center space-x-2 bg-background/95 backdrop-blur-md px-3 py-2 rounded-xl border border-border/50"
+              className="absolute top-2 right-2 sm:top-4 sm:right-4 flex items-center space-x-1 sm:space-x-2 bg-background/95 backdrop-blur-md px-2 py-1 sm:px-3 sm:py-2 rounded-lg sm:rounded-xl border border-border/50"
               whileHover={{ scale: 1.05 }}
             >
-              <Star className={`w-4 h-4 ${getRelevanceColor(relevanceScore)} fill-current animate-pulse-glow`} />
-              <span className="text-sm font-bold text-foreground">
+              <Star className={`w-3 h-3 sm:w-4 sm:h-4 ${getRelevanceColor(relevanceScore)} fill-current animate-pulse-glow`} />
+              <span className="text-xs sm:text-sm font-bold text-foreground">
                 {relevanceScore}%
               </span>
             </motion.div>

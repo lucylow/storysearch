@@ -1,12 +1,22 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, Sparkles, Lightbulb } from 'lucide-react';
+import { Send, Bot, User, Sparkles, Lightbulb, Brain, BookOpen, ArrowRight, Target, Zap, CheckCircle, ExternalLink } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAIChat } from '../../hooks/useAIChat';
+import { algoliaService, AskAIResponse } from '../../services/algoliaService';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 const AIChatInterface: React.FC = () => {
   const [input, setInput] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { messages, sendMessage, isLoading, error } = useAIChat();
+  
+  // Enhanced AI state
+  const [askAIResponse, setAskAIResponse] = useState<AskAIResponse | null>(null);
+  const [isAskAILoading, setIsAskAILoading] = useState(false);
+  const [showAskAI, setShowAskAI] = useState(false);
+  const [currentQuestion, setCurrentQuestion] = useState('');
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -19,12 +29,43 @@ const AIChatInterface: React.FC = () => {
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
 
-    try {
-      await sendMessage(input);
-      setInput('');
-    } catch (err) {
-      // Error is handled in the hook
-      console.error('Failed to send message:', err);
+    const userInput = input.trim();
+    setInput('');
+    
+    // Check if this looks like a question for AskAI
+    const isQuestion = userInput.includes('?') || 
+                      userInput.toLowerCase().startsWith('what') ||
+                      userInput.toLowerCase().startsWith('how') ||
+                      userInput.toLowerCase().startsWith('why') ||
+                      userInput.toLowerCase().startsWith('when') ||
+                      userInput.toLowerCase().startsWith('where') ||
+                      userInput.toLowerCase().startsWith('can') ||
+                      userInput.toLowerCase().startsWith('should');
+
+    if (isQuestion) {
+      // Use AskAI for questions
+      setCurrentQuestion(userInput);
+      setIsAskAILoading(true);
+      setShowAskAI(true);
+      
+      try {
+        const response = await algoliaService.askAIAdvanced(userInput);
+        setAskAIResponse(response);
+      } catch (err) {
+        console.error('AskAI error:', err);
+        // Fallback to regular chat
+        await sendMessage(userInput);
+      } finally {
+        setIsAskAILoading(false);
+      }
+    } else {
+      // Use regular chat for non-questions
+      try {
+        await sendMessage(userInput);
+      } catch (err) {
+        // Error is handled in the hook
+        console.error('Failed to send message:', err);
+      }
     }
   };
 
@@ -176,6 +217,151 @@ const AIChatInterface: React.FC = () => {
           )}
         </AnimatePresence>
       </div>
+
+      {/* AskAI Response Display */}
+      <AnimatePresence>
+        {(showAskAI || askAIResponse) && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="px-4"
+          >
+            <Card className="border-2 border-blue-200 dark:border-blue-800 bg-gradient-to-r from-blue-50/50 to-purple-50/50 dark:from-blue-900/10 dark:to-purple-900/10">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-blue-800 dark:text-blue-200">
+                  <Brain className="w-5 h-5" />
+                  AskAI Response
+                  {askAIResponse && (
+                    <Badge variant="outline" className="text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200">
+                      {Math.round(askAIResponse.confidence * 100)}% confidence
+                    </Badge>
+                  )}
+                </CardTitle>
+                <CardDescription className="text-blue-700 dark:text-blue-300">
+                  {currentQuestion}
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {isAskAILoading ? (
+                  <div className="flex items-center gap-3">
+                    <div className="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+                    <span className="text-sm text-muted-foreground">Analyzing your question with AI...</span>
+                  </div>
+                ) : askAIResponse ? (
+                  <>
+                    {/* AI Answer */}
+                    <div className="p-4 bg-white/50 dark:bg-gray-900/50 rounded-lg border border-blue-200 dark:border-blue-800">
+                      <div className="flex items-start gap-2 mb-2">
+                        <CheckCircle className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                        <span className="text-sm font-medium text-green-800 dark:text-green-200">Answer</span>
+                      </div>
+                      <p className="text-sm text-gray-800 dark:text-gray-200 leading-relaxed">
+                        {askAIResponse.answer}
+                      </p>
+                    </div>
+
+                    {/* Sources */}
+                    {askAIResponse.sources.length > 0 && (
+                      <div>
+                        <h4 className="text-sm font-medium text-foreground mb-3 flex items-center gap-2">
+                          <BookOpen className="w-4 h-4" />
+                          Sources ({askAIResponse.sources.length})
+                        </h4>
+                        <div className="space-y-2">
+                          {askAIResponse.sources.map((source, index) => (
+                            <motion.div
+                              key={source.id}
+                              initial={{ opacity: 0, x: -10 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: index * 0.1 }}
+                              className="p-3 bg-white/30 dark:bg-gray-900/30 rounded-lg border border-border/50 hover:border-blue-300 dark:hover:border-blue-700 transition-colors"
+                            >
+                              <div className="flex items-start justify-between">
+                                <div className="flex-1">
+                                  <h5 className="text-sm font-medium text-foreground mb-1">{source.title}</h5>
+                                  <p className="text-xs text-muted-foreground mb-2">{source.excerpt}</p>
+                                  <div className="flex items-center gap-2">
+                                    <Badge variant="secondary" className="text-xs">
+                                      {Math.round(source.relevanceScore * 100)}% match
+                                    </Badge>
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      className="text-xs h-6 px-2"
+                                      onClick={() => window.open(source.url, '_blank')}
+                                    >
+                                      <ExternalLink className="w-3 h-3 mr-1" />
+                                      View
+                                    </Button>
+                                  </div>
+                                </div>
+                              </div>
+                            </motion.div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Related Questions */}
+                    {askAIResponse.relatedQuestions.length > 0 && (
+                      <div>
+                        <h4 className="text-sm font-medium text-foreground mb-3 flex items-center gap-2">
+                          <ArrowRight className="w-4 h-4" />
+                          Related Questions
+                        </h4>
+                        <div className="space-y-1">
+                          {askAIResponse.relatedQuestions.map((question, index) => (
+                            <motion.button
+                              key={index}
+                              initial={{ opacity: 0, y: 5 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: index * 0.1 }}
+                              onClick={() => {
+                                setInput(question);
+                                setShowAskAI(false);
+                                setAskAIResponse(null);
+                              }}
+                              className="w-full text-left p-2 text-sm rounded-lg hover:bg-primary/5 transition-colors text-foreground hover:text-primary flex items-center gap-2"
+                            >
+                              <Target className="w-3 h-3 text-muted-foreground" />
+                              {question}
+                            </motion.button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Suggested Actions */}
+                    {askAIResponse.suggestedActions.length > 0 && (
+                      <div>
+                        <h4 className="text-sm font-medium text-foreground mb-3 flex items-center gap-2">
+                          <Zap className="w-4 h-4" />
+                          Suggested Actions
+                        </h4>
+                        <div className="flex flex-wrap gap-2">
+                          {askAIResponse.suggestedActions.map((action, index) => (
+                            <motion.div
+                              key={index}
+                              initial={{ opacity: 0, scale: 0.9 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              transition={{ delay: index * 0.1 }}
+                            >
+                              <Badge variant="outline" className="text-xs hover:bg-primary/10 transition-colors cursor-pointer">
+                                {action}
+                              </Badge>
+                            </motion.div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </>
+                ) : null}
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Input Area */}
       <div className="border-t border-border p-4 bg-background/30">

@@ -264,7 +264,7 @@ graph LR
 
 ### Prerequisites
 
-- Node.js 18+
+- Node.js 18+ 
 - Storyblok account with API access
 - Algolia account with AI features
 - Supabase account for backend services
@@ -606,28 +606,28 @@ graph TB
 ## 🎯 Future Roadmap
 
 ### Phase 1: Enhanced AI (Q4 2024)
-- 🤖 **Machine Learning Models**: Train custom models on user interactions
-- 🌍 **Multi-language Support**: Automatic translation and localization
-- 🎤 **Voice Search**: Speech-to-text and voice-based queries
-- 📱 **Mobile App**: Native iOS and Android applications
+🤖 **Machine Learning Models**: Train custom models on user interactions
+🌍 **Multi-language Support**: Automatic translation and localization
+🎤 **Voice Search**: Speech-to-text and voice-based queries
+📱 **Mobile App**: Native iOS and Android applications
 
 ### Phase 2: Advanced Analytics (Q1 2025)
-- 🔮 **Predictive Analytics**: Forecast content trends and user needs
-- 🧪 **A/B Testing Framework**: Optimize search algorithms
-- 👥 **Advanced Segmentation**: User behavior analysis and targeting
-- 📊 **Content Optimization**: AI-powered content improvement suggestions
+🔮 **Predictive Analytics**: Forecast content trends and user needs
+🧪 **A/B Testing Framework**: Optimize search algorithms
+👥 **Advanced Segmentation**: User behavior analysis and targeting
+📊 **Content Optimization**: AI-powered content improvement suggestions
 
 ### Phase 3: Enterprise Features (Q2 2025)
-- 🏢 **White-label Solutions**: Customizable branding for agencies
-- 🔐 **Advanced Security**: Enterprise-grade security and compliance
-- 🎯 **Custom AI Models**: Industry-specific training and optimization
-- 🔌 **Integration Marketplace**: Third-party tool integrations
+🏢 **White-label Solutions**: Customizable branding for agencies
+🔐 **Advanced Security**: Enterprise-grade security and compliance
+🎯 **Custom AI Models**: Industry-specific training and optimization
+🔌 **Integration Marketplace**: Third-party tool integrations
 
 ### Phase 4: Platform Expansion (Q3 2025)
-- 🌐 **Browser Extension**: Cross-site content discovery
-- 🔗 **API Platform**: Public API for third-party developers
-- ⚡ **Workflow Automation**: Advanced content management automation
-- 🚀 **Global Scaling**: Multi-region deployment and optimization
+🌐 **Browser Extension**: Cross-site content discovery
+🔗 **API Platform**: Public API for third-party developers
+⚡ **Workflow Automation**: Advanced content management automation
+🚀 **Global Scaling**: Multi-region deployment and optimization
 
 ---
 
