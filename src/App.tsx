@@ -7,6 +7,8 @@ import Index from "./pages/Index";
 import AppPage from "./pages/AppPage";
 import NotFound from "./pages/NotFound";
 import AnalyticsDashboard from "./components/AIFeatures/AnalyticsDashboard";
+import TestPage from "./pages/TestPage";
+import DiagnosticPage from "./pages/DiagnosticPage";
 import FloatingAIChatbot from "./components/UI/FloatingAIChatbot";
 import { AIContextProvider } from "./contexts/AIContext";
 
@@ -23,6 +25,8 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/app" element={<AppPage />} />
             <Route path="/analytics" element={<AnalyticsDashboard />} />
+            <Route path="/test" element={<TestPage />} />
+            <Route path="/diagnostic" element={<DiagnosticPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

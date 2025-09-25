@@ -19,9 +19,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import ResultCard from './ResultCard';
-import EmptyState from '../UI/EmptyState';
-import LoadingSpinner from '../UI/LoadingSpinner';
-import { SearchResultSkeleton, SearchProgressBar } from '../UI/Skeleton';
+import { SearchResultSkeleton, SearchProgressBar, EmptyState } from '../UI/Skeleton';
 import type { SearchResult } from '../../services/storyblokService';
 
 const ResultsGrid: React.FC = () => {
