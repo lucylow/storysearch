@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useSearchContext } from '../contexts/SearchContext';
-import { algoliaService } from '../services/algoliaService';
+import { storyblokService } from '../services/storyblokService';
 
 export const useSearch = () => {
   const {
@@ -30,7 +30,7 @@ export const useSearch = () => {
     setHasSearched(true);
 
     try {
-      const searchResults = await algoliaService.search(queryToSearch, filters);
+      const searchResults = await storyblokService.search(queryToSearch);
       setResults(searchResults);
       if (searchQuery) {
         setQuery(searchQuery);

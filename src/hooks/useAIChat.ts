@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useAIContext } from '../contexts/AIContext';
-import { algoliaService } from '../services/algoliaService';
+import { storyblokService } from '../services/storyblokService';
 
 export const useAIChat = () => {
   const {
@@ -29,14 +29,14 @@ export const useAIChat = () => {
     setAIError(null);
 
     try {
-      const response = await algoliaService.askAI(content);
+      const response = await storyblokService.askAI(content);
       
       const assistantMessage = {
         id: (Date.now() + 1).toString(),
         content: response,
         role: 'assistant' as const,
         timestamp: new Date(),
-        suggestions: await algoliaService.getSuggestions(content)
+        suggestions: await storyblokService.getSuggestions(content)
       };
 
       setMessages(prev => [...prev, assistantMessage]);

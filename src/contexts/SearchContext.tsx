@@ -1,16 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-
-interface SearchResult {
-  id: string;
-  title: string;
-  content: string;
-  type: 'article' | 'documentation' | 'tutorial' | 'guide';
-  url: string;
-  thumbnail?: string;
-  tags: string[];
-  createdAt: string;
-  relevanceScore: number;
-}
+import type { SearchResult } from '../services/storyblokService';
 
 interface SearchContextType {
   query: string;

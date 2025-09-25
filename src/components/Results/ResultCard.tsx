@@ -1,18 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ExternalLink, Calendar, Tag, Star } from 'lucide-react';
-
-interface SearchResult {
-  id: string;
-  title: string;
-  content: string;
-  type: 'article' | 'documentation' | 'tutorial' | 'guide';
-  url: string;
-  thumbnail?: string;
-  tags: string[];
-  createdAt: string;
-  relevanceScore: number;
-}
+import type { SearchResult } from '../../services/storyblokService';
 
 interface ResultCardProps {
   result: SearchResult;
@@ -20,17 +9,15 @@ interface ResultCardProps {
 
 const ResultCard: React.FC<ResultCardProps> = ({ result }) => {
   const typeColors = {
-    article: 'bg-blue-100 text-blue-800 border-blue-200',
-    documentation: 'bg-green-100 text-green-800 border-green-200',
-    tutorial: 'bg-purple-100 text-purple-800 border-purple-200',
-    guide: 'bg-orange-100 text-orange-800 border-orange-200'
+    story: 'bg-blue-100 text-blue-800 border-blue-200',
+    component: 'bg-green-100 text-green-800 border-green-200',
+    folder: 'bg-purple-100 text-purple-800 border-purple-200'
   };
 
   const typeIcons = {
-    article: '📄',
-    documentation: '📚',
-    tutorial: '🎓',
-    guide: '📖'
+    story: '📄',
+    component: '🧩',
+    folder: '📁'
   };
 
   return (
@@ -104,7 +91,7 @@ const ResultCard: React.FC<ResultCardProps> = ({ result }) => {
         <div className="flex items-center justify-between text-xs text-muted-foreground">
           <div className="flex items-center space-x-1">
             <Calendar className="w-3 h-3" />
-            <span>{new Date(result.createdAt).toLocaleDateString()}</span>
+            <span>{new Date(result.updatedAt || result.createdAt).toLocaleDateString()}</span>
           </div>
           <div className="flex items-center space-x-2">
             <span>Relevance: {Math.round(result.relevanceScore * 100)}%</span>

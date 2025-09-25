@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import ResultCard from './ResultCard';
 import EmptyState from '../UI/EmptyState';
 import LoadingSpinner from '../UI/LoadingSpinner';
+import type { SearchResult } from '../../services/storyblokService';
 
 const ResultsGrid: React.FC = () => {
   const { results, isLoading, hasSearched, error } = useSearch();
