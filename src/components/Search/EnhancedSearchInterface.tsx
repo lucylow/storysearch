@@ -444,58 +444,195 @@ const EnhancedSearchInterface: React.FC = () => {
 
           {/* Agent Studio Tab */}
           <TabsContent value="agent" className="space-y-6">
-            {/* Contextual Intelligence Insights */}
+            {/* Enhanced Contextual Intelligence Dashboard */}
             {searchHistory.length > 0 && (
-              <Card className="glass border-blue/20 bg-gradient-to-r from-blue-50/50 to-purple-50/50 dark:from-blue-900/20 dark:to-purple-900/20">
-                <CardContent className="pt-6">
-                  <div className="flex items-start space-x-4">
-                    <div className="p-3 glass rounded-lg">
-                      <Brain className="w-6 h-6 text-blue-500" />
-                    </div>
-                    <div className="flex-1">
-                      <h4 className="font-semibold mb-2 flex items-center space-x-2">
-                        <span>Contextual Intelligence Active</span>
-                        <Badge variant="secondary" className="animate-pulse">Live</Badge>
-                      </h4>
-                      <p className="text-sm text-muted-foreground mb-3">
-                        Analyzing your search patterns, interests, and session behavior to deliver personalized recommendations
-                      </p>
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                        <div className="text-center p-2 glass rounded-lg">
-                          <div className="text-xs text-muted-foreground mb-1">Searches</div>
-                          <div className="text-lg font-bold">{searchHistory.length}</div>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Card className="relative overflow-hidden border-2 bg-gradient-to-br from-blue-500/10 via-purple-500/10 to-pink-500/10 backdrop-blur-sm">
+                  {/* Animated background pattern */}
+                  <motion.div
+                    className="absolute inset-0 opacity-30"
+                    style={{
+                      backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.1) 0%, transparent 50%)'
+                    }}
+                    animate={{
+                      scale: [1, 1.1, 1],
+                      rotate: [0, 5, 0]
+                    }}
+                    transition={{
+                      duration: 8,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                  />
+
+                  <CardContent className="pt-6 relative">
+                    <div className="flex items-start space-x-4">
+                      {/* Animated icon */}
+                      <motion.div
+                        className="relative"
+                        animate={{
+                          scale: [1, 1.05, 1],
+                        }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                          ease: "easeInOut"
+                        }}
+                      >
+                        <div className="p-4 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 text-white shadow-2xl">
+                          <Brain className="w-8 h-8" />
                         </div>
-                        <div className="text-center p-2 glass rounded-lg">
-                          <div className="text-xs text-muted-foreground mb-1">Context</div>
-                          <div className="text-lg font-bold">{searchHistory.length >= 3 ? 'Rich' : 'Building'}</div>
+                        <motion.div
+                          className="absolute -inset-2 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-2xl blur-lg -z-10"
+                          animate={{
+                            opacity: [0.5, 0.8, 0.5],
+                            scale: [1, 1.1, 1]
+                          }}
+                          transition={{
+                            duration: 2,
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                          }}
+                        />
+                      </motion.div>
+
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-2 mb-2">
+                          <h4 className="font-bold text-xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                            Contextual Intelligence
+                          </h4>
+                          <motion.div
+                            animate={{ scale: [1, 1.2, 1] }}
+                            transition={{ duration: 2, repeat: Infinity }}
+                          >
+                            <Badge className="bg-gradient-to-r from-green-500 to-emerald-500 text-white border-0">
+                              <Activity className="w-3 h-3 mr-1" />
+                              Live
+                            </Badge>
+                          </motion.div>
                         </div>
-                        <div className="text-center p-2 glass rounded-lg">
-                          <div className="text-xs text-muted-foreground mb-1">Relevance</div>
-                          <div className="text-lg font-bold">{agentRecommendations.length > 0 ? Math.round(agentRecommendations[0].confidence * 100) + '%' : '-'}</div>
+
+                        <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
+                          🤖 AI analyzing your search patterns, interests, and session behavior in real-time to deliver hyper-personalized recommendations
+                        </p>
+
+                        {/* Enhanced metrics grid */}
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+                          {[
+                            {
+                              label: 'Searches',
+                              value: searchHistory.length,
+                              icon: Search,
+                              color: 'from-blue-500 to-cyan-500'
+                            },
+                            {
+                              label: 'Context',
+                              value: searchHistory.length >= 3 ? 'Rich' : 'Building',
+                              icon: BarChart3,
+                              color: 'from-purple-500 to-pink-500'
+                            },
+                            {
+                              label: 'Relevance',
+                              value: agentRecommendations.length > 0 ? `${Math.round(agentRecommendations[0].confidence * 100)}%` : '-',
+                              icon: Target,
+                              color: 'from-green-500 to-emerald-500'
+                            },
+                            {
+                              label: 'Mode',
+                              value: new Date().getHours() >= 9 && new Date().getHours() <= 17 ? 'Work' : 'Learn',
+                              icon: Clock,
+                              color: 'from-orange-500 to-red-500'
+                            }
+                          ].map((metric, idx) => (
+                            <motion.div
+                              key={metric.label}
+                              initial={{ opacity: 0, y: 20 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: idx * 0.1 }}
+                              whileHover={{ scale: 1.05, y: -2 }}
+                              className="relative group"
+                            >
+                              <div className="p-4 rounded-xl bg-white/50 dark:bg-black/30 backdrop-blur-sm border border-white/20 hover:border-white/40 transition-all shadow-lg">
+                                <div className="flex items-center justify-between mb-2">
+                                  <div className={`p-1.5 rounded-lg bg-gradient-to-br ${metric.color} text-white`}>
+                                    <metric.icon className="w-3 h-3" />
+                                  </div>
+                                </div>
+                                <div className="text-xs text-muted-foreground font-medium mb-1">{metric.label}</div>
+                                <div className="text-2xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text">
+                                  {metric.value}
+                                </div>
+                              </div>
+                            </motion.div>
+                          ))}
                         </div>
-                        <div className="text-center p-2 glass rounded-lg">
-                          <div className="text-xs text-muted-foreground mb-1">Mode</div>
-                          <div className="text-lg font-bold">
-                            {new Date().getHours() >= 9 && new Date().getHours() <= 17 ? 'Work' : 'Learn'}
-                          </div>
-                        </div>
+
+                        {/* Pattern detection with enhanced visual */}
+                        {searchHistory.length >= 2 && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.4 }}
+                            className="relative overflow-hidden rounded-xl bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border border-primary/20 p-4"
+                          >
+                            <div className="flex items-start space-x-3">
+                              <motion.div
+                                animate={{ rotate: [0, 360] }}
+                                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                              >
+                                <Sparkles className="w-5 h-5 text-primary" />
+                              </motion.div>
+                              <div className="flex-1">
+                                <div className="flex items-center space-x-2 mb-2">
+                                  <span className="text-sm font-bold text-primary">Pattern Detected</span>
+                                  <Badge variant="outline" className="text-xs border-primary/30">
+                                    <TrendingUp className="w-3 h-3 mr-1" />
+                                    Analyzing
+                                  </Badge>
+                                </div>
+                                <div className="flex flex-wrap gap-2">
+                                  {searchHistory.slice(-3).map((search, idx) => (
+                                    <motion.div
+                                      key={idx}
+                                      initial={{ opacity: 0, scale: 0.8 }}
+                                      animate={{ opacity: 1, scale: 1 }}
+                                      transition={{ delay: idx * 0.1 }}
+                                      whileHover={{ scale: 1.05 }}
+                                    >
+                                      <Badge 
+                                        variant="secondary" 
+                                        className="text-xs bg-white/60 dark:bg-black/60 backdrop-blur-sm border border-primary/20"
+                                      >
+                                        {search.length > 20 ? search.substring(0, 20) + '...' : search}
+                                      </Badge>
+                                    </motion.div>
+                                  ))}
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Animated progress bar */}
+                            <motion.div
+                              className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-purple-500 to-pink-500"
+                              initial={{ x: '-100%' }}
+                              animate={{ x: '100%' }}
+                              transition={{
+                                duration: 3,
+                                repeat: Infinity,
+                                ease: "easeInOut"
+                              }}
+                            />
+                          </motion.div>
+                        )}
                       </div>
-                      {searchHistory.length >= 2 && (
-                        <div className="mt-3 p-3 bg-primary/5 rounded-lg border border-primary/10">
-                          <div className="text-xs font-medium text-primary mb-1">Recent Search Pattern Detected</div>
-                          <div className="text-xs text-muted-foreground flex flex-wrap gap-1">
-                            {searchHistory.slice(-3).map((search, idx) => (
-                              <Badge key={idx} variant="outline" className="text-xs">
-                                {search.length > 20 ? search.substring(0, 20) + '...' : search}
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
-                      )}
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </motion.div>
             )}
 
             <Card className="glass border-purple/20">
@@ -515,50 +652,147 @@ const EnhancedSearchInterface: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="grid gap-6 md:grid-cols-2">
-                  {agentRecommendations.map((rec) => (
-                    <motion.div
-                      key={rec.id}
-                      whileHover={{ scale: 1.02 }}
-                      className="p-6 glass rounded-lg border border-border/50"
-                    >
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="flex items-center space-x-2">
-                          {getPriorityIcon(rec.priority)}
-                          <Badge
-                            variant={rec.type === 'trending' ? 'default' : 'secondary'}
-                            className="capitalize"
-                          >
-                            {rec.type}
-                          </Badge>
-                        </div>
-                        <div className="flex items-center space-x-1">
-                          <TrendingUp className="w-3 h-3 text-green-500" />
-                          <span className="text-xs font-medium">{rec.estimatedValue}/10</span>
-                        </div>
-                      </div>
+                  {agentRecommendations.map((rec, index) => {
+                    const getTypeGradient = (type: string) => {
+                      switch (type) {
+                        case 'proactive': return 'from-blue-500/10 to-cyan-500/10 border-blue-500/30';
+                        case 'trending': return 'from-orange-500/10 to-red-500/10 border-orange-500/30';
+                        case 'contextual': return 'from-purple-500/10 to-pink-500/10 border-purple-500/30';
+                        case 'personalized': return 'from-green-500/10 to-emerald-500/10 border-green-500/30';
+                        default: return 'from-gray-500/10 to-slate-500/10 border-gray-500/30';
+                      }
+                    };
 
-                      <h4 className="font-semibold mb-2 line-clamp-2">{rec.title}</h4>
-                      <p className="text-sm text-muted-foreground mb-4 line-clamp-3">{rec.reason}</p>
+                    const getTypeIcon = (type: string) => {
+                      switch (type) {
+                        case 'proactive': return <Zap className="w-4 h-4" />;
+                        case 'trending': return <TrendingUp className="w-4 h-4" />;
+                        case 'contextual': return <Brain className="w-4 h-4" />;
+                        case 'personalized': return <Users className="w-4 h-4" />;
+                        default: return <Sparkles className="w-4 h-4" />;
+                      }
+                    };
 
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                          <span className="text-xs text-muted-foreground">Confidence:</span>
-                          <Progress value={rec.confidence * 100} className="w-16 h-1" />
-                          <span className="text-xs text-muted-foreground">
-                            {Math.round(rec.confidence * 100)}%
-                          </span>
+                    return (
+                      <motion.div
+                        key={rec.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.05 }}
+                        whileHover={{ 
+                          scale: 1.03, 
+                          y: -4,
+                          transition: { duration: 0.2 }
+                        }}
+                        className={`relative overflow-hidden rounded-xl border bg-gradient-to-br ${getTypeGradient(rec.type)} backdrop-blur-sm`}
+                      >
+                        {/* Animated gradient overlay */}
+                        <motion.div
+                          className="absolute inset-0 bg-gradient-to-br from-white/0 via-white/5 to-white/0"
+                          animate={{
+                            x: ['-100%', '100%']
+                          }}
+                          transition={{
+                            duration: 3,
+                            repeat: Infinity,
+                            repeatDelay: 5,
+                            ease: "easeInOut"
+                          }}
+                        />
+
+                        <div className="relative p-6">
+                          {/* Header */}
+                          <div className="flex items-start justify-between mb-4">
+                            <div className="flex items-center space-x-2">
+                              <div className={`p-2 rounded-lg bg-gradient-to-br ${
+                                rec.type === 'proactive' ? 'from-blue-500 to-cyan-500' :
+                                rec.type === 'trending' ? 'from-orange-500 to-red-500' :
+                                rec.type === 'contextual' ? 'from-purple-500 to-pink-500' :
+                                'from-green-500 to-emerald-500'
+                              } text-white shadow-lg`}>
+                                {getTypeIcon(rec.type)}
+                              </div>
+                              <div>
+                                {getPriorityIcon(rec.priority)}
+                                <Badge
+                                  variant="outline"
+                                  className="capitalize text-xs backdrop-blur-sm bg-white/50 dark:bg-black/50"
+                                >
+                                  {rec.type}
+                                </Badge>
+                              </div>
+                            </div>
+                            <motion.div 
+                              className="flex items-center space-x-1 px-2 py-1 rounded-full bg-green-500/20 border border-green-500/30"
+                              whileHover={{ scale: 1.05 }}
+                            >
+                              <Star className="w-3 h-3 text-green-600 fill-green-600" />
+                              <span className="text-xs font-bold text-green-700 dark:text-green-300">
+                                {rec.estimatedValue.toFixed(1)}
+                              </span>
+                            </motion.div>
+                          </div>
+
+                          {/* Content */}
+                          <h4 className="font-bold text-lg mb-2 line-clamp-2 bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text">
+                            {rec.title}
+                          </h4>
+                          <p className="text-sm text-muted-foreground mb-4 line-clamp-3 leading-relaxed">
+                            {rec.reason}
+                          </p>
+
+                          {/* Category tag */}
+                          <div className="mb-4">
+                            <Badge variant="secondary" className="text-xs">
+                              {rec.category}
+                            </Badge>
+                          </div>
+
+                          {/* Footer */}
+                          <div className="flex items-center justify-between pt-4 border-t border-border/50">
+                            <div className="flex flex-col space-y-2 flex-1">
+                              <div className="flex items-center space-x-2">
+                                <Brain className="w-3 h-3 text-muted-foreground" />
+                                <span className="text-xs text-muted-foreground font-medium">AI Confidence</span>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <Progress 
+                                  value={rec.confidence * 100} 
+                                  className="h-2 flex-1"
+                                />
+                                <span className="text-xs font-bold min-w-[3ch]">
+                                  {Math.round(rec.confidence * 100)}%
+                                </span>
+                              </div>
+                            </div>
+                            <Button
+                              size="sm"
+                              onClick={() => handleSearch(rec.title)}
+                              className="ml-4 group hover:shadow-lg transition-all"
+                            >
+                              <span>Explore</span>
+                              <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                            </Button>
+                          </div>
                         </div>
-                        <Button
-                          size="sm"
-                          onClick={() => handleSearch(rec.title)}
-                          className="shrink-0"
-                        >
-                          <ChevronRight className="w-3 h-3 mr-1" />
-                          Explore
-                        </Button>
-                      </div>
-                    </motion.div>
-                  ))}
+
+                        {/* Pulse effect for high priority */}
+                        {rec.priority === 'high' && (
+                          <motion.div
+                            className="absolute -inset-0.5 bg-gradient-to-r from-primary/20 to-primary/0 rounded-xl blur-sm -z-10"
+                            animate={{
+                              opacity: [0.5, 0.8, 0.5]
+                            }}
+                            transition={{
+                              duration: 2,
+                              repeat: Infinity,
+                              ease: "easeInOut"
+                            }}
+                          />
+                        )}
+                      </motion.div>
+                    );
+                  })}
                 </div>
               </CardContent>
             </Card>
