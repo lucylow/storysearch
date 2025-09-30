@@ -12,29 +12,32 @@ import TestPage from "./pages/TestPage";
 import DiagnosticPage from "./pages/DiagnosticPage";
 import FloatingAIChatbot from "./components/ui/FloatingAIChatbot";
 import { AIContextProvider } from "./contexts/AIContext";
+import { BrandProvider } from "./contexts/BrandContext";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <AIContextProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/app" element={<AppPage />} />
-            <Route path="/analytics" element={<AnalyticsDashboard />} />
-            <Route path="/search" element={<EnhancedSearchInterface />} />
-            <Route path="/test" element={<TestPage />} />
-            <Route path="/diagnostic" element={<DiagnosticPage />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-        <FloatingAIChatbot />
-      </AIContextProvider>
+      <BrandProvider>
+        <AIContextProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/app" element={<AppPage />} />
+              <Route path="/analytics" element={<AnalyticsDashboard />} />
+              <Route path="/search" element={<EnhancedSearchInterface />} />
+              <Route path="/test" element={<TestPage />} />
+              <Route path="/diagnostic" element={<DiagnosticPage />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+          <FloatingAIChatbot />
+        </AIContextProvider>
+      </BrandProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );

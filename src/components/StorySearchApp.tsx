@@ -11,6 +11,9 @@ import MobileNavigation from './ui/MobileNavigation';
 import { useSearchShortcuts, KeyboardShortcutsHelp } from '../hooks/useKeyboardShortcuts';
 import { useMobile } from '../hooks/useMobile';
 import { Toast } from './ui/Skeleton';
+import PredictiveSurfacing from './AIFeatures/PredictiveSurfacing';
+import BrandSwitcher from './BrandSwitcher';
+import { useBrandSearch } from '../hooks/useBrandSearch';
 
 const StorySearchApp: React.FC = () => {
   const [isAISidebarOpen, setAISidebarOpen] = useState(false);
@@ -23,6 +26,9 @@ const StorySearchApp: React.FC = () => {
   
   // Mobile detection
   const { isMobile, isTablet } = useMobile();
+  
+  // Brand search integration
+  useBrandSearch();
 
   // Check if user has completed onboarding
   useEffect(() => {
@@ -112,6 +118,11 @@ const StorySearchApp: React.FC = () => {
 
         {/* Main Content */}
         <div className="container mx-auto px-4 py-4 sm:py-8">
+          {/* Brand Switcher - Demo Feature */}
+          <div className="mb-6 flex justify-end">
+            <BrandSwitcher />
+          </div>
+          
           <div className={`${isMobile ? 'block' : 'flex gap-8'}`}>
             {/* Search & Results Area */}
             <div className={`${isMobile ? 'w-full' : 'flex-1 transition-all duration-300'} ${
@@ -126,6 +137,11 @@ const StorySearchApp: React.FC = () => {
                 <>
                   {/* Search Interface */}
                   <SearchInterface mode={searchMode} />
+                  
+                  {/* Predictive Surfacing */}
+                  <div className="mt-8">
+                    <PredictiveSurfacing onContentClick={(contentId) => console.log('Content clicked:', contentId)} />
+                  </div>
                   
                   {/* Results Area */}
                   <div className="mt-8">

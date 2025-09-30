@@ -12,7 +12,11 @@ import {
   TrendingUp,
   Clock,
   X,
-  ChevronDown
+  ChevronDown,
+  Network,
+  Layers,
+  Brain,
+  BarChart3
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -21,6 +25,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import ResultCard from './ResultCard';
 import LoadingSpinner from '../ui/LoadingSpinner';
 import { EmptyState } from '../ui/Skeleton';
+import ContentVisualizationDashboard from '../Visualizations/ContentVisualizationDashboard';
 import type { SearchResult } from '../../services/storyblokService';
 
 const ResultsGrid: React.FC = () => {
@@ -30,6 +35,8 @@ const ResultsGrid: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [showVisualization, setShowVisualization] = useState(false);
+  const [selectedContent, setSelectedContent] = useState<SearchResult | null>(null);
   const [showFilters, setShowFilters] = useState(false);
 
   // Get unique types and tags from results
@@ -221,10 +228,23 @@ const ResultsGrid: React.FC = () => {
             >
               <List className="w-4 h-4" />
             </Button>
+            
+            {/* Visualization Button */}
+            {results.length > 0 && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowVisualization(true)}
+                className="flex items-center gap-2 h-8 px-3"
+              >
+                <Network className="w-4 h-4" />
+                <span className="hidden sm:inline">Visualize</span>
+              </Button>
+            )}
           </div>
 
           {/* Sort Controls */}
-          <Select value={sortBy} onValueChange={(value: string) => setSortBy(value as SortOption)}>
+          <Select value={sortBy} onValueChange={(value: string) => setSortBy(value as 'relevance' | 'date' | 'title' | 'popularity')}>
             <SelectTrigger className="w-32 h-8">
               <SelectValue />
             </SelectTrigger>
@@ -397,6 +417,17 @@ const ResultsGrid: React.FC = () => {
           </Button>
         </div>
       )}
+
+      {/* Content Visualization Dashboard */}
+      <AnimatePresence>
+        {showVisualization && (
+          <ContentVisualizationDashboard
+            content={results}
+            onContentSelect={setSelectedContent}
+            onClose={() => setShowVisualization(false)}
+          />
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 };

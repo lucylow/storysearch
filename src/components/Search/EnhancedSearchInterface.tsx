@@ -28,7 +28,7 @@ import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { algoliaService } from '../../services/algoliaService';
+import { algoliaService, AgentRecommendation } from '../../services/algoliaService';
 
 interface SearchResult {
   id: string;
@@ -49,16 +49,6 @@ interface SearchResult {
   };
 }
 
-interface AgentRecommendation {
-  id: string;
-  title: string;
-  reason: string;
-  confidence: number;
-  type: 'proactive' | 'contextual' | 'trending' | 'personalized';
-  priority: 'high' | 'medium' | 'low';
-  category: string;
-  estimatedValue: number;
-}
 
 interface AIResponse {
   answer: string;
@@ -85,7 +75,23 @@ const EnhancedSearchInterface: React.FC = () => {
     setIsLoading(true);
     setQuery(searchQuery);
 
+    // Update search history
+    setSearchHistory(prev => {
+      const updated = [...prev, searchQuery];
+      return updated.slice(-10); // Keep last 10 searches
+    });
+
     try {
+      // Build enhanced context for recommendations
+      const enhancedContext = {
+        searchHistory: [...searchHistory, searchQuery],
+        currentPage: window.location.pathname,
+        timestamp: new Date().toISOString(),
+        previousQuery: query || '',
+        hasResults: true,
+        sessionDuration: Date.now()
+      };
+
       // Parallel execution of all AI features
       const [
         searchResultsData,
@@ -96,7 +102,7 @@ const EnhancedSearchInterface: React.FC = () => {
           ? algoliaService.searchWithCustomRelevance(searchQuery)
           : algoliaService.search(searchQuery),
         algoliaService.askAI(searchQuery),
-        algoliaService.getAgentRecommendations()
+        algoliaService.getAgentRecommendations('user-1', enhancedContext)
       ]);
 
       setSearchResults(searchResultsData);
@@ -110,7 +116,7 @@ const EnhancedSearchInterface: React.FC = () => {
       }
 
       // Track user behavior
-      algoliaService.updateUserBehavior('user-1', 'search', { query: searchQuery });
+      algoliaService.updateUserBehavior('user-1', 'search', { query: searchQuery, timestamp: new Date().toISOString() });
     } catch (error) {
       console.error('Search error:', error);
     } finally {
@@ -122,7 +128,16 @@ const EnhancedSearchInterface: React.FC = () => {
   useEffect(() => {
     const loadRecommendations = async () => {
       try {
-        const recommendations = await algoliaService.getAgentRecommendations();
+        // Build rich context for recommendations
+        const context = {
+          searchHistory: searchHistory || [],
+          currentPage: window.location.pathname,
+          timestamp: new Date().toISOString(),
+          previousQuery: query || '',
+          hasResults: searchResults.length > 0
+        };
+        
+        const recommendations = await algoliaService.getAgentRecommendations('user-1', context);
         setAgentRecommendations(recommendations);
       } catch (error) {
         console.error('Error loading recommendations:', error);
@@ -131,6 +146,9 @@ const EnhancedSearchInterface: React.FC = () => {
 
     loadRecommendations();
   }, []);
+
+  // State for search history tracking
+  const [searchHistory, setSearchHistory] = useState<string[]>([]);
 
   const handleContentClick = (contentId: string) => {
     algoliaService.updateUserBehavior('user-1', 'click', { contentId });
@@ -426,14 +444,73 @@ const EnhancedSearchInterface: React.FC = () => {
 
           {/* Agent Studio Tab */}
           <TabsContent value="agent" className="space-y-6">
+            {/* Contextual Intelligence Insights */}
+            {searchHistory.length > 0 && (
+              <Card className="glass border-blue/20 bg-gradient-to-r from-blue-50/50 to-purple-50/50 dark:from-blue-900/20 dark:to-purple-900/20">
+                <CardContent className="pt-6">
+                  <div className="flex items-start space-x-4">
+                    <div className="p-3 glass rounded-lg">
+                      <Brain className="w-6 h-6 text-blue-500" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-semibold mb-2 flex items-center space-x-2">
+                        <span>Contextual Intelligence Active</span>
+                        <Badge variant="secondary" className="animate-pulse">Live</Badge>
+                      </h4>
+                      <p className="text-sm text-muted-foreground mb-3">
+                        Analyzing your search patterns, interests, and session behavior to deliver personalized recommendations
+                      </p>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        <div className="text-center p-2 glass rounded-lg">
+                          <div className="text-xs text-muted-foreground mb-1">Searches</div>
+                          <div className="text-lg font-bold">{searchHistory.length}</div>
+                        </div>
+                        <div className="text-center p-2 glass rounded-lg">
+                          <div className="text-xs text-muted-foreground mb-1">Context</div>
+                          <div className="text-lg font-bold">{searchHistory.length >= 3 ? 'Rich' : 'Building'}</div>
+                        </div>
+                        <div className="text-center p-2 glass rounded-lg">
+                          <div className="text-xs text-muted-foreground mb-1">Relevance</div>
+                          <div className="text-lg font-bold">{agentRecommendations.length > 0 ? Math.round(agentRecommendations[0].confidence * 100) + '%' : '-'}</div>
+                        </div>
+                        <div className="text-center p-2 glass rounded-lg">
+                          <div className="text-xs text-muted-foreground mb-1">Mode</div>
+                          <div className="text-lg font-bold">
+                            {new Date().getHours() >= 9 && new Date().getHours() <= 17 ? 'Work' : 'Learn'}
+                          </div>
+                        </div>
+                      </div>
+                      {searchHistory.length >= 2 && (
+                        <div className="mt-3 p-3 bg-primary/5 rounded-lg border border-primary/10">
+                          <div className="text-xs font-medium text-primary mb-1">Recent Search Pattern Detected</div>
+                          <div className="text-xs text-muted-foreground flex flex-wrap gap-1">
+                            {searchHistory.slice(-3).map((search, idx) => (
+                              <Badge key={idx} variant="outline" className="text-xs">
+                                {search.length > 20 ? search.substring(0, 20) + '...' : search}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
             <Card className="glass border-purple/20">
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2">
                   <Zap className="w-5 h-5 text-purple-500" />
-                  <span>Proactive Content Recommendations</span>
+                  <span>Intelligent Recommendations</span>
+                  {agentRecommendations.length > 0 && (
+                    <Badge variant="secondary" className="ml-auto">
+                      {agentRecommendations.length} personalized
+                    </Badge>
+                  )}
                 </CardTitle>
                 <CardDescription>
-                  AI-powered suggestions based on your interests and behavior patterns
+                  Context-aware suggestions powered by advanced AI analysis of your behavior, interests, and session goals
                 </CardDescription>
               </CardHeader>
               <CardContent>

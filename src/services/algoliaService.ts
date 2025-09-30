@@ -1,5 +1,6 @@
 // Enhanced Algolia AI service with advanced content discovery features
 import { aiAnalyticsService } from './aiAnalyticsService';
+import { brandMockDataMap, type BrandKey } from '../data/brandMockData';
 
 interface SearchResult {
   id: string;
@@ -25,6 +26,17 @@ export interface AskAIResponse {
   confidence: number;
   relatedQuestions: string[];
   suggestedActions: string[];
+}
+
+export interface AgentRecommendation {
+  id: string;
+  title: string;
+  reason: string;
+  confidence: number;
+  type: 'proactive' | 'contextual' | 'trending' | 'personalized';
+  priority: 'high' | 'medium' | 'low';
+  category: string;
+  estimatedValue: number;
 }
 
 // Enhanced mock data with more comprehensive content
@@ -167,6 +179,19 @@ class AlgoliaService {
   private mockDelay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
   private searchCache = new Map<string, { results: SearchResult[]; timestamp: number }>();
   private readonly CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+  private currentBrand: BrandKey = 'default';
+
+  // Method to set current brand for demo purposes
+  setBrand(brand: BrandKey) {
+    this.currentBrand = brand;
+    this.searchCache.clear(); // Clear cache when brand changes
+  }
+
+  // Get current mock data based on brand
+  private getMockResults(): SearchResult[] {
+    const brandData = brandMockDataMap[this.currentBrand];
+    return brandData.length > 0 ? brandData : mockResults;
+  }
 
   async search(query: string, filters?: {
     type?: string[];
@@ -193,7 +218,10 @@ class AlgoliaService {
     const lowercaseQuery = query.toLowerCase();
     const queryTerms = lowercaseQuery.split(' ').filter(term => term.length > 0);
     
-    let results = mockResults.map(result => {
+    // Use brand-specific mock data
+    const currentMockData = this.getMockResults();
+    
+    let results = currentMockData.map(result => {
       const relevanceScore = this.calculateRelevanceScore(result, queryTerms, filters);
       return { ...result, relevanceScore };
     });
@@ -856,55 +884,363 @@ class AlgoliaService {
     return Math.min(confidence, 1.0);
   }
 
-  // ===== AGENT STUDIO: Proactive Content Recommendations =====
+  // ===== AGENT STUDIO: Enhanced Contextual Recommendations =====
 
   async getAgentRecommendations(userId?: string, context?: Record<string, unknown>): Promise<AgentRecommendation[]> {
     await this.mockDelay(800);
     
-    const recommendations = [
+    // Analyze user context for intelligent recommendations
+    const contextualInsights = this.analyzeUserContext(userId, context);
+    const searchHistory = (context?.searchHistory as string[]) || [];
+    const currentPage = (context?.currentPage as string) || '';
+    const timeOfDay = new Date().getHours();
+    const dayOfWeek = new Date().getDay();
+    
+    // Generate base recommendations
+    const baseRecommendations = this.generateBaseRecommendations();
+    
+    // Enhance recommendations with contextual intelligence
+    const enhancedRecommendations = baseRecommendations.map(rec => {
+      return this.enhanceRecommendationWithContext(rec, contextualInsights, searchHistory, timeOfDay);
+    });
+    
+    // Add dynamic contextual recommendations
+    const dynamicRecs = this.generateDynamicRecommendations(searchHistory, currentPage, timeOfDay, dayOfWeek);
+    
+    // Combine and rank all recommendations
+    const allRecommendations = [...enhancedRecommendations, ...dynamicRecs];
+    
+    // Apply intelligent filtering and ranking
+    return this.rankAndFilterRecommendations(allRecommendations, contextualInsights);
+  }
+
+  private analyzeUserContext(userId?: string, context?: Record<string, unknown>): {
+    experienceLevel: 'beginner' | 'intermediate' | 'advanced';
+    primaryInterests: string[];
+    contentPreferences: string[];
+    learningStyle: 'tutorial' | 'documentation' | 'hands-on' | 'conceptual';
+    sessionGoal: string;
+  } {
+    // Analyze context to understand user needs
+    const searchHistory = (context?.searchHistory as string[]) || [];
+    const recentSearches = searchHistory.slice(-5);
+    
+    // Determine experience level from query complexity
+    const hasAdvancedTerms = recentSearches.some(query => 
+      ['architecture', 'optimization', 'scaling', 'advanced', 'enterprise'].some(term => 
+        query.toLowerCase().includes(term)
+      )
+    );
+    const hasBeginnerTerms = recentSearches.some(query => 
+      ['beginner', 'basic', 'introduction', 'getting started', 'how to'].some(term => 
+        query.toLowerCase().includes(term)
+      )
+    );
+    
+    let experienceLevel: 'beginner' | 'intermediate' | 'advanced' = 'intermediate';
+    if (hasAdvancedTerms) experienceLevel = 'advanced';
+    else if (hasBeginnerTerms) experienceLevel = 'beginner';
+    
+    // Extract primary interests from search patterns
+    const interestKeywords = ['cms', 'api', 'integration', 'performance', 'seo', 'security', 'content', 'modeling'];
+    const primaryInterests = interestKeywords.filter(keyword => 
+      recentSearches.some(query => query.toLowerCase().includes(keyword))
+    );
+    
+    // Determine content preferences
+    const contentPreferences = [];
+    if (recentSearches.some(q => q.includes('tutorial') || q.includes('how to'))) {
+      contentPreferences.push('tutorial');
+    }
+    if (recentSearches.some(q => q.includes('documentation') || q.includes('api'))) {
+      contentPreferences.push('documentation');
+    }
+    if (recentSearches.some(q => q.includes('example') || q.includes('demo'))) {
+      contentPreferences.push('examples');
+    }
+    
+    // Infer learning style
+    let learningStyle: 'tutorial' | 'documentation' | 'hands-on' | 'conceptual' = 'tutorial';
+    if (contentPreferences.includes('documentation')) learningStyle = 'documentation';
+    else if (contentPreferences.includes('examples')) learningStyle = 'hands-on';
+    else if (recentSearches.some(q => q.includes('what is') || q.includes('concept'))) learningStyle = 'conceptual';
+    
+    // Determine session goal
+    let sessionGoal = 'general exploration';
+    if (recentSearches.some(q => q.includes('setup') || q.includes('install'))) {
+      sessionGoal = 'getting started';
+    } else if (recentSearches.some(q => q.includes('optimize') || q.includes('improve'))) {
+      sessionGoal = 'optimization';
+    } else if (recentSearches.some(q => q.includes('integrate') || q.includes('connect'))) {
+      sessionGoal = 'integration';
+    } else if (recentSearches.some(q => q.includes('troubleshoot') || q.includes('error'))) {
+      sessionGoal = 'problem solving';
+    }
+    
+    return {
+      experienceLevel,
+      primaryInterests: primaryInterests.length > 0 ? primaryInterests : ['content', 'cms'],
+      contentPreferences: contentPreferences.length > 0 ? contentPreferences : ['tutorial', 'guide'],
+      learningStyle,
+      sessionGoal
+    };
+  }
+
+  private generateBaseRecommendations(): AgentRecommendation[] {
+    return [
       {
-        id: 'rec-1',
+        id: 'rec-base-1',
         title: 'Advanced Content Modeling Strategies',
-        reason: 'Based on your recent searches about content modeling, you might be interested in advanced techniques',
-        confidence: 0.92,
-        type: 'proactive',
-        priority: 'high',
+        reason: 'Master complex content structures and relationships',
+        confidence: 0.85,
+        type: 'proactive' as const,
+        priority: 'high' as const,
         category: 'Advanced Topics',
         estimatedValue: 8.5
       },
       {
-        id: 'rec-2',
+        id: 'rec-base-2',
         title: 'Performance Optimization Techniques',
-        reason: 'Users with similar interests often find this content valuable for scaling their projects',
-        confidence: 0.87,
-        type: 'contextual',
-        priority: 'medium',
+        reason: 'Learn to optimize your content delivery and API performance',
+        confidence: 0.82,
+        type: 'contextual' as const,
+        priority: 'medium' as const,
         category: 'Performance',
         estimatedValue: 7.8
       },
       {
-        id: 'rec-3',
+        id: 'rec-base-3',
         title: 'AI-Powered Content Creation',
-        reason: 'Trending topic that aligns with your content management interests',
+        reason: 'Leverage AI to automate and enhance content workflows',
         confidence: 0.79,
-        type: 'trending',
-        priority: 'medium',
+        type: 'trending' as const,
+        priority: 'medium' as const,
         category: 'AI & Automation',
         estimatedValue: 7.2
       },
       {
-        id: 'rec-4',
+        id: 'rec-base-4',
         title: 'Multilingual Content Management',
-        reason: 'Personalized recommendation based on your content structure preferences',
-        confidence: 0.85,
-        type: 'personalized',
-        priority: 'high',
+        reason: 'Expand your reach with international content strategies',
+        confidence: 0.80,
+        type: 'personalized' as const,
+        priority: 'medium' as const,
         category: 'Content Strategy',
-        estimatedValue: 8.1
+        estimatedValue: 7.5
+      },
+      {
+        id: 'rec-base-5',
+        title: 'Security Best Practices for Headless CMS',
+        reason: 'Protect your content and API endpoints',
+        confidence: 0.88,
+        type: 'proactive' as const,
+        priority: 'high' as const,
+        category: 'Security',
+        estimatedValue: 8.8
       }
     ];
+  }
 
+  private enhanceRecommendationWithContext(
+    rec: AgentRecommendation,
+    insights: ReturnType<typeof this.analyzeUserContext>,
+    searchHistory: string[],
+    timeOfDay: number
+  ): AgentRecommendation {
+    let confidence = rec.confidence;
+    let priority = rec.priority;
+    let reason = rec.reason;
+    
+    // Boost confidence based on primary interests
+    if (insights.primaryInterests.some(interest => 
+      rec.title.toLowerCase().includes(interest) || rec.category.toLowerCase().includes(interest)
+    )) {
+      confidence += 0.1;
+      reason = `Based on your interest in ${insights.primaryInterests.join(', ')}, ${reason}`;
+    }
+    
+    // Adjust based on experience level
+    if (insights.experienceLevel === 'advanced' && rec.category.includes('Advanced')) {
+      confidence += 0.08;
+      priority = 'high';
+      reason += '. Perfect for your advanced skill level';
+    } else if (insights.experienceLevel === 'beginner' && !rec.category.includes('Advanced')) {
+      confidence += 0.05;
+      reason += '. Great for building foundational knowledge';
+    }
+    
+    // Boost based on learning style
+    if (insights.learningStyle === 'tutorial' && rec.category.includes('Tutorial')) {
+      confidence += 0.07;
+    } else if (insights.learningStyle === 'documentation' && rec.category.includes('Documentation')) {
+      confidence += 0.07;
+    }
+    
+    // Time-based adjustments
+    if (timeOfDay >= 9 && timeOfDay <= 17) {
+      // Business hours - boost professional/work-related content
+      if (rec.category.includes('Performance') || rec.category.includes('Security')) {
+        confidence += 0.05;
+      }
+    } else {
+      // After hours - boost learning/tutorial content
+      if (rec.category.includes('Tutorial') || rec.category.includes('Guide')) {
+        confidence += 0.05;
+      }
+    }
+    
+    // Session goal alignment
+    if (insights.sessionGoal === 'getting started' && rec.category.includes('Getting Started')) {
+      confidence += 0.12;
+      priority = 'high';
+    } else if (insights.sessionGoal === 'optimization' && rec.category.includes('Performance')) {
+      confidence += 0.12;
+      priority = 'high';
+    }
+    
+    return {
+      ...rec,
+      confidence: Math.min(confidence, 0.99),
+      priority,
+      reason
+    };
+  }
+
+  private generateDynamicRecommendations(
+    searchHistory: string[],
+    currentPage: string,
+    timeOfDay: number,
+    dayOfWeek: number
+  ): AgentRecommendation[] {
+    const recommendations: AgentRecommendation[] = [];
+    
+    // Recent search pattern analysis
+    if (searchHistory.length >= 3) {
+      const recentSearches = searchHistory.slice(-3);
+      const commonTheme = this.extractCommonTheme(recentSearches);
+      
+      if (commonTheme) {
+        recommendations.push({
+          id: `rec-dynamic-theme-${Date.now()}`,
+          title: `Deep Dive: ${commonTheme}`,
+          reason: `Your recent searches show strong interest in ${commonTheme}. Here's comprehensive content to master this topic`,
+          confidence: 0.91,
+          type: 'contextual' as const,
+          priority: 'high' as const,
+          category: commonTheme,
+          estimatedValue: 9.2
+        });
+      }
+    }
+    
+    // Complementary content recommendations
+    if (searchHistory.some(q => q.toLowerCase().includes('setup'))) {
+      recommendations.push({
+        id: `rec-dynamic-next-${Date.now()}`,
+        title: 'Next Steps After Setup',
+        reason: "You've explored setup guides. Continue your journey with configuration and customization",
+        confidence: 0.89,
+        type: 'proactive' as const,
+        priority: 'high' as const,
+        category: 'Getting Started',
+        estimatedValue: 8.7
+      });
+    }
+    
+    // Time-sensitive recommendations
+    if (dayOfWeek === 1) { // Monday
+      recommendations.push({
+        id: `rec-dynamic-weekly-${Date.now()}`,
+        title: 'Weekly Trending: Latest CMS Features',
+        reason: 'Start your week with the latest updates and trending topics in content management',
+        confidence: 0.76,
+        type: 'trending' as const,
+        priority: 'medium' as const,
+        category: 'Trending',
+        estimatedValue: 7.0
+      });
+    }
+    
+    // Problem-solving pathway
+    if (searchHistory.some(q => ['error', 'issue', 'problem', 'fix', 'troubleshoot'].some(term => q.toLowerCase().includes(term)))) {
+      recommendations.push({
+        id: `rec-dynamic-troubleshoot-${Date.now()}`,
+        title: 'Common Issues and Solutions',
+        reason: "Noticed you're troubleshooting. Here's a comprehensive guide to common issues and their solutions",
+        confidence: 0.93,
+        type: 'contextual' as const,
+        priority: 'high' as const,
+        category: 'Troubleshooting',
+        estimatedValue: 9.5
+      });
+    }
+    
+    // Skill progression recommendations
+    const hasBasicQueries = searchHistory.some(q => 
+      ['basic', 'beginner', 'introduction', 'getting started'].some(term => q.toLowerCase().includes(term))
+    );
+    const hasAdvancedQueries = searchHistory.some(q => 
+      ['advanced', 'expert', 'optimization', 'scaling'].some(term => q.toLowerCase().includes(term))
+    );
+    
+    if (hasBasicQueries && !hasAdvancedQueries) {
+      recommendations.push({
+        id: `rec-dynamic-progression-${Date.now()}`,
+        title: 'Level Up: Intermediate Concepts',
+        reason: "You've mastered the basics. Ready to advance your skills with intermediate topics?",
+        confidence: 0.87,
+        type: 'personalized' as const,
+        priority: 'high' as const,
+        category: 'Skill Progression',
+        estimatedValue: 8.6
+      });
+    }
+    
     return recommendations;
+  }
+
+  private extractCommonTheme(searches: string[]): string | null {
+    const themes = {
+      'API': ['api', 'endpoint', 'integration', 'rest'],
+      'Performance': ['performance', 'optimize', 'speed', 'cache'],
+      'Security': ['security', 'authentication', 'authorization', 'token'],
+      'Content Modeling': ['content', 'model', 'schema', 'structure'],
+      'SEO': ['seo', 'search', 'ranking', 'meta'],
+      'Deployment': ['deploy', 'hosting', 'production', 'build']
+    };
+    
+    for (const [theme, keywords] of Object.entries(themes)) {
+      const matchCount = searches.filter(search => 
+        keywords.some(keyword => search.toLowerCase().includes(keyword))
+      ).length;
+      
+      if (matchCount >= 2) {
+        return theme;
+      }
+    }
+    
+    return null;
+  }
+
+  private rankAndFilterRecommendations(
+    recommendations: AgentRecommendation[],
+    insights: ReturnType<typeof this.analyzeUserContext>
+  ): AgentRecommendation[] {
+    // Remove duplicates based on title
+    const uniqueRecs = recommendations.filter((rec, index, self) =>
+      index === self.findIndex(r => r.title === rec.title)
+    );
+    
+    // Sort by confidence and priority
+    const priorityScore = { high: 3, medium: 2, low: 1 };
+    const sorted = uniqueRecs.sort((a, b) => {
+      const scoreA = (a.confidence * 0.6) + (priorityScore[a.priority] * 0.4);
+      const scoreB = (b.confidence * 0.6) + (priorityScore[b.priority] * 0.4);
+      return scoreB - scoreA;
+    });
+    
+    // Return top recommendations (max 8)
+    return sorted.slice(0, 8);
   }
 
   async updateUserBehavior(userId: string, action: 'search' | 'click' | 'time', data: Record<string, unknown>): Promise<void> {
