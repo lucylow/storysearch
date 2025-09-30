@@ -244,14 +244,14 @@ class StoryblokService {
   }
 
   async getSuggestions(query: string): Promise<string[]> {
-    // Generate contextual suggestions based on Storyblok
+    // Generate contextual suggestions for web search
     const suggestions = [
-      'How do I create a new content type in Storyblok?',
-      'What are the best practices for content modeling?',
-      'How can I optimize my content for SEO?',
-      'Show me examples of rich text content',
-      'How do I set up multilingual content?',
-      'What are Storyblok components and how do I use them?'
+      'Tell me about Nike\'s latest product lines',
+      'What are Tesla\'s recent innovations?',
+      'Compare top tech companies',
+      'Show me trending startups in AI',
+      'Latest news about major brands',
+      'How do companies use digital marketing?'
     ];
 
     if (!query.trim()) {
