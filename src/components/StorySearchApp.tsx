@@ -8,6 +8,7 @@ import AISidebar from './AIFeatures/AISidebar';
 import SearchAnalytics from './AIFeatures/SearchAnalytics';
 import Onboarding, { QuickTips } from './ui/Onboarding';
 import MobileNavigation from './ui/MobileNavigation';
+import CrawlerDashboard from './WebCrawler/CrawlerDashboard';
 import { useSearchShortcuts, KeyboardShortcutsHelp } from '../hooks/useKeyboardShortcuts';
 import { useMobile } from '../hooks/useMobile';
 import { Toast } from './ui/Skeleton';
@@ -22,6 +23,7 @@ const StorySearchApp: React.FC = () => {
   const [showQuickTips, setShowQuickTips] = useState(false);
   const [showKeyboardHelp, setShowKeyboardHelp] = useState(false);
   const [showMobileSearch, setShowMobileSearch] = useState(false);
+  const [showCrawlerDashboard, setShowCrawlerDashboard] = useState(false);
   const [toasts, setToasts] = useState<Array<{ id: string; message: string; type: 'success' | 'error' | 'info' | 'warning' }>>([]);
   
   // Mobile detection
@@ -113,6 +115,13 @@ const StorySearchApp: React.FC = () => {
               isFullscreen={true}
               onBack={() => setShowMobileSearch(false)}
             />
+          </div>
+        )}
+
+        {/* Web Crawler Dashboard */}
+        {showCrawlerDashboard && (
+          <div className="fixed inset-0 z-50 bg-background/95 backdrop-blur-xl">
+            <CrawlerDashboard onClose={() => setShowCrawlerDashboard(false)} />
           </div>
         )}
 

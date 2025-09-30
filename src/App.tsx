@@ -12,6 +12,7 @@ import EnhancedSearchInterface from "./components/Search/EnhancedSearchInterface
 import TestPage from "./pages/TestPage";
 import DiagnosticPage from "./pages/DiagnosticPage";
 import AgentStudioPage from "./pages/AgentStudioPage";
+import WorkflowStudioPage from "./pages/WorkflowStudioPage";
 import AIReportsPage from "./pages/AIReportsPage";
 import FloatingAIChatbot from "./components/ui/FloatingAIChatbot";
 import { AIContextProvider } from "./contexts/AIContext";
@@ -36,6 +37,7 @@ const App = () => (
               <Route path="/ai-agents" element={<AIAgentsDashboard />} />
               <Route path="/search" element={<EnhancedSearchInterface />} />
               <Route path="/agents" element={<AgentStudioPage />} />
+              <Route path="/workflows" element={<WorkflowStudioPage />} />
               <Route path="/reports" element={<AIReportsPage />} />
               <Route path="/test" element={<TestPage />} />
               <Route path="/diagnostic" element={<DiagnosticPage />} />
