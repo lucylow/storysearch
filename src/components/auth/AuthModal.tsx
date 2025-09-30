@@ -189,7 +189,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultTab = 'si
           className="w-full max-w-md"
           onClick={(e) => e.stopPropagation()}
         >
-          <Card className="relative">
+          <Card className="relative bg-white/95 backdrop-blur-lg border border-white/20 shadow-2xl">
             <Button
               variant="ghost"
               size="sm"
@@ -200,21 +200,27 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultTab = 'si
             </Button>
 
             <CardHeader className="text-center pb-4">
-              <div className="mx-auto w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center mb-4">
-                <Mail className="h-6 w-6 text-white" />
-              </div>
-              <CardTitle className="text-2xl">Welcome to StorySearch AI</CardTitle>
-              <CardDescription>
+              <motion.div 
+                className="mx-auto w-16 h-16 bg-gradient-to-br from-blue-500 via-purple-600 to-indigo-600 rounded-xl flex items-center justify-center mb-4 shadow-lg"
+                whileHover={{ scale: 1.05, rotate: 5 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Mail className="h-8 w-8 text-white" />
+              </motion.div>
+              <CardTitle className="text-2xl bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
+                Welcome to StorySearch AI
+              </CardTitle>
+              <CardDescription className="text-slate-600">
                 Sign in to your account or create a new one
               </CardDescription>
             </CardHeader>
 
             <CardContent>
               <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as any)}>
-                <TabsList className="grid w-full grid-cols-3">
-                  <TabsTrigger value="signin">Sign In</TabsTrigger>
-                  <TabsTrigger value="signup">Sign Up</TabsTrigger>
-                  <TabsTrigger value="forgot">Forgot</TabsTrigger>
+                <TabsList className="grid w-full grid-cols-3 bg-slate-100 border border-slate-200">
+                  <TabsTrigger value="signin" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Sign In</TabsTrigger>
+                  <TabsTrigger value="signup" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Sign Up</TabsTrigger>
+                  <TabsTrigger value="forgot" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Forgot</TabsTrigger>
                 </TabsList>
 
                 {/* Social Sign In */}
@@ -231,24 +237,34 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultTab = 'si
                   </div>
                   
                   <div className="grid grid-cols-2 gap-3">
-                    <Button
-                      variant="outline"
-                      onClick={() => handleSocialSignIn('google')}
-                      disabled={loading}
-                      className="w-full"
+                    <motion.div
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
                     >
-                      <Chrome className="h-4 w-4 mr-2" />
-                      Google
-                    </Button>
-                    <Button
-                      variant="outline"
-                      onClick={() => handleSocialSignIn('github')}
-                      disabled={loading}
-                      className="w-full"
+                      <Button
+                        variant="outline"
+                        onClick={() => handleSocialSignIn('google')}
+                        disabled={loading}
+                        className="w-full border-slate-200 hover:border-blue-300 hover:bg-blue-50 transition-all duration-300"
+                      >
+                        <Chrome className="h-4 w-4 mr-2 text-blue-600" />
+                        Google
+                      </Button>
+                    </motion.div>
+                    <motion.div
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
                     >
-                      <Github className="h-4 w-4 mr-2" />
-                      GitHub
-                    </Button>
+                      <Button
+                        variant="outline"
+                        onClick={() => handleSocialSignIn('github')}
+                        disabled={loading}
+                        className="w-full border-slate-200 hover:border-slate-400 hover:bg-slate-50 transition-all duration-300"
+                      >
+                        <Github className="h-4 w-4 mr-2 text-slate-700" />
+                        GitHub
+                      </Button>
+                    </motion.div>
                   </div>
                 </div>
 
@@ -307,9 +323,18 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultTab = 'si
                       </button>
                     </div>
 
-                    <Button type="submit" className="w-full" disabled={loading}>
-                      {loading ? "Signing in..." : "Sign In"}
-                    </Button>
+                    <motion.div
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      <Button 
+                        type="submit" 
+                        className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300" 
+                        disabled={loading}
+                      >
+                        {loading ? "Signing in..." : "Sign In"}
+                      </Button>
+                    </motion.div>
                   </form>
                 </TabsContent>
 
@@ -404,9 +429,18 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultTab = 'si
                       </div>
                     </div>
 
-                    <Button type="submit" className="w-full" disabled={loading}>
-                      {loading ? "Creating account..." : "Create Account"}
-                    </Button>
+                    <motion.div
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      <Button 
+                        type="submit" 
+                        className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300" 
+                        disabled={loading}
+                      >
+                        {loading ? "Creating account..." : "Create Account"}
+                      </Button>
+                    </motion.div>
                   </form>
                 </TabsContent>
 

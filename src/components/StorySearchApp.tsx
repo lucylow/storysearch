@@ -9,7 +9,10 @@ import SearchAnalytics from './AIFeatures/SearchAnalytics';
 import Onboarding, { QuickTips } from './ui/Onboarding';
 import MobileNavigation from './ui/MobileNavigation';
 import CrawlerDashboard from './WebCrawler/CrawlerDashboard';
-import { useSearchShortcuts, KeyboardShortcutsHelp } from '../hooks/useKeyboardShortcuts';
+import { useKeyboardShortcuts, defaultShortcuts } from '../hooks/useKeyboardShortcuts';
+import { KeyboardShortcutsHelp } from './UI/KeyboardShortcutsHelp';
+import LoadingSpinner from './ui/LoadingSpinner';
+import ErrorBoundary from './ui/ErrorBoundary';
 import { useMobile } from '../hooks/useMobile';
 import { Toast } from './ui/Skeleton';
 import PredictiveSurfacing from './AIFeatures/PredictiveSurfacing';
@@ -41,33 +44,31 @@ const StorySearchApp: React.FC = () => {
   }, []);
 
   // Keyboard shortcuts
-  useSearchShortcuts({
-    focusSearch: () => {
-      const searchInput = document.querySelector('input[type="text"]') as HTMLInputElement;
-      searchInput?.focus();
+  const shortcuts = [
+    ...defaultShortcuts,
+    {
+      key: '?',
+      action: () => setShowKeyboardHelp(true),
+      description: 'Show keyboard shortcuts',
+      category: 'Help'
     },
-    clearSearch: () => {
-      // Clear search functionality
-      const searchInput = document.querySelector('input[type="text"]') as HTMLInputElement;
-      if (searchInput) {
-        searchInput.value = '';
-        searchInput.dispatchEvent(new Event('input', { bubbles: true }));
-      }
+    {
+      key: 'c',
+      ctrl: true,
+      action: () => setShowCrawlerDashboard(true),
+      description: 'Open crawler dashboard',
+      category: 'Tools'
     },
-    toggleFilters: () => {
-      const filterButton = document.querySelector('[data-testid="filter-button"]') as HTMLButtonElement;
-      filterButton?.click();
-    },
-    toggleViewMode: () => {
-      const viewModeButton = document.querySelector('[data-testid="view-mode-button"]') as HTMLButtonElement;
-      viewModeButton?.click();
-    },
-    openAIChat: () => setAISidebarOpen(true),
-    toggleVoiceSearch: () => {
-      const voiceButton = document.querySelector('[data-testid="voice-button"]') as HTMLButtonElement;
-      voiceButton?.click();
+    {
+      key: 'a',
+      ctrl: true,
+      action: () => setAISidebarOpen(!isAISidebarOpen),
+      description: 'Toggle AI assistant',
+      category: 'AI'
     }
-  });
+  ];
+  
+  useKeyboardShortcuts(shortcuts);
 
   // Add toast notification
   const addToast = (message: string, type: 'success' | 'error' | 'info' | 'warning' = 'info') => {

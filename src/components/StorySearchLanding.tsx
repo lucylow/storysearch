@@ -28,15 +28,26 @@ const StorySearchLanding = () => {
   const { user, isAuthenticated } = useAuth();
 
   return (
-    <div className="min-h-screen bg-hero-gradient overflow-hidden">
-      {/* Floating Background Elements */}
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 overflow-hidden relative">
+      {/* Enhanced Floating Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-10 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl animate-float" />
-        <div className="absolute bottom-10 right-10 w-96 h-96 bg-secondary/10 rounded-full blur-3xl animate-float" style={{animationDelay: '2s'}} />
-        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-accent/5 rounded-full blur-3xl animate-float" style={{animationDelay: '4s'}} />
+        {/* Primary floating orb */}
+        <div className="absolute top-10 left-10 w-72 h-72 bg-gradient-to-r from-blue-400/20 to-purple-500/20 rounded-full blur-3xl animate-float" />
+        {/* Secondary floating orb */}
+        <div className="absolute bottom-10 right-10 w-96 h-96 bg-gradient-to-r from-purple-400/20 to-pink-500/20 rounded-full blur-3xl animate-float" style={{animationDelay: '2s'}} />
+        {/* Tertiary floating orb */}
+        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-gradient-to-r from-indigo-400/15 to-blue-500/15 rounded-full blur-3xl animate-float" style={{animationDelay: '4s'}} />
+        {/* Additional accent elements */}
+        <div className="absolute top-1/4 right-1/4 w-48 h-48 bg-gradient-to-r from-cyan-400/10 to-teal-500/10 rounded-full blur-2xl animate-pulse" style={{animationDelay: '1s'}} />
+        <div className="absolute bottom-1/4 left-1/3 w-56 h-56 bg-gradient-to-r from-violet-400/10 to-purple-500/10 rounded-full blur-2xl animate-pulse" style={{animationDelay: '3s'}} />
       </div>
 
-      {/* Navigation */}
+      {/* Grid Pattern Overlay */}
+      <div className="fixed inset-0 opacity-40" style={{
+        backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")"
+      }} />
+
+      {/* Enhanced Navigation */}
       <nav className="relative z-50 px-4 sm:px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <motion.div 
@@ -44,108 +55,191 @@ const StorySearchLanding = () => {
             animate={{ opacity: 1, x: 0 }}
             className="flex items-center space-x-3"
           >
-            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-ai-gradient rounded-lg sm:rounded-xl flex items-center justify-center shadow-lg animate-glow">
+            <motion.div 
+              className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-600 rounded-lg sm:rounded-xl flex items-center justify-center shadow-lg"
+              whileHover={{ scale: 1.05, rotate: 5 }}
+              whileTap={{ scale: 0.95 }}
+            >
               <Search className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-            </div>
-            <span className="text-xl sm:text-2xl font-bold text-gradient-hero">
+            </motion.div>
+            <span className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
               StorySearch AI
             </span>
           </motion.div>
           
-          {/* Desktop Menu */}
+          {/* Enhanced Desktop Menu */}
           <div className="hidden md:flex items-center space-x-8">
-            <a href="#features" className="text-muted-foreground hover:text-primary transition-colors">Features</a>
-            <a href="#how-it-works" className="text-muted-foreground hover:text-primary transition-colors">How it Works</a>
-            <a href="#testimonials" className="text-muted-foreground hover:text-primary transition-colors">Testimonials</a>
+            <motion.a 
+              href="#features" 
+              className="text-slate-600 hover:text-blue-600 transition-colors font-medium relative group"
+              whileHover={{ y: -2 }}
+            >
+              Features
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 transition-all group-hover:w-full"></span>
+            </motion.a>
+            <motion.a 
+              href="#how-it-works" 
+              className="text-slate-600 hover:text-blue-600 transition-colors font-medium relative group"
+              whileHover={{ y: -2 }}
+            >
+              How it Works
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 transition-all group-hover:w-full"></span>
+            </motion.a>
+            <motion.a 
+              href="#testimonials" 
+              className="text-slate-600 hover:text-blue-600 transition-colors font-medium relative group"
+              whileHover={{ y: -2 }}
+            >
+              Testimonials
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 transition-all group-hover:w-full"></span>
+            </motion.a>
           </div>
           
-          {/* Desktop CTA */}
+          {/* Enhanced Desktop CTA */}
           <div className="hidden md:flex items-center space-x-4">
-            <a href="/search" className="px-4 py-2 text-muted-foreground hover:text-primary transition-colors font-medium">
+            <motion.a 
+              href="/search" 
+              className="px-4 py-2 text-slate-600 hover:text-blue-600 transition-colors font-medium rounded-lg hover:bg-blue-50"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
               Try AI Search
-            </a>
+            </motion.a>
             {isAuthenticated ? (
-              <Link to="/app" className="px-4 py-2 text-muted-foreground hover:text-foreground transition-colors">
-                Dashboard
-              </Link>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Link to="/app" className="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all duration-300">
+                  Dashboard
+            </Link>
+              </motion.div>
             ) : (
               <>
-                <button 
+                <motion.button 
                   onClick={() => {
                     setAuthMode('signin');
                     setShowAuthModal(true);
                   }}
-                  className="px-4 py-2 text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Sign In
-                </button>
-                <button 
+                  className="px-4 py-2 text-slate-600 hover:text-blue-600 transition-colors font-medium rounded-lg hover:bg-blue-50"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+            >
+              Sign In
+                </motion.button>
+                <motion.button 
                   onClick={() => {
                     setAuthMode('signup');
                     setShowAuthModal(true);
                   }}
-                  className="btn-ai-primary"
-                >
-                  Get Started Free
-                </button>
+                  className="px-6 py-2 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:from-blue-700 hover:via-purple-700 hover:to-indigo-700"
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+            >
+              Get Started Free
+                </motion.button>
               </>
             )}
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
+          {/* Enhanced Mobile Menu Button */}
+          <motion.button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 text-muted-foreground hover:text-foreground"
+            className="md:hidden p-2 text-slate-600 hover:text-blue-600 rounded-lg hover:bg-blue-50 transition-all duration-300"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <motion.div
+              animate={{ rotate: mobileMenuOpen ? 180 : 0 }}
+              transition={{ duration: 0.3 }}
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+            </motion.div>
+          </motion.button>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Enhanced Mobile Menu */}
         {mobileMenuOpen && (
           <motion.div 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="md:hidden mt-4 p-6 glass rounded-2xl"
+            initial={{ opacity: 0, y: -20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -20, scale: 0.95 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="md:hidden mt-4 p-6 bg-white/80 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl"
           >
             <div className="space-y-4">
-              <a href="#features" className="block text-foreground hover:text-primary">Features</a>
-              <a href="#how-it-works" className="block text-foreground hover:text-primary">How it Works</a>
-              <a href="#testimonials" className="block text-foreground hover:text-primary">Testimonials</a>
-              <div className="pt-4 border-t border-border space-y-3">
-                <a href="/search" className="w-full px-4 py-2 bg-primary/10 text-primary hover:bg-primary/20 rounded-lg font-medium text-center block">
+              <motion.a 
+                href="#features" 
+                className="block text-slate-700 hover:text-blue-600 font-medium transition-colors"
+                whileHover={{ x: 5 }}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Features
+              </motion.a>
+              <motion.a 
+                href="#how-it-works" 
+                className="block text-slate-700 hover:text-blue-600 font-medium transition-colors"
+                whileHover={{ x: 5 }}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                How it Works
+              </motion.a>
+              <motion.a 
+                href="#testimonials" 
+                className="block text-slate-700 hover:text-blue-600 font-medium transition-colors"
+                whileHover={{ x: 5 }}
+                  onClick={() => setMobileMenuOpen(false)}
+              >
+                Testimonials
+              </motion.a>
+              <div className="pt-4 border-t border-slate-200 space-y-3">
+                <motion.a 
+                  href="/search" 
+                  className="w-full px-4 py-3 bg-gradient-to-r from-blue-50 to-purple-50 text-blue-600 hover:from-blue-100 hover:to-purple-100 rounded-lg font-medium text-center block border border-blue-200 transition-all duration-300"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
                   Try AI Search
-                </a>
+                </motion.a>
                 {isAuthenticated ? (
-                  <Link 
-                    to="/app"
-                    className="w-full px-4 py-2 text-muted-foreground hover:text-foreground text-center block"
-                    onClick={() => setMobileMenuOpen(false)}
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                   >
-                    Dashboard
-                  </Link>
+                <Link 
+                  to="/app"
+                      className="w-full px-4 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-medium text-center block shadow-lg"
+                  onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Dashboard
+                    </Link>
+                  </motion.div>
                 ) : (
                   <>
-                    <button 
+                    <motion.button 
                       onClick={() => {
                         setAuthMode('signin');
                         setShowAuthModal(true);
                         setMobileMenuOpen(false);
                       }}
-                      className="w-full px-4 py-2 text-muted-foreground hover:text-foreground"
-                    >
-                      Sign In
-                    </button>
-                    <button 
+                      className="w-full px-4 py-3 text-slate-600 hover:text-blue-600 font-medium rounded-lg hover:bg-blue-50 transition-all duration-300"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                >
+                  Sign In
+                    </motion.button>
+                    <motion.button 
                       onClick={() => {
                         setAuthMode('signup');
                         setShowAuthModal(true);
                         setMobileMenuOpen(false);
                       }}
-                      className="w-full btn-ai-primary"
-                    >
-                      Get Started Free
-                    </button>
+                      className="w-full px-4 py-3 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all duration-300"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                >
+                  Get Started Free
+                    </motion.button>
                   </>
                 )}
               </div>
@@ -169,11 +263,11 @@ const StorySearchLanding = () => {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2 }}
               whileHover={{ scale: 1.05, y: -2 }}
-              className="inline-flex items-center px-6 py-3 glass rounded-full mb-8 hover:shadow-[0_0_30px_hsl(var(--primary)/0.3)] transition-all duration-300 cursor-pointer group"
+              className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-full mb-8 hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300 cursor-pointer group"
             >
-              <Sparkles className="w-5 h-5 text-accent mr-3 group-hover:animate-spin" />
-              <span className="text-sm font-semibold text-foreground">AI-Powered Content Discovery</span>
-              <ArrowRight className="w-4 h-4 ml-3 text-primary group-hover:translate-x-1 transition-transform" />
+              <Sparkles className="w-5 h-5 text-blue-600 mr-3 group-hover:animate-spin" />
+              <span className="text-sm font-semibold text-slate-700">AI-Powered Content Discovery</span>
+              <ArrowRight className="w-4 h-4 ml-3 text-blue-600 group-hover:translate-x-1 transition-transform" />
             </motion.div>
 
             {/* Main Heading */}
@@ -184,7 +278,7 @@ const StorySearchLanding = () => {
               className="text-6xl md:text-8xl font-bold mb-8 leading-tight"
             >
               <motion.span 
-                className="text-gradient-hero block"
+                className="block bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 bg-clip-text text-transparent"
                 animate={{ 
                   backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
                 }}
@@ -219,12 +313,12 @@ const StorySearchLanding = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="text-xl md:text-3xl text-muted-foreground mb-12 max-w-5xl mx-auto leading-relaxed"
+              className="text-xl md:text-3xl text-slate-600 mb-12 max-w-5xl mx-auto leading-relaxed"
             >
               Transform how users discover your Storyblok content with{' '}
-              <span className="text-primary font-semibold">AI-powered search</span>,{' '}
-              <span className="text-secondary font-semibold">natural language understanding</span>, and{' '}
-              <span className="text-accent font-semibold">intelligent recommendations</span> powered by Algolia.
+              <span className="text-blue-600 font-semibold">AI-powered search</span>,{' '}
+              <span className="text-purple-600 font-semibold">natural language understanding</span>, and{' '}
+              <span className="text-indigo-600 font-semibold">intelligent recommendations</span> powered by Algolia.
             </motion.p>
 
             {/* CTA Buttons */}
@@ -235,7 +329,7 @@ const StorySearchLanding = () => {
               className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16"
             >
               <motion.button 
-                className="group btn-ai-primary flex items-center text-lg px-10 py-5" 
+                className="group bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 text-white flex items-center text-lg px-10 py-5 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:from-blue-700 hover:via-purple-700 hover:to-indigo-700" 
                 onClick={() => window.location.href = '/app'}
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
@@ -246,7 +340,7 @@ const StorySearchLanding = () => {
               </motion.button>
               
               <motion.button 
-                className="group btn-ai-ghost flex items-center text-lg px-10 py-5"
+                className="group bg-white/80 backdrop-blur-sm border border-slate-200 text-slate-700 hover:bg-white hover:shadow-lg flex items-center text-lg px-10 py-5 rounded-xl font-semibold transition-all duration-300"
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
               >

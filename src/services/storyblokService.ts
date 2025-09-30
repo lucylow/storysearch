@@ -505,7 +505,29 @@ class StoryblokService {
     crossModalRecommendations: ContentRecommendation[];
   }> {
     try {
-      const analysis: Record<string, unknown> = {};
+      const analysis: {
+        textAnalysis?: ContentAnalysis;
+        imageAnalysis?: {
+          description: string;
+          tags: string[];
+          objects: string[];
+          colors: string[];
+          confidence: number;
+        };
+        audioAnalysis?: {
+          transcription: string;
+          topics: string[];
+          sentiment: string;
+          confidence: number;
+        };
+        videoAnalysis?: {
+          description: string;
+          scenes: string[];
+          tags: string[];
+          duration: number;
+          confidence: number;
+        };
+      } = {};
       let searchQuery = searchData.text || '';
 
       // Process text if provided
