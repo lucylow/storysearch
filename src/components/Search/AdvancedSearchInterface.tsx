@@ -24,7 +24,7 @@ interface AdvancedSearchInterfaceProps {
   onModeChange?: (mode: 'standard' | 'ai-chat') => void;
 }
 
-interface SearchFilters {
+interface SearchFilters extends Record<string, unknown> {
   type: string[];
   dateRange: string;
   tags: string[];

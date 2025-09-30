@@ -4,7 +4,7 @@ import {
   Activity,
   Play,
   Pause,
-  Stop,
+  Square,
   Clock,
   CheckCircle,
   AlertCircle,
@@ -186,7 +186,7 @@ const CrawlSessionList: React.FC<CrawlSessionListProps> = ({
                           onStopCrawl(session.id);
                         }}
                       >
-                        <Stop className="w-4 h-4" />
+                        <Square className="w-4 h-4" />
                       </Button>
                     )}
                   </div>
