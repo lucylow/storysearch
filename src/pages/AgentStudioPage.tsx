@@ -16,6 +16,7 @@ import {
 import AgentStudio from '@/components/AgentStudio/AgentStudio';
 import DiscoveryDashboard from '@/components/AgentStudio/DiscoveryDashboard';
 import AskAIInterface from '@/components/AgentStudio/AskAIInterface';
+import AgentDashboard from '@/components/AgentStudio/AgentDashboard';
 
 const AgentStudioPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -97,8 +98,9 @@ const AgentStudioPage: React.FC = () => {
             </div>
           </div>
 
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
             <TabsTrigger value="discovery">Discovery</TabsTrigger>
             <TabsTrigger value="askai">AskAI</TabsTrigger>
             <TabsTrigger value="studio">Studio</TabsTrigger>
@@ -285,6 +287,10 @@ const AgentStudioPage: React.FC = () => {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="dashboard" className="space-y-6">
+            <AgentDashboard />
           </TabsContent>
 
           <TabsContent value="discovery" className="space-y-6">

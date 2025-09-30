@@ -1,19 +1,23 @@
 import { useEffect } from 'react';
 import { useBrand } from '../contexts/BrandContext';
-import { algoliaService } from '../services/algoliaService';
 
 /**
  * Hook to sync brand selection with algolia service
  * Automatically updates search results when brand changes
+ * Note: Brand switching is now handled directly in BrandSwitcher component
  */
 export const useBrandSearch = () => {
-  const { currentBrand } = useBrand();
+  const { brand } = useBrand();
 
   useEffect(() => {
-    // Update algolia service with current brand
-    algoliaService.setBrand(currentBrand);
-  }, [currentBrand]);
+    // Apply brand colors to CSS variables
+    if (brand.colors) {
+      document.documentElement.style.setProperty('--brand-primary', brand.colors.primary);
+      document.documentElement.style.setProperty('--brand-secondary', brand.colors.secondary);
+      document.documentElement.style.setProperty('--brand-accent', brand.colors.accent);
+    }
+  }, [brand]);
 
-  return { currentBrand };
+  return { brand };
 };
 
