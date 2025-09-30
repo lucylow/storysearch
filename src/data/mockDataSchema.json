@@ -1,0 +1,100 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "StorySearchAI Content Item",
+  "description": "Schema for a single content item in StorySearchAI, designed for AI-powered discovery.",
+  "type": "object",
+  "required": [
+    "id",
+    "title",
+    "slug",
+    "content_type",
+    "description",
+    "full_text_content",
+    "image_url",
+    "url",
+    "tags",
+    "categories",
+    "related_entities",
+    "brand_or_person"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the content item."
+    },
+    "title": {
+      "type": "string",
+      "description": "Main title of the content item."
+    },
+    "slug": {
+      "type": "string",
+      "description": "URL-friendly slug for the content item."
+    },
+    "content_type": {
+      "type": "string",
+      "description": "Type of content (e.g., 'product', 'article', 'video', 'profile', 'campaign')."
+    },
+    "description": {
+      "type": "string",
+      "description": "A brief summary or meta description of the content."
+    },
+    "full_text_content": {
+      "type": "string",
+      "description": "Comprehensive text content for AI analysis and search. This would typically be the full body of an article, product description, or video transcript."
+    },
+    "image_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL to a primary image associated with the content."
+    },
+    "url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Canonical URL to the content item."
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Keywords or tags associated with the content for better discoverability."
+    },
+    "categories": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Categorization of the content (e.g., 'sports', 'fashion', 'music', 'gaming')."
+    },
+    "related_entities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Other entities (people, brands, products) related to this content item."
+    },
+    "brand_or_person": {
+      "type": "string",
+      "description": "The main brand or person this content item is about."
+    },
+    "date_published": {
+      "type": "string",
+      "format": "date",
+      "description": "Publication date of the content."
+    },
+    "author": {
+      "type": "string",
+      "description": "Author or creator of the content."
+    },
+    "sentiment": {
+      "type": "string",
+      "enum": ["positive", "neutral", "negative"],
+      "description": "AI-derived sentiment of the content."
+    },
+    "ai_summary": {
+      "type": "string",
+      "description": "AI-generated summary of the content."
+    }
+  }
+}
+

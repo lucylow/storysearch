@@ -17,6 +17,8 @@ import { AuthProvider } from "./contexts/AuthContext";
 const AnalyticsDashboard = lazy(() => import("./components/AIFeatures/AnalyticsDashboard"));
 const AIAgentsDashboard = lazy(() => import("./components/AIFeatures/AIAgentsDashboard"));
 const EnhancedSearchInterface = lazy(() => import("./components/Search/EnhancedSearchInterface"));
+const StorySearchEnhanced = lazy(() => import("./components/StorySearchEnhanced"));
+const HackathonDemo = lazy(() => import("./pages/HackathonDemo"));
 const TestPage = lazy(() => import("./pages/TestPage"));
 const DiagnosticPage = lazy(() => import("./pages/DiagnosticPage"));
 const AgentStudioPage = lazy(() => import("./pages/AgentStudioPage"));
@@ -55,6 +57,16 @@ const App = () => (
               <Route path="/search" element={
                 <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div>}>
                   <EnhancedSearchInterface />
+                </Suspense>
+              } />
+              <Route path="/demo" element={
+                <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div>}>
+                  <StorySearchEnhanced />
+                </Suspense>
+              } />
+              <Route path="/hackathon" element={
+                <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div>}>
+                  <HackathonDemo />
                 </Suspense>
               } />
               <Route path="/agents" element={

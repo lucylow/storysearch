@@ -14,7 +14,8 @@
 StorySearch AI transforms content discovery from simple keyword matching to **intelligent understanding**. Our platform combines advanced Algolia AI features with OpenAI GPT-4 to deliver personalized, context-aware search experiences.
 
 ### **Live Demo**
-**[🌐 Try StorySearch AI](https://storysearch.lovable.app)**
+**[🌐 Try StorySearch AI](https://storysearch.lovable.app)**  
+**[🎯 Hackathon Demo](https://storysearch.lovable.app/hackathon)** - Enhanced demo with Nike, iShowSpeed, and BLACKPINK content
 
 ---
 
@@ -82,11 +83,52 @@ StorySearch AI transforms content discovery from simple keyword matching to **in
 ## 🚀 Quick Start
 
 ```bash
-git clone https://github.com/yourusername/storysearch.git
+git clone https://github.com/lucylow/storysearch.git
 cd storysearch
 npm install
 npm run dev
 ```
+
+### **Demo Routes**
+- **Main App**: `http://localhost:5173/` - Original StorySearch AI interface
+- **Hackathon Demo**: `http://localhost:5173/hackathon` - Enhanced demo landing page
+- **Enhanced Search**: `http://localhost:5173/demo` - Nike, iShowSpeed, BLACKPINK content demo
+- **Brand Dashboard**: `http://localhost:5173/demo/brands` - Interactive brand analytics
+- **Cross-Content Discovery**: `http://localhost:5173/demo/connections` - AI-powered recommendations
+
+---
+
+## 🎯 Hackathon 2025 Enhancements
+
+### **Cross-Entity Content Discovery**
+Our enhanced demo showcases intelligent content discovery across three distinct entities:
+
+#### **🏃‍♂️ Nike - Athletic Brand**
+- Product catalog with performance metrics
+- Campaign analytics and brand sentiment
+- Partnership insights with influencers and musicians
+
+#### **🎮 iShowSpeed - Gaming Influencer** 
+- Gaming content and FIFA gameplay highlights
+- Brand collaborations and endorsement deals
+- Cross-over content with athletic brands
+
+#### **🎵 BLACKPINK - K-pop Sensation**
+- Music releases and album analytics
+- Fashion partnerships and brand endorsements
+- Cultural impact and global reach metrics
+
+### **AI-Powered Features**
+- **Multi-Entity Search**: Find connections between brands, influencers, and music
+- **Cross-Content Recommendations**: Discover unexpected relationships using semantic analysis
+- **Real-time Analytics**: Live performance metrics and engagement tracking
+- **Intelligent Insights**: AI-generated content performance predictions
+
+### **Demo Experience**
+1. **Enhanced Search Interface** - Multi-modal search across all content types
+2. **Brand Discovery Dashboard** - Deep analytics for each entity
+3. **Cross-Content Connections** - AI-powered relationship mapping
+4. **Performance Metrics** - Real-time engagement and relevance scoring
 
 ---
 

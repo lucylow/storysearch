@@ -42,22 +42,13 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultTab = 'si
     setLoading(true);
 
     try {
-      const { error } = await signIn(formData.email, formData.password);
-      
-      if (error) {
-        toast({
-          title: "Sign In Failed",
-          description: error.message,
-          variant: "destructive"
-        });
-      } else {
-        toast({
-          title: "Welcome back!",
-          description: "You've been signed in successfully.",
-        });
-        onClose();
-        setFormData({ email: '', password: '', confirmPassword: '', fullName: '', company: '' });
-      }
+      await signIn(formData.email, formData.password);
+      toast({
+        title: "Welcome back!",
+        description: "You've been signed in successfully.",
+      });
+      onClose();
+      setFormData({ email: '', password: '', confirmPassword: '', fullName: '', company: '' });
     } catch (error) {
       toast({
         title: "Error",
@@ -84,25 +75,13 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultTab = 'si
     setLoading(true);
 
     try {
-      const { error } = await signUp(formData.email, formData.password, {
-        full_name: formData.fullName,
-        company: formData.company
+      await signUp(formData.email, formData.password, formData.fullName);
+      toast({
+        title: "Account Created!",
+        description: "Welcome to StorySearch AI!",
       });
-      
-      if (error) {
-        toast({
-          title: "Sign Up Failed",
-          description: error.message,
-          variant: "destructive"
-        });
-      } else {
-        toast({
-          title: "Account Created!",
-          description: "Please check your email to verify your account.",
-        });
-        onClose();
-        setFormData({ email: '', password: '', confirmPassword: '', fullName: '', company: '' });
-      }
+      onClose();
+      setFormData({ email: '', password: '', confirmPassword: '', fullName: '', company: '' });
     } catch (error) {
       toast({
         title: "Error",
@@ -119,21 +98,12 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultTab = 'si
     setLoading(true);
 
     try {
-      const { error } = await resetPassword(formData.email);
-      
-      if (error) {
-        toast({
-          title: "Reset Failed",
-          description: error.message,
-          variant: "destructive"
-        });
-      } else {
-        toast({
-          title: "Reset Email Sent",
-          description: "Check your email for password reset instructions.",
-        });
-        setActiveTab('signin');
-      }
+      await resetPassword(formData.email);
+      toast({
+        title: "Reset Email Sent",
+        description: "Check your email for password reset instructions.",
+      });
+      setActiveTab('signin');
     } catch (error) {
       toast({
         title: "Error",
@@ -149,17 +119,18 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultTab = 'si
     setLoading(true);
     
     try {
-      const { error } = provider === 'google' 
-        ? await signInWithGoogle() 
-        : await signInWithGitHub();
-      
-      if (error) {
-        toast({
-          title: `${provider === 'google' ? 'Google' : 'GitHub'} Sign In Failed`,
-          description: error.message,
-          variant: "destructive"
-        });
+      if (provider === 'google') {
+        await signInWithGoogle();
+      } else {
+        await signInWithGitHub();
       }
+      
+      toast({
+        title: `Signed in with ${provider === 'google' ? 'Google' : 'GitHub'}`,
+        description: "Welcome back!",
+      });
+      onClose();
+      setFormData({ email: '', password: '', confirmPassword: '', fullName: '', company: '' });
     } catch (error) {
       toast({
         title: "Error",

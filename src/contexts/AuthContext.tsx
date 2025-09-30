@@ -15,10 +15,14 @@ interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  error: string | null;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, fullName?: string) => Promise<void>;
+  signInWithGoogle: () => Promise<void>;
+  signInWithGitHub: () => Promise<void>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
+  updateUser: (updates: Partial<User>) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -38,6 +42,7 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     // Check for existing session on mount
@@ -132,14 +137,91 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  const signInWithGoogle = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      // Simulate Google OAuth
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      const mockUser: User = {
+        id: 'google_user_' + Date.now(),
+        email: 'user@gmail.com',
+        user_metadata: {
+          full_name: 'Google User',
+          avatar_url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=google'
+        },
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
+
+      setUser(mockUser);
+      localStorage.setItem('storysearch_user', JSON.stringify(mockUser));
+    } catch (error) {
+      setError('Google sign-in failed');
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const signInWithGitHub = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      // Simulate GitHub OAuth
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      const mockUser: User = {
+        id: 'github_user_' + Date.now(),
+        email: 'user@github.com',
+        user_metadata: {
+          full_name: 'GitHub User',
+          avatar_url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=github'
+        },
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
+
+      setUser(mockUser);
+      localStorage.setItem('storysearch_user', JSON.stringify(mockUser));
+    } catch (error) {
+      setError('GitHub sign-in failed');
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const updateUser = async (updates: Partial<User>) => {
+    if (!user) throw new Error('No user logged in');
+    
+    setIsLoading(true);
+    setError(null);
+    try {
+      const updatedUser = { ...user, ...updates, updated_at: new Date().toISOString() };
+      setUser(updatedUser);
+      localStorage.setItem('storysearch_user', JSON.stringify(updatedUser));
+    } catch (error) {
+      setError('Update failed');
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const value: AuthContextType = {
     user,
     isAuthenticated: !!user,
     isLoading,
+    error,
     signIn,
     signUp,
+    signInWithGoogle,
+    signInWithGitHub,
     signOut,
-    resetPassword
+    resetPassword,
+    updateUser
   };
 
   return (

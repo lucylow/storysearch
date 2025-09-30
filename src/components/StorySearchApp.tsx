@@ -10,7 +10,7 @@ import Onboarding, { QuickTips } from './ui/Onboarding';
 import MobileNavigation from './ui/MobileNavigation';
 import CrawlerDashboard from './WebCrawler/CrawlerDashboard';
 import { useKeyboardShortcuts, defaultShortcuts } from '../hooks/useKeyboardShortcuts';
-import { KeyboardShortcutsHelp } from './UI/KeyboardShortcutsHelp';
+import KeyboardShortcutsHelp from './ui/KeyboardShortcutsHelp';
 import LoadingSpinner from './ui/LoadingSpinner';
 import ErrorBoundary from './ui/ErrorBoundary';
 import { useMobile } from '../hooks/useMobile';
@@ -88,8 +88,9 @@ const StorySearchApp: React.FC = () => {
   };
 
   return (
-    <SearchProvider>
-      <div className="min-h-screen bg-hero-gradient">
+    <ErrorBoundary>
+      <SearchProvider>
+        <div className="min-h-screen bg-hero-gradient">
         {/* Header */}
         <Header 
           onAIToggle={() => setAISidebarOpen(!isAISidebarOpen)}
@@ -201,8 +202,9 @@ const StorySearchApp: React.FC = () => {
             onClose={() => removeToast(toast.id)}
           />
         ))}
-      </div>
-    </SearchProvider>
+        </div>
+      </SearchProvider>
+    </ErrorBoundary>
   );
 };
 

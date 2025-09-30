@@ -29,6 +29,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { algoliaService, AgentRecommendation } from '../../services/algoliaService';
+import BrandSelector from '../UI/BrandSelector';
+import { type BrandKey } from '../../data/brandMockData';
 
 interface SearchResult {
   id: string;
@@ -67,6 +69,17 @@ const EnhancedSearchInterface: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('search');
   const [customRelevanceEnabled, setCustomRelevanceEnabled] = useState(true);
+  const [selectedBrand, setSelectedBrand] = useState<BrandKey>('default');
+
+  // Update brand in algolia service when changed
+  const handleBrandChange = (brand: BrandKey) => {
+    setSelectedBrand(brand);
+    algoliaService.setBrand(brand);
+    // Clear current results to show new brand content
+    setSearchResults([]);
+    setAiResponse(null);
+    setSimilarContent([]);
+  };
 
   // Enhanced search with AI features
   const handleSearch = async (searchQuery: string) => {
@@ -189,6 +202,19 @@ const EnhancedSearchInterface: React.FC = () => {
           </p>
         </motion.div>
 
+        {/* Brand Selector */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.05 }}
+          className="max-w-6xl mx-auto mb-8"
+        >
+          <BrandSelector 
+            currentBrand={selectedBrand}
+            onBrandChange={handleBrandChange}
+          />
+        </motion.div>
+
         {/* Enhanced Search Bar */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -200,7 +226,12 @@ const EnhancedSearchInterface: React.FC = () => {
             <Search className="absolute left-6 top-1/2 transform -translate-y-1/2 w-6 h-6 text-muted-foreground" />
             <Input
               type="text"
-              placeholder="Ask me anything about content management, development, or best practices..."
+              placeholder={
+                selectedBrand === 'nike' ? "Search Nike products, campaigns, and innovations..." :
+                selectedBrand === 'blackpink' ? "Search BLACKPINK music, fashion, and collaborations..." :
+                selectedBrand === 'ishowspeed' ? "Search iShowSpeed videos, streams, and content..." :
+                "Search all content across Nike, BLACKPINK, iShowSpeed..."
+              }
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleSearch(query)}
