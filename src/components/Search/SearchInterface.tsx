@@ -341,12 +341,12 @@ const SearchInterface: React.FC<SearchInterfaceProps> = ({ mode }) => {
   };
 
   const quickQueries = [
-    "How to set up Storyblok with Next.js?",
-    "Best practices for headless CMS",
-    "Content modeling examples",
-    "API integration tutorials",
-    "SEO optimization strategies",
-    "Performance optimization techniques",
+    "Tell me about Nike's sustainability initiatives",
+    "Latest Tesla electric vehicle models",
+    "Apple vs Samsung comparison",
+    "Top AI companies in 2025",
+    "SpaceX recent launches",
+    "Amazon's latest innovations",
     "Multilingual content management",
     "Webhook implementation guide"
   ];
@@ -446,7 +446,7 @@ const SearchInterface: React.FC<SearchInterfaceProps> = ({ mode }) => {
                   searchMode === 'image' ? "Upload an image or drag & drop..." :
                   searchMode === 'video' ? "Upload a video or drag & drop..." :
                   searchMode === 'audio' ? "Upload audio or drag & drop..." :
-                  "Ask anything about your Storyblok content..."
+                  "Search for companies like Nike, topics, news, or anything online..."
                 }
                 className="w-full pl-20 pr-32 py-6 text-xl glass rounded-3xl border-2 border-border focus:border-primary focus:outline-none focus:shadow-[0_0_40px_hsl(var(--primary)/0.3)] transition-all duration-500 bg-gradient-to-r from-background/50 to-background/30 backdrop-blur-xl"
               />

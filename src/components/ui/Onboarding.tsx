@@ -260,7 +260,7 @@ export const QuickTips: React.FC<{
     {
       icon: <Search className="w-5 h-5 text-blue-600" />,
       title: 'Smart Search',
-      description: 'Try natural language queries like "How to set up Storyblok with React"'
+      description: 'Try natural language queries like "Tell me about Nike" or "Latest Tesla models"'
     },
     {
       icon: <Filter className="w-5 h-5 text-green-600" />,

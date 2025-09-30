@@ -19,7 +19,7 @@ const AskAI: React.FC = () => {
 
   const exampleQuestions = [
     "What are the benefits of headless CMS?",
-    "How do I integrate Storyblok with Next.js?",
+    "What are Nike's most popular shoe models?",
     "What are best practices for content modeling?",
     "How can I optimize my content for SEO?"
   ];
@@ -44,7 +44,7 @@ const AskAI: React.FC = () => {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-3xl font-bold text-gradient-hero mb-2">AskAI</h2>
-          <p className="text-muted-foreground">Get precise answers from your Storyblok content</p>
+          <p className="text-muted-foreground">Get precise answers about any online content</p>
         </div>
         <div className="w-12 h-12 bg-ai-gradient rounded-xl flex items-center justify-center animate-glow">
           <MessageCircle className="w-6 h-6 text-white" />
@@ -62,7 +62,7 @@ const AskAI: React.FC = () => {
                   <Sparkles className="w-16 h-16 mx-auto mb-4 text-primary animate-pulse-glow" />
                   <h3 className="text-xl font-semibold text-foreground mb-3">Ask Me Anything</h3>
                   <p className="text-sm text-muted-foreground mb-6">
-                    I can answer questions about Storyblok, provide exact information from your content,
+                    I can answer questions about companies, topics, and online content,
                     and guide you through complex topics.
                   </p>
                   <div className="space-y-2">

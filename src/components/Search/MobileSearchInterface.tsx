@@ -131,7 +131,7 @@ const MobileSearchInterface: React.FC<MobileSearchInterfaceProps> = ({
               }}
               onBlur={() => setIsFocused(false)}
               onKeyDown={handleKeyDown}
-              placeholder="Search your Storyblok content..."
+              placeholder="Search companies, topics, news..."
               className="flex-1 px-12 py-4 text-lg bg-transparent border-none outline-none placeholder:text-muted-foreground"
             />
 

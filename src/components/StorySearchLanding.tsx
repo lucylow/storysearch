@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { 
   Search, 
   Bot, 
@@ -17,9 +18,14 @@ import {
   Menu,
   X
 } from 'lucide-react';
+import AuthModal from './auth/AuthModal';
+import { useAuth } from '@/contexts/AuthContext';
 
 const StorySearchLanding = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin');
+  const { user, isAuthenticated } = useAuth();
 
   return (
     <div className="min-h-screen bg-hero-gradient overflow-hidden">
@@ -58,12 +64,32 @@ const StorySearchLanding = () => {
             <a href="/search" className="px-4 py-2 text-muted-foreground hover:text-primary transition-colors font-medium">
               Try AI Search
             </a>
-            <button className="px-4 py-2 text-muted-foreground hover:text-foreground transition-colors">
-              Sign In
-            </button>
-            <button className="btn-ai-primary">
-              Get Started Free
-            </button>
+            {isAuthenticated ? (
+              <Link to="/app" className="px-4 py-2 text-muted-foreground hover:text-foreground transition-colors">
+                Dashboard
+              </Link>
+            ) : (
+              <>
+                <button 
+                  onClick={() => {
+                    setAuthMode('signin');
+                    setShowAuthModal(true);
+                  }}
+                  className="px-4 py-2 text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  Sign In
+                </button>
+                <button 
+                  onClick={() => {
+                    setAuthMode('signup');
+                    setShowAuthModal(true);
+                  }}
+                  className="btn-ai-primary"
+                >
+                  Get Started Free
+                </button>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -90,8 +116,38 @@ const StorySearchLanding = () => {
                 <a href="/search" className="w-full px-4 py-2 bg-primary/10 text-primary hover:bg-primary/20 rounded-lg font-medium text-center block">
                   Try AI Search
                 </a>
-                <button className="w-full px-4 py-2 text-muted-foreground hover:text-foreground">Sign In</button>
-                <button className="w-full btn-ai-primary">Get Started Free</button>
+                {isAuthenticated ? (
+                  <Link 
+                    to="/app"
+                    className="w-full px-4 py-2 text-muted-foreground hover:text-foreground text-center block"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Dashboard
+                  </Link>
+                ) : (
+                  <>
+                    <button 
+                      onClick={() => {
+                        setAuthMode('signin');
+                        setShowAuthModal(true);
+                        setMobileMenuOpen(false);
+                      }}
+                      className="w-full px-4 py-2 text-muted-foreground hover:text-foreground"
+                    >
+                      Sign In
+                    </button>
+                    <button 
+                      onClick={() => {
+                        setAuthMode('signup');
+                        setShowAuthModal(true);
+                        setMobileMenuOpen(false);
+                      }}
+                      className="w-full btn-ai-primary"
+                    >
+                      Get Started Free
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           </motion.div>
@@ -391,7 +447,7 @@ const StorySearchLanding = () => {
               Ready to Transform Your Content Discovery?
             </h2>
             <p className="text-xl text-muted-foreground mb-8">
-              Join hundreds of teams using StorySearch AI to make their Storyblok content more discoverable and engaging.
+              Join thousands of users discovering companies, topics, and content online with AI-powered intelligence.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
@@ -448,6 +504,12 @@ const StorySearchLanding = () => {
           </div>
         </div>
       </footer>
+      
+      <AuthModal 
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        defaultTab={authMode}
+      />
     </div>
   );
 };
@@ -464,17 +526,17 @@ const features = [
   {
     icon: Bot,
     title: "AI-Powered Search",
-    description: "Natural language understanding that goes beyond keywords to deliver intelligent, contextual results."
+    description: "Search for any company, topic, or content online using natural language. Get intelligent, contextual results instantly."
   },
   {
     icon: MessageCircle,
     title: "Conversational AI",
-    description: "Chat with your content using our AI assistant that understands complex questions and provides precise answers."
+    description: "Ask about Nike, Tesla, or any company. Our AI assistant understands complex questions and provides precise answers from web sources."
   },
   {
     icon: Zap,
-    title: "Real-time Indexing",
-    description: "Instant content synchronization with Storyblok webhooks ensuring your search is always up-to-date."
+    title: "Real-time Discovery",
+    description: "Access the latest information about any company, topic, or trend with real-time web content indexing."
   },
   {
     icon: BarChart3,
@@ -496,13 +558,13 @@ const features = [
 const steps = [
   {
     icon: Search,
-    title: "Connect Storyblok",
-    description: "Link your Storyblok space with one-click integration. No coding required."
+    title: "Start Searching",
+    description: "Search any company, topic, or content online. Just type what you're looking for - no setup required."
   },
   {
     icon: Zap,
-    title: "AI Learns Your Content",
-    description: "Our AI analyzes your content structure and relationships to build intelligent search models."
+    title: "AI Analyzes Content",
+    description: "Our AI analyzes web content, company information, and online sources to deliver relevant results."
   },
   {
     icon: Rocket,

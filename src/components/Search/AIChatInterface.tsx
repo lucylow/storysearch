@@ -74,10 +74,10 @@ const AIChatInterface: React.FC = () => {
   };
 
   const examplePrompts = [
-    "Explain how content modeling works in Storyblok",
-    "Show me examples of successful headless CMS implementations",
-    "What are the benefits of using Algolia with Storyblok?",
-    "Help me optimize my content structure for better search"
+    "Tell me about Nike's latest products and sustainability efforts",
+    "What are Tesla's recent innovations in electric vehicles?",
+    "Compare Apple vs Samsung smartphones",
+    "Find trending tech startups in AI"
   ];
 
   return (
@@ -94,7 +94,7 @@ const AIChatInterface: React.FC = () => {
           </div>
           <div>
             <h3 className="font-semibold text-lg">StorySearch AI Assistant</h3>
-            <p className="text-white/80 text-sm">Ask me anything about your Storyblok content</p>
+            <p className="text-white/90 text-base">Ask me anything about companies, topics, or online content</p>
           </div>
         </div>
       </div>
@@ -371,7 +371,7 @@ const AIChatInterface: React.FC = () => {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-            placeholder="Type your question about Storyblok content..."
+            placeholder="Ask about Nike, Tesla, or any company/topic..."
             className="flex-1 px-4 py-3 glass border border-border rounded-full focus:outline-none focus:border-primary focus:shadow-[0_0_20px_hsl(var(--primary)/0.2)] transition-all"
             disabled={isLoading}
           />

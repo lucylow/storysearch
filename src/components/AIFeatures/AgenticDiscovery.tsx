@@ -35,7 +35,7 @@ const AgenticDiscovery: React.FC = () => {
     {
       id: 'step-2',
       title: 'Content Discovery',
-      description: 'Finding relevant Storyblok content',
+      description: 'Finding relevant online content',
       status: 'pending',
       icon: Compass
     },

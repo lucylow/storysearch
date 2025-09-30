@@ -185,7 +185,7 @@ const AdvancedSearchInterface: React.FC<AdvancedSearchInterfaceProps> = ({
             }}
             onBlur={() => setIsFocused(false)}
             onKeyDown={handleKeyDown}
-            placeholder="Search your Storyblok content with AI..."
+            placeholder="Search for companies like Nike, topics, news, or anything online..."
             className="flex-1 px-10 sm:px-12 py-3 sm:py-4 text-base sm:text-lg bg-transparent border-none outline-none placeholder:text-gray-400"
           />
 

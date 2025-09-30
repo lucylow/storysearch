@@ -22,7 +22,7 @@ const AgentStudio: React.FC = () => {
     {
       id: 'content-discovery',
       name: 'Content Discovery Journey',
-      description: 'Guide users through finding relevant Storyblok content',
+      description: 'Guide users through finding relevant online content',
       steps: 3,
       icon: Sparkles
     },

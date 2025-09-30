@@ -14,19 +14,25 @@ import DiagnosticPage from "./pages/DiagnosticPage";
 import AgentStudioPage from "./pages/AgentStudioPage";
 import WorkflowStudioPage from "./pages/WorkflowStudioPage";
 import AIReportsPage from "./pages/AIReportsPage";
+import AuthCallbackPage from "./pages/AuthCallbackPage";
+import ContentLibraryPage from "./pages/ContentLibraryPage";
+import SettingsPage from "./pages/SettingsPage";
+import DocumentationPage from "./pages/DocumentationPage";
 import FloatingAIChatbot from "./components/ui/FloatingAIChatbot";
 import { AIContextProvider } from "./contexts/AIContext";
 import { BrandProvider } from "./contexts/BrandContext";
 import { AgentProvider } from "./contexts/AgentContext";
+import { AuthProvider } from "./contexts/AuthContext";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <BrandProvider>
-        <AIContextProvider>
-          <AgentProvider>
+      <AuthProvider>
+        <BrandProvider>
+          <AIContextProvider>
+            <AgentProvider>
           <Toaster />
           <Sonner />
           <BrowserRouter>
@@ -39,6 +45,10 @@ const App = () => (
               <Route path="/agents" element={<AgentStudioPage />} />
               <Route path="/workflows" element={<WorkflowStudioPage />} />
               <Route path="/reports" element={<AIReportsPage />} />
+              <Route path="/auth/callback" element={<AuthCallbackPage />} />
+              <Route path="/content" element={<ContentLibraryPage />} />
+              <Route path="/settings" element={<SettingsPage />} />
+              <Route path="/docs" element={<DocumentationPage />} />
               <Route path="/test" element={<TestPage />} />
               <Route path="/diagnostic" element={<DiagnosticPage />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
@@ -46,9 +56,10 @@ const App = () => (
             </Routes>
           </BrowserRouter>
           <FloatingAIChatbot />
-          </AgentProvider>
-        </AIContextProvider>
-      </BrandProvider>
+            </AgentProvider>
+          </AIContextProvider>
+        </BrandProvider>
+      </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
