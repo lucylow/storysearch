@@ -215,3 +215,4 @@ export const useMobileInteractions = () => {
 
   return interactions;
 };
+

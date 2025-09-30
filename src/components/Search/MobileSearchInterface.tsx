@@ -279,3 +279,4 @@ const MobileSearchInterface: React.FC<MobileSearchInterfaceProps> = ({
 };
 
 export default MobileSearchInterface;
+

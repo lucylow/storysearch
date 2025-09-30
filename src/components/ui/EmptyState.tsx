@@ -38,3 +38,4 @@ const EmptyState: React.FC<EmptyStateProps> = ({ icon, title, description, actio
 };
 
 export default EmptyState;
+
