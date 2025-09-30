@@ -10,9 +10,11 @@ import AnalyticsDashboard from "./components/AIFeatures/AnalyticsDashboard";
 import EnhancedSearchInterface from "./components/Search/EnhancedSearchInterface";
 import TestPage from "./pages/TestPage";
 import DiagnosticPage from "./pages/DiagnosticPage";
+import AgentStudioPage from "./pages/AgentStudioPage";
 import FloatingAIChatbot from "./components/ui/FloatingAIChatbot";
 import { AIContextProvider } from "./contexts/AIContext";
 import { BrandProvider } from "./contexts/BrandContext";
+import { AgentProvider } from "./contexts/AgentContext";
 
 const queryClient = new QueryClient();
 
@@ -21,6 +23,7 @@ const App = () => (
     <TooltipProvider>
       <BrandProvider>
         <AIContextProvider>
+          <AgentProvider>
           <Toaster />
           <Sonner />
           <BrowserRouter>
@@ -29,6 +32,7 @@ const App = () => (
               <Route path="/app" element={<AppPage />} />
               <Route path="/analytics" element={<AnalyticsDashboard />} />
               <Route path="/search" element={<EnhancedSearchInterface />} />
+              <Route path="/agents" element={<AgentStudioPage />} />
               <Route path="/test" element={<TestPage />} />
               <Route path="/diagnostic" element={<DiagnosticPage />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
@@ -36,6 +40,7 @@ const App = () => (
             </Routes>
           </BrowserRouter>
           <FloatingAIChatbot />
+          </AgentProvider>
         </AIContextProvider>
       </BrandProvider>
     </TooltipProvider>
