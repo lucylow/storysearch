@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
 import { 
   Search, 
   Bot, 
@@ -25,14 +24,12 @@ import {
   Percent,
   ChevronRight
 } from 'lucide-react';
-import AuthModal from './auth/AuthModal';
-import { useAuth } from '@/contexts/AuthContext';
+import LandingVoiceSearchDemo from './LandingVoiceSearchDemo';
+import LandingAIChatDemo from './LandingAIChatDemo';
+import LandingDiscoveryJourney from './LandingDiscoveryJourney';
+import LandingPredictiveSurfacing from './LandingPredictiveSurfacing';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 const StorySearchLanding = () => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [showAuthModal, setShowAuthModal] = useState(false);
-  const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin');
-  const { user, isAuthenticated } = useAuth();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 overflow-hidden relative">
@@ -331,19 +328,19 @@ const StorySearchLanding = () => {
             </TabsList>
 
             <TabsContent value="voice" className="mt-8">
-              <AskAIDemo />
+              <LandingVoiceSearchDemo />
             </TabsContent>
 
             <TabsContent value="chat" className="mt-8">
-              <AgenticDemo />
+              <LandingAIChatDemo />
             </TabsContent>
 
             <TabsContent value="journey" className="mt-8">
-              <AgenticDemo />
+              <LandingDiscoveryJourney />
             </TabsContent>
 
             <TabsContent value="predictive" className="mt-8">
-              <PredictiveDemo />
+              <LandingPredictiveSurfacing />
             </TabsContent>
           </Tabs>
         </div>
@@ -402,23 +399,12 @@ const StorySearchLanding = () => {
       {/* Footer */}
       <footer className="px-6 py-12 bg-slate-900 text-white">
         <div className="max-w-7xl mx-auto">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-600 rounded-xl flex items-center justify-center">
-                <Search className="w-5 h-5 text-white" />
-              </div>
-              <span className="text-xl font-bold">StorySearch AI</span>
-            </div>
+          <div className="text-center">
             <p className="text-slate-400">&copy; 2024 StorySearch AI. All rights reserved.</p>
           </div>
         </div>
       </footer>
       
-      <AuthModal 
-        isOpen={showAuthModal}
-        onClose={() => setShowAuthModal(false)}
-        defaultTab={authMode}
-      />
     </div>
   );
 };
