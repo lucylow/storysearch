@@ -11,7 +11,24 @@
 
 ## 🌟 What is StorySearch AI?
 
-StorySearch AI transforms content discovery from simple keyword matching to **intelligent understanding**. Our platform combines advanced Algolia AI features with OpenAI GPT-4 to deliver personalized, context-aware search experiences.
+In today's digital world, finding the right information feels impossible. You want to learn about Nike's latest innovations. Research Tesla's new models. Compare tech companies. But traditional search? It buries you in thousands of generic links.
+
+**StorySearch AI** is an AI that doesn't just search, it understands. It answers questions. It guides discovery. It thinks like you do.
+
+Powered by **GPT-4**, **Algolia's AskAI**, and **autonomous agent technology**, we've created an intelligent discovery platform that works with any online content. Ask about Nike. Explore Tesla. Compare smartphones. Discover AI startups. StorySearch AI understands it all.
+
+## 🚀 Three Breakthrough Capabilities
+
+### 1. **AskAI: Get Exact Answers, Not Search Results**
+Ask "What are Tesla's latest models?" and get a precise answer with sources. Model 3, Model Y, Cybertruck, with full specifications.
+
+### 2. **Agentic Discovery: Multi-Step AI Journeys**
+Our AI creates intelligent learning paths. Learning about electric vehicles? The agent guides you through fundamentals, then comparisons, then implementation, automatically understanding your learning path.
+
+### 3. **Predictive Surfacing: The More You Search, The Smarter It Gets**
+It anticipates what you need next and proactively recommends content. Search for Nike once, and it understands you're interested in athletic brands. It suggests Adidas innovations, Under Armour technology, Puma sustainability, with confidence scores.
+
+**This isn't search. This is intelligent discovery.**
 
 ### **Live Demo**
 **[🌐 Try StorySearch AI](https://storysearch.lovable.app)**  

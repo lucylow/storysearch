@@ -16,7 +16,16 @@ import {
   Users,
   Rocket,
   Menu,
-  X
+  X,
+  Mic,
+  Brain,
+  TrendingUp,
+  Lightbulb,
+  Target,
+  Globe,
+  Clock,
+  Percent,
+  ChevronRight
 } from 'lucide-react';
 import AuthModal from './auth/AuthModal';
 import { useAuth } from '@/contexts/AuthContext';
@@ -31,23 +40,12 @@ const StorySearchLanding = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 overflow-hidden relative">
       {/* Enhanced Floating Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        {/* Primary floating orb */}
         <div className="absolute top-10 left-10 w-72 h-72 bg-gradient-to-r from-blue-400/20 to-purple-500/20 rounded-full blur-3xl animate-float" />
-        {/* Secondary floating orb */}
         <div className="absolute bottom-10 right-10 w-96 h-96 bg-gradient-to-r from-purple-400/20 to-pink-500/20 rounded-full blur-3xl animate-float" style={{animationDelay: '2s'}} />
-        {/* Tertiary floating orb */}
         <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-gradient-to-r from-indigo-400/15 to-blue-500/15 rounded-full blur-3xl animate-float" style={{animationDelay: '4s'}} />
-        {/* Additional accent elements */}
-        <div className="absolute top-1/4 right-1/4 w-48 h-48 bg-gradient-to-r from-cyan-400/10 to-teal-500/10 rounded-full blur-2xl animate-pulse" style={{animationDelay: '1s'}} />
-        <div className="absolute bottom-1/4 left-1/3 w-56 h-56 bg-gradient-to-r from-violet-400/10 to-purple-500/10 rounded-full blur-2xl animate-pulse" style={{animationDelay: '3s'}} />
       </div>
 
-      {/* Grid Pattern Overlay */}
-      <div className="fixed inset-0 opacity-40" style={{
-        backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")"
-      }} />
-
-      {/* Enhanced Navigation */}
+      {/* Navigation */}
       <nav className="relative z-50 px-4 sm:px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <motion.div 
@@ -67,44 +65,36 @@ const StorySearchLanding = () => {
             </span>
           </motion.div>
           
-          {/* Enhanced Desktop Menu */}
+          {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-8">
             <motion.a 
-              href="#features" 
+              href="#problem" 
               className="text-slate-600 hover:text-blue-600 transition-colors font-medium relative group"
               whileHover={{ y: -2 }}
             >
-              Features
+              The Problem
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 transition-all group-hover:w-full"></span>
             </motion.a>
             <motion.a 
-              href="#how-it-works" 
+              href="#solution" 
               className="text-slate-600 hover:text-blue-600 transition-colors font-medium relative group"
               whileHover={{ y: -2 }}
             >
-              How it Works
+              Our Solution
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 transition-all group-hover:w-full"></span>
             </motion.a>
             <motion.a 
-              href="#testimonials" 
+              href="#capabilities" 
               className="text-slate-600 hover:text-blue-600 transition-colors font-medium relative group"
               whileHover={{ y: -2 }}
             >
-              Testimonials
+              Capabilities
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 transition-all group-hover:w-full"></span>
             </motion.a>
           </div>
           
-          {/* Enhanced Desktop CTA */}
+          {/* Desktop CTA */}
           <div className="hidden md:flex items-center space-x-4">
-            <motion.a 
-              href="/search" 
-              className="px-4 py-2 text-slate-600 hover:text-blue-600 transition-colors font-medium rounded-lg hover:bg-blue-50"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Try AI Search
-            </motion.a>
             {isAuthenticated ? (
               <motion.div
                 whileHover={{ scale: 1.05 }}
@@ -112,7 +102,7 @@ const StorySearchLanding = () => {
               >
                 <Link to="/app" className="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all duration-300">
                   Dashboard
-            </Link>
+                </Link>
               </motion.div>
             ) : (
               <>
@@ -124,25 +114,25 @@ const StorySearchLanding = () => {
                   className="px-4 py-2 text-slate-600 hover:text-blue-600 transition-colors font-medium rounded-lg hover:bg-blue-50"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-            >
-              Sign In
+                >
+                  Sign In
                 </motion.button>
                 <motion.button 
                   onClick={() => {
                     setAuthMode('signup');
                     setShowAuthModal(true);
                   }}
-                  className="px-6 py-2 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:from-blue-700 hover:via-purple-700 hover:to-indigo-700"
+                  className="px-6 py-2 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all duration-300"
                   whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.95 }}
-            >
-              Get Started Free
+                >
+                  Get Started Free
                 </motion.button>
               </>
             )}
           </div>
 
-          {/* Enhanced Mobile Menu Button */}
+          {/* Mobile Menu Button */}
           <motion.button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="md:hidden p-2 text-slate-600 hover:text-blue-600 rounded-lg hover:bg-blue-50 transition-all duration-300"
@@ -152,13 +142,13 @@ const StorySearchLanding = () => {
             <motion.div
               animate={{ rotate: mobileMenuOpen ? 180 : 0 }}
               transition={{ duration: 0.3 }}
-          >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            >
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </motion.div>
           </motion.button>
         </div>
 
-        {/* Enhanced Mobile Menu */}
+        {/* Mobile Menu */}
         {mobileMenuOpen && (
           <motion.div 
             initial={{ opacity: 0, y: -20, scale: 0.95 }}
@@ -169,87 +159,36 @@ const StorySearchLanding = () => {
           >
             <div className="space-y-4">
               <motion.a 
-                href="#features" 
+                href="#problem" 
                 className="block text-slate-700 hover:text-blue-600 font-medium transition-colors"
                 whileHover={{ x: 5 }}
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Features
+                The Problem
               </motion.a>
               <motion.a 
-                href="#how-it-works" 
+                href="#solution" 
                 className="block text-slate-700 hover:text-blue-600 font-medium transition-colors"
                 whileHover={{ x: 5 }}
                 onClick={() => setMobileMenuOpen(false)}
               >
-                How it Works
+                Our Solution
               </motion.a>
               <motion.a 
-                href="#testimonials" 
+                href="#capabilities" 
                 className="block text-slate-700 hover:text-blue-600 font-medium transition-colors"
                 whileHover={{ x: 5 }}
-                  onClick={() => setMobileMenuOpen(false)}
+                onClick={() => setMobileMenuOpen(false)}
               >
-                Testimonials
+                Capabilities
               </motion.a>
-              <div className="pt-4 border-t border-slate-200 space-y-3">
-                <motion.a 
-                  href="/search" 
-                  className="w-full px-4 py-3 bg-gradient-to-r from-blue-50 to-purple-50 text-blue-600 hover:from-blue-100 hover:to-purple-100 rounded-lg font-medium text-center block border border-blue-200 transition-all duration-300"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  Try AI Search
-                </motion.a>
-                {isAuthenticated ? (
-                  <motion.div
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                <Link 
-                  to="/app"
-                      className="w-full px-4 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-medium text-center block shadow-lg"
-                  onClick={() => setMobileMenuOpen(false)}
-                    >
-                      Dashboard
-                    </Link>
-                  </motion.div>
-                ) : (
-                  <>
-                    <motion.button 
-                      onClick={() => {
-                        setAuthMode('signin');
-                        setShowAuthModal(true);
-                        setMobileMenuOpen(false);
-                      }}
-                      className="w-full px-4 py-3 text-slate-600 hover:text-blue-600 font-medium rounded-lg hover:bg-blue-50 transition-all duration-300"
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                >
-                  Sign In
-                    </motion.button>
-                    <motion.button 
-                      onClick={() => {
-                        setAuthMode('signup');
-                        setShowAuthModal(true);
-                        setMobileMenuOpen(false);
-                      }}
-                      className="w-full px-4 py-3 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all duration-300"
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                >
-                  Get Started Free
-                    </motion.button>
-                  </>
-                )}
-              </div>
             </div>
           </motion.div>
         )}
       </nav>
 
-      {/* Hero Section */}
-      <section className="relative px-6 py-20">
+      {/* Hero Section - The Problem */}
+      <section id="problem" className="relative px-6 py-20">
         <div className="max-w-7xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -257,137 +196,183 @@ const StorySearchLanding = () => {
             transition={{ duration: 0.8 }}
             className="relative z-10"
           >
-            {/* Badge */}
+            {/* Problem Statement */}
             <motion.div 
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2 }}
-              whileHover={{ scale: 1.05, y: -2 }}
-              className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-full mb-8 hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300 cursor-pointer group"
+              className="inline-flex items-center px-6 py-3 bg-red-50 border border-red-200 rounded-full mb-8"
             >
-              <Sparkles className="w-5 h-5 text-blue-600 mr-3 group-hover:animate-spin" />
-              <span className="text-sm font-semibold text-slate-700">AI-Powered Content Discovery</span>
-              <ArrowRight className="w-4 h-4 ml-3 text-blue-600 group-hover:translate-x-1 transition-transform" />
+              <span className="text-sm font-semibold text-red-700">42% of searches end in frustration</span>
             </motion.div>
 
-            {/* Main Heading */}
             <motion.h1 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="text-6xl md:text-8xl font-bold mb-8 leading-tight"
+              className="text-5xl md:text-7xl font-bold mb-8 leading-tight"
             >
-              <motion.span 
-                className="block bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 bg-clip-text text-transparent"
-                animate={{ 
-                  backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
-                }}
-                transition={{ 
-                  duration: 8, 
-                  repeat: Infinity, 
-                  ease: "linear" 
-                }}
-                style={{ backgroundSize: '200% 200%' }}
-              >
-                Intelligent Content
-              </motion.span>
-              <motion.span 
-                className="text-gradient block"
-                animate={{ 
-                  backgroundPosition: ['100% 50%', '0% 50%', '100% 50%']
-                }}
-                transition={{ 
-                  duration: 8, 
-                  repeat: Infinity, 
-                  ease: "linear",
-                  delay: 1
-                }}
-                style={{ backgroundSize: '200% 200%' }}
-              >
-                Discovery for Storyblok
-              </motion.span>
+              <span className="block text-slate-900 mb-4">
+                Finding the right information
+              </span>
+              <span className="block bg-gradient-to-r from-red-600 via-orange-600 to-yellow-600 bg-clip-text text-transparent">
+                feels impossible
+              </span>
             </motion.h1>
 
-            {/* Subheading */}
             <motion.p 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="text-xl md:text-3xl text-slate-600 mb-12 max-w-5xl mx-auto leading-relaxed"
+              className="text-xl md:text-2xl text-slate-600 mb-12 max-w-4xl mx-auto leading-relaxed"
             >
-              Transform how users discover your Storyblok content with{' '}
-              <span className="text-blue-600 font-semibold">AI-powered search</span>,{' '}
-              <span className="text-purple-600 font-semibold">natural language understanding</span>, and{' '}
-              <span className="text-indigo-600 font-semibold">intelligent recommendations</span> powered by Algolia.
+              You want to learn about Nike's latest innovations. Research Tesla's new models. Compare tech companies. But traditional search? It buries you in thousands of generic links.
             </motion.p>
 
-            {/* CTA Buttons */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16"
-            >
-              <motion.button 
-                className="group bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 text-white flex items-center text-lg px-10 py-5 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:from-blue-700 hover:via-purple-700 hover:to-indigo-700" 
-                onClick={() => window.location.href = '/app'}
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Zap className="w-6 h-6 mr-3 group-hover:animate-pulse" />
-                Start Free Trial
-                <Rocket className="w-6 h-6 ml-3 group-hover:translate-x-1 transition-transform" />
-              </motion.button>
-              
-              <motion.button 
-                className="group bg-white/80 backdrop-blur-sm border border-slate-200 text-slate-700 hover:bg-white hover:shadow-lg flex items-center text-lg px-10 py-5 rounded-xl font-semibold transition-all duration-300"
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Play className="w-6 h-6 mr-3 group-hover:scale-110 transition-transform" />
-                Watch Demo
-              </motion.button>
-            </motion.div>
-
-            {/* Enhanced Stats */}
+            {/* Problem Visualization */}
             <motion.div 
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 }}
-              className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto"
+              transition={{ delay: 0.5 }}
+              className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-16"
             >
-              {stats.map((stat, index) => (
+              {problemSteps.map((step, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: index * 0.1 + 0.7 }}
-                  whileHover={{ scale: 1.05, y: -5 }}
-                  className="text-center p-6 glass rounded-2xl border border-border/50 hover:border-primary/30 hover:shadow-[0_0_30px_hsl(var(--primary)/0.2)] transition-all duration-300"
+                  transition={{ delay: index * 0.1 + 0.6 }}
+                  className="p-6 bg-white/60 backdrop-blur-sm border border-red-200 rounded-2xl"
                 >
-                  <motion.div 
-                    className="text-3xl md:text-4xl font-bold text-gradient mb-2"
-                    animate={{ 
-                      scale: [1, 1.1, 1],
-                    }}
-                    transition={{ 
-                      duration: 2,
-                      repeat: Infinity,
-                      delay: index * 0.2
-                    }}
-                  >
-                    {stat.number}
-                  </motion.div>
-                  <div className="text-sm text-muted-foreground font-medium">{stat.label}</div>
+                  <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-xl font-bold text-red-600">{index + 1}</span>
+                  </div>
+                  <h3 className="text-lg font-semibold text-slate-900 mb-2">{step.title}</h3>
+                  <p className="text-slate-600 text-sm">{step.description}</p>
                 </motion.div>
               ))}
+            </motion.div>
+
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7 }}
+              className="text-2xl md:text-3xl text-slate-800 font-semibold mb-12"
+            >
+              <span className="text-red-600">What if there was a better way?</span>
+            </motion.p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Solution Section */}
+      <section id="solution" className="px-6 py-20 bg-gradient-to-br from-blue-50 to-indigo-100">
+        <div className="max-w-7xl mx-auto text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
+            <motion.h2 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="text-4xl md:text-6xl font-bold mb-8"
+            >
+              <span className="block text-slate-900 mb-4">Meet</span>
+              <span className="block bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
+                StorySearch AI
+              </span>
+            </motion.h2>
+
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="text-xl md:text-2xl text-slate-700 mb-12 max-w-4xl mx-auto leading-relaxed"
+            >
+              We built something revolutionary: an AI that doesn't just search, it understands. It answers questions. It guides discovery. It thinks like you do.
+            </motion.p>
+
+            {/* Tech Stack */}
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto mb-16"
+            >
+              {techStack.map((tech, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: index * 0.1 + 0.5 }}
+                  whileHover={{ scale: 1.05, y: -5 }}
+                  className="p-8 bg-white/80 backdrop-blur-sm border border-blue-200 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300"
+                >
+                  <tech.icon className="w-12 h-12 text-blue-600 mx-auto mb-4" />
+                  <h3 className="text-xl font-bold text-slate-900 mb-2">{tech.name}</h3>
+                  <p className="text-slate-600">{tech.description}</p>
+                </motion.div>
+              ))}
+            </motion.div>
+
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 }}
+              className="text-xl md:text-2xl text-slate-700 mb-12 max-w-4xl mx-auto leading-relaxed"
+            >
+              Powered by <span className="font-semibold text-blue-600">GPT-4</span>, <span className="font-semibold text-purple-600">Algolia's AskAI</span>, and <span className="font-semibold text-indigo-600">autonomous agent technology</span>, we've created an intelligent discovery platform that works with any online content.
+            </motion.p>
+
+            {/* Demo Preview */}
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7 }}
+              className="relative max-w-4xl mx-auto"
+            >
+              <div className="bg-white/90 backdrop-blur-sm border border-gray-200 rounded-2xl p-8 shadow-2xl">
+                <div className="flex items-center space-x-3 mb-6">
+                  <Mic className="w-6 h-6 text-green-600" />
+                  <span className="text-lg font-semibold text-slate-900">Voice Search Demo</span>
+                  <div className="flex space-x-1">
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" style={{animationDelay: '0.2s'}}></div>
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" style={{animationDelay: '0.4s'}}></div>
+                  </div>
+                </div>
+                
+                <div className="bg-slate-50 rounded-lg p-4 mb-6">
+                  <p className="text-slate-700 italic">"Tell me about Nike's sustainability initiatives"</p>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="font-semibold text-green-800">Nike's Move to Zero</h4>
+                      <span className="bg-green-600 text-white px-2 py-1 rounded-full text-xs font-semibold">92%</span>
+                    </div>
+                    <p className="text-green-700 text-sm">Carbon neutral by 2025, 75% renewable energy in manufacturing</p>
+                  </div>
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="font-semibold text-green-800">Circular Design</h4>
+                      <span className="bg-green-600 text-white px-2 py-1 rounded-full text-xs font-semibold">88%</span>
+                    </div>
+                    <p className="text-green-700 text-sm">Recycled materials in Air Max and Space Hippie collections</p>
+                  </div>
+                </div>
+              </div>
             </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section id="features" className="px-6 py-20 glass">
+      {/* Three Breakthrough Capabilities */}
+      <section id="capabilities" className="px-6 py-20">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -396,130 +381,52 @@ const StorySearchLanding = () => {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-gradient-hero mb-4">
-              AI-Powered Features
+            <h2 className="text-4xl md:text-5xl font-bold mb-8">
+              <span className="block text-slate-900 mb-4">StorySearch AI has three</span>
+              <span className="block bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
+                breakthrough capabilities
+              </span>
             </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Experience the future of content discovery with cutting-edge AI capabilities 
-              that understand context, intent, and user behavior.
-            </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {features.map((feature, index) => (
+          <div className="space-y-20">
+            {capabilities.map((capability, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                viewport={{ once: true }}
-                whileHover={{ scale: 1.02, y: -5 }}
-                className="group p-8 glass rounded-3xl hover:shadow-[0_0_30px_hsl(var(--primary)/0.2)] transition-all duration-300"
-              >
-                <div className="w-14 h-14 bg-ai-gradient rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform animate-glow">
-                  <feature.icon className="w-7 h-7 text-white" />
-                </div>
-                <h3 className="text-xl font-bold text-foreground mb-3">{feature.title}</h3>
-                <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works Section */}
-      <section id="how-it-works" className="px-6 py-20">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold text-gradient-hero mb-4">
-              How StorySearch AI Works
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Simple integration, powerful results. Get started in minutes and transform 
-              your content discovery experience.
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-3 gap-8 relative">
-            {/* Connecting Lines */}
-            <div className="hidden md:block absolute top-24 left-1/3 right-1/3 h-0.5 bg-ai-gradient rounded-full opacity-30" />
-            
-            {steps.map((step, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.2 }}
                 viewport={{ once: true }}
-                className="relative z-10 text-center"
+                className={`grid md:grid-cols-2 gap-12 items-center ${index % 2 === 1 ? 'md:grid-flow-col-dense' : ''}`}
               >
-                <motion.div 
-                  whileHover={{ scale: 1.05, rotate: 5 }}
-                  className="w-20 h-20 bg-ai-gradient rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-2xl animate-glow"
-                >
-                  <div className="w-12 h-12 glass rounded-xl flex items-center justify-center">
-                    <step.icon className="w-6 h-6 text-white" />
+                <div className={index % 2 === 1 ? 'md:col-start-2' : ''}>
+                  <div className="flex items-center space-x-4 mb-6">
+                    <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+                      <capability.icon className="w-8 h-8 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-3xl font-bold text-slate-900">{capability.title}</h3>
+                      <p className="text-blue-600 font-semibold">{capability.subtitle}</p>
+                    </div>
                   </div>
-                </motion.div>
-                <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white font-bold text-sm mx-auto mb-4 shadow-lg">
-                  {index + 1}
+                  <p className="text-lg text-slate-700 mb-6 leading-relaxed">{capability.description}</p>
+                  
+                  {capability.example && (
+                    <div className="bg-slate-50 rounded-lg p-6 border border-slate-200">
+                      <h4 className="font-semibold text-slate-900 mb-3">{capability.example.title}</h4>
+                      <p className="text-slate-700 italic mb-3">"{capability.example.query}"</p>
+                      <div className="bg-white rounded-lg p-4 border border-slate-200">
+                        <p className="text-slate-700">{capability.example.response}</p>
+                      </div>
+                    </div>
+                  )}
                 </div>
-                <h3 className="text-xl font-bold text-foreground mb-3">{step.title}</h3>
-                <p className="text-muted-foreground">{step.description}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* Testimonials Section */}
-      <section id="testimonials" className="px-6 py-20 glass">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold text-gradient-hero mb-4">
-              Loved by Content Teams
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              See how StorySearch AI is transforming content discovery for teams worldwide.
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                viewport={{ once: true }}
-                whileHover={{ scale: 1.02, y: -5 }}
-                className="p-8 glass rounded-3xl hover:shadow-[0_0_30px_hsl(var(--primary)/0.2)] transition-all duration-300"
-              >
-                <div className="flex items-center mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 text-accent fill-current" />
-                  ))}
-                </div>
-                <p className="text-foreground mb-6 leading-relaxed">"{testimonial.quote}"</p>
-                <div className="flex items-center">
-                  <div className="w-12 h-12 bg-ai-gradient rounded-full flex items-center justify-center text-white font-bold mr-4">
-                    {testimonial.author.charAt(0)}
-                  </div>
-                  <div>
-                    <div className="font-semibold text-foreground">{testimonial.author}</div>
-                    <div className="text-sm text-muted-foreground">{testimonial.role}</div>
+                <div className={index % 2 === 1 ? 'md:col-start-1' : ''}>
+                  <div className="relative">
+                    <div className="bg-white/90 backdrop-blur-sm border border-gray-200 rounded-2xl p-8 shadow-2xl">
+                      <capability.demoComponent />
+                    </div>
                   </div>
                 </div>
               </motion.div>
@@ -528,8 +435,8 @@ const StorySearchLanding = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="px-6 py-20">
+      {/* Final CTA */}
+      <section className="px-6 py-20 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -537,64 +444,58 @@ const StorySearchLanding = () => {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-gradient-hero mb-6">
-              Ready to Transform Your Content Discovery?
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+              This isn't search.
             </h2>
-            <p className="text-xl text-muted-foreground mb-8">
-              Join thousands of users discovering companies, topics, and content online with AI-powered intelligence.
+            <h3 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent mb-8">
+              This is intelligent discovery.
+            </h3>
+            
+            <p className="text-xl text-blue-100 mb-12 max-w-3xl mx-auto leading-relaxed">
+              StorySearch AI represents the future of how we find information online. Voice-powered. Conversational. Predictive. Intelligent.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
-              <button className="btn-ai-primary" onClick={() => window.location.href = '/app'}>
-                Start Your Free Trial
-              </button>
-              <button className="btn-ai-ghost">
-                Schedule a Demo
-              </button>
+              <motion.button 
+                className="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center space-x-3"
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => window.location.href = '/app'}
+              >
+                <Rocket className="w-6 h-6" />
+                <span>Start Discovering Now</span>
+              </motion.button>
+              <motion.button 
+                className="px-8 py-4 bg-white/10 backdrop-blur-sm border border-white/20 text-white text-lg font-semibold rounded-xl hover:bg-white/20 transition-all duration-300 flex items-center space-x-3"
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Play className="w-6 h-6" />
+                <span>Watch Demo</span>
+              </motion.button>
             </div>
             
-            <div className="text-sm text-muted-foreground flex items-center justify-center">
-              <CheckCircle2 className="w-4 h-4 mr-2 text-primary" />
-              No credit card required • 14-day free trial • Setup in 5 minutes
-            </div>
+            <p className="text-blue-200 text-lg font-semibold">
+              Ask anything. Discover everything.
+            </p>
+            <p className="text-blue-300 text-sm mt-2">
+              This is the future of discovery, and it's available now.
+            </p>
           </motion.div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="px-6 py-12 border-t border-border">
+      <footer className="px-6 py-12 bg-slate-900 text-white">
         <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center space-x-2 mb-4">
-                <div className="w-8 h-8 bg-ai-gradient rounded-xl flex items-center justify-center">
-                  <Search className="w-5 h-5 text-white" />
-                </div>
-                <span className="text-xl font-bold text-gradient">StorySearch AI</span>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-600 rounded-xl flex items-center justify-center">
+                <Search className="w-5 h-5 text-white" />
               </div>
-              <p className="text-muted-foreground">
-                Intelligent content discovery powered by Storyblok and Algolia.
-              </p>
+              <span className="text-xl font-bold">StorySearch AI</span>
             </div>
-            
-            {footerLinks.map((column, index) => (
-              <div key={index}>
-                <h4 className="font-semibold text-foreground mb-4">{column.title}</h4>
-                <ul className="space-y-2">
-                  {column.links.map((link, linkIndex) => (
-                    <li key={linkIndex}>
-                      <a href={link.href} className="text-muted-foreground hover:text-primary transition-colors">
-                        {link.label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-          
-          <div className="border-t border-border mt-8 pt-8 text-center text-muted-foreground">
-            <p>&copy; 2024 StorySearch AI. All rights reserved.</p>
+            <p className="text-slate-400">&copy; 2024 StorySearch AI. All rights reserved.</p>
           </div>
         </div>
       </footer>
@@ -609,108 +510,154 @@ const StorySearchLanding = () => {
 };
 
 // Data arrays
-const stats = [
-  { number: '10x', label: 'Faster Content Discovery' },
-  { number: '92%', label: 'Search Accuracy' },
-  { number: '85%', label: 'Content Engagement' },
-  { number: '24/7', label: 'AI Assistance' }
-];
-
-const features = [
+const problemSteps = [
   {
-    icon: Bot,
-    title: "AI-Powered Search",
-    description: "Search for any company, topic, or content online using natural language. Get intelligent, contextual results instantly."
+    title: "You Click",
+    description: "Open twenty tabs searching for information"
   },
   {
-    icon: MessageCircle,
-    title: "Conversational AI",
-    description: "Ask about Nike, Tesla, or any company. Our AI assistant understands complex questions and provides precise answers from web sources."
+    title: "You Scroll", 
+    description: "Endless scrolling through generic results"
   },
   {
-    icon: Zap,
-    title: "Real-time Discovery",
-    description: "Access the latest information about any company, topic, or trend with real-time web content indexing."
-  },
-  {
-    icon: BarChart3,
-    title: "Smart Analytics",
-    description: "Gain insights into search behavior, content performance, and user engagement patterns."
-  },
-  {
-    icon: Shield,
-    title: "Enterprise Security",
-    description: "Bank-level security with encrypted data, role-based access, and comprehensive audit logs."
-  },
-  {
-    icon: Users,
-    title: "Team Collaboration",
-    description: "Share search configurations, analytics insights, and collaborate on content optimization."
+    title: "You're Lost",
+    description: "Still not sure you found what you needed"
   }
 ];
 
-const steps = [
+const techStack = [
+  {
+    icon: Brain,
+    name: "GPT-4",
+    description: "Advanced language understanding and generation"
+  },
   {
     icon: Search,
-    title: "Start Searching",
-    description: "Search any company, topic, or content online. Just type what you're looking for - no setup required."
+    name: "Algolia AskAI",
+    description: "Intelligent search and question answering"
   },
   {
-    icon: Zap,
-    title: "AI Analyzes Content",
-    description: "Our AI analyzes web content, company information, and online sources to deliver relevant results."
-  },
-  {
-    icon: Rocket,
-    title: "Launch & Optimize",
-    description: "Go live in minutes and use our analytics to continuously improve content discovery."
+    icon: Bot,
+    name: "Autonomous Agents",
+    description: "AI that guides your discovery journey"
   }
 ];
 
-const testimonials = [
-  {
-    quote: "StorySearch AI reduced our content discovery time by 80%. The AI understands what our users are really looking for.",
-    author: "Sarah Chen",
-    role: "Content Director at TechCorp"
-  },
-  {
-    quote: "The conversational AI feature is a game-changer. Our support team can now instantly find relevant documentation.",
-    author: "Mike Rodriguez",
-    role: "CTO at StartupXYZ"
-  },
-  {
-    quote: "Implementation took less than an hour, and the results were immediately visible in our user engagement metrics.",
-    author: "Emily Watson",
-    role: "Product Manager at ScaleUp Inc"
-  }
-];
+const AskAIDemo = () => (
+  <div>
+    <div className="flex items-center space-x-2 mb-4">
+      <Search className="w-5 h-5 text-blue-600" />
+      <span className="font-semibold text-slate-900">AskAI</span>
+    </div>
+    <div className="bg-slate-50 rounded-lg p-4 mb-4">
+      <p className="text-slate-700 text-sm">"What are Tesla's latest models?"</p>
+    </div>
+    <div className="space-y-3">
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+        <h4 className="font-semibold text-blue-800 text-sm">Model 3</h4>
+        <p className="text-blue-700 text-xs">Starting at $38,990</p>
+      </div>
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+        <h4 className="font-semibold text-blue-800 text-sm">Model Y</h4>
+        <p className="text-blue-700 text-xs">Starting at $47,740</p>
+      </div>
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+        <h4 className="font-semibold text-blue-800 text-sm">Cybertruck</h4>
+        <p className="text-blue-700 text-xs">Starting at $60,990</p>
+      </div>
+    </div>
+  </div>
+);
 
-const footerLinks = [
+const AgenticDemo = () => (
+  <div>
+    <div className="flex items-center space-x-2 mb-4">
+      <Bot className="w-5 h-5 text-purple-600" />
+      <span className="font-semibold text-slate-900">Agentic Discovery</span>
+    </div>
+    <div className="space-y-3">
+      <div className="flex items-center space-x-3 p-3 bg-purple-50 border border-purple-200 rounded-lg">
+        <div className="w-6 h-6 bg-purple-600 text-white rounded-full flex items-center justify-center text-xs font-bold">1</div>
+        <span className="text-sm text-purple-800">Understanding fundamentals</span>
+      </div>
+      <div className="flex items-center space-x-3 p-3 bg-purple-50 border border-purple-200 rounded-lg">
+        <div className="w-6 h-6 bg-purple-600 text-white rounded-full flex items-center justify-center text-xs font-bold">2</div>
+        <span className="text-sm text-purple-800">Comparing options</span>
+      </div>
+      <div className="flex items-center space-x-3 p-3 bg-purple-50 border border-purple-200 rounded-lg">
+        <div className="w-6 h-6 bg-purple-600 text-white rounded-full flex items-center justify-center text-xs font-bold">3</div>
+        <span className="text-sm text-purple-800">Analyzing features</span>
+      </div>
+      <div className="flex items-center space-x-3 p-3 bg-purple-50 border border-purple-200 rounded-lg">
+        <div className="w-6 h-6 bg-purple-600 text-white rounded-full flex items-center justify-center text-xs font-bold">4</div>
+        <span className="text-sm text-purple-800">Making decisions</span>
+      </div>
+    </div>
+  </div>
+);
+
+const PredictiveDemo = () => (
+  <div>
+    <div className="flex items-center space-x-2 mb-4">
+      <TrendingUp className="w-5 h-5 text-indigo-600" />
+      <span className="font-semibold text-slate-900">Predictive Surfacing</span>
+    </div>
+    <div className="bg-slate-50 rounded-lg p-4 mb-4">
+      <p className="text-slate-700 text-sm">Searched for: Nike</p>
+    </div>
+    <div className="space-y-3">
+      <div className="flex items-center justify-between p-3 bg-indigo-50 border border-indigo-200 rounded-lg">
+        <span className="text-sm text-indigo-800">Adidas innovations</span>
+        <span className="bg-indigo-600 text-white px-2 py-1 rounded-full text-xs font-semibold">85%</span>
+      </div>
+      <div className="flex items-center justify-between p-3 bg-indigo-50 border border-indigo-200 rounded-lg">
+        <span className="text-sm text-indigo-800">Under Armour technology</span>
+        <span className="bg-indigo-600 text-white px-2 py-1 rounded-full text-xs font-semibold">78%</span>
+      </div>
+      <div className="flex items-center justify-between p-3 bg-indigo-50 border border-indigo-200 rounded-lg">
+        <span className="text-sm text-indigo-800">Puma sustainability</span>
+        <span className="bg-indigo-600 text-white px-2 py-1 rounded-full text-xs font-semibold">82%</span>
+      </div>
+    </div>
+  </div>
+);
+
+const capabilities = [
   {
-    title: "Product",
-    links: [
-      { label: "Features", href: "#features" },
-      { label: "How it Works", href: "#how-it-works" },
-      { label: "API Docs", href: "#" }
-    ]
+    icon: Search,
+    title: "AskAI",
+    subtitle: "Get exact answers, not search results",
+    description: "Ask 'What are Tesla's latest models?' and get a precise answer with sources. No more scrolling through pages of links.",
+    example: {
+      title: "Example:",
+      query: "What are Tesla's latest models?",
+      response: "Model 3, Model Y, Cybertruck, with full specifications and pricing."
+    },
+    demoComponent: AskAIDemo
   },
   {
-    title: "Company",
-    links: [
-      { label: "About", href: "#" },
-      { label: "Blog", href: "#" },
-      { label: "Careers", href: "#" },
-      { label: "Contact", href: "#" }
-    ]
+    icon: Bot,
+    title: "Agentic Discovery",
+    subtitle: "Our AI creates multi-step journeys",
+    description: "Learning about electric vehicles? The agent guides you through fundamentals, then comparisons, then implementation, automatically understanding your learning path.",
+    example: {
+      title: "Learning Journey:",
+      query: "Tell me about electric vehicles",
+      response: "Step 1: Understanding. Step 2: Comparing. Step 3: Analyzing. Step 4: Deciding."
+    },
+    demoComponent: AgenticDemo
   },
   {
-    title: "Resources",
-    links: [
-      { label: "Documentation", href: "#" },
-      { label: "Help Center", href: "#" },
-      { label: "Community", href: "#" },
-      { label: "Status", href: "#" }
-    ]
+    icon: TrendingUp,
+    title: "Predictive Surfacing",
+    subtitle: "The more you search, the smarter it gets",
+    description: "It anticipates what you need next and proactively recommends content. Search for Nike once, and it understands you're interested in athletic brands.",
+    example: {
+      title: "Smart Recommendations:",
+      query: "Nike sustainability",
+      response: "Suggests Adidas innovations, Under Armour technology, Puma sustainability with confidence scores."
+    },
+    demoComponent: PredictiveDemo
   }
 ];
 
