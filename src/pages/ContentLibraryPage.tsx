@@ -123,14 +123,14 @@ const ContentLibraryPage: React.FC = () => {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-              <FileText className="w-8 h-8 text-blue-600" />
+              <FileText className="w-8 h-8 text-blue-600 dark:text-blue-400" />
               Content Library
             </h1>
-            <p className="text-gray-600 dark:text-gray-400 mt-2">
+            <p className="text-gray-600 dark:text-gray-300 mt-2">
               Browse, manage, and analyze your content collection
             </p>
           </div>
-          <Button className="gap-2">
+          <Button className="gap-2 bg-primary hover:bg-primary/90 text-primary-foreground">
             <Plus className="w-4 h-4" />
             Create Content
           </Button>
@@ -141,14 +141,14 @@ const ContentLibraryPage: React.FC = () => {
           {stats.map((stat, index) => {
             const Icon = stat.icon;
             return (
-              <Card key={index}>
+              <Card key={index} className="bg-card/50 backdrop-blur-sm border-border/50 hover:shadow-lg transition-all duration-300">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">{stat.label}</p>
-                      <p className="text-2xl font-bold mt-1">{stat.value}</p>
+                      <p className="text-sm text-muted-foreground dark:text-gray-200 font-medium">{stat.label}</p>
+                      <p className="text-2xl font-bold mt-1 text-foreground">{stat.value}</p>
                     </div>
-                    <Icon className={`w-8 h-8 ${stat.color}`} />
+                    <Icon className={`w-8 h-8 ${stat.color} dark:opacity-90`} />
                   </div>
                 </CardContent>
               </Card>
@@ -157,7 +157,7 @@ const ContentLibraryPage: React.FC = () => {
         </div>
 
         {/* Filters and View Controls */}
-        <Card>
+        <Card className="bg-card/50 backdrop-blur-sm border-border/50">
           <CardContent className="p-4">
             <div className="flex items-center justify-between gap-4">
               {/* Content Type Filter */}
@@ -168,15 +168,24 @@ const ContentLibraryPage: React.FC = () => {
                     <button
                       key={type.value}
                       onClick={() => setSelectedType(type.value)}
-                      className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
+                      className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                         selectedType === type.value
-                          ? 'bg-primary text-white'
-                          : 'bg-gray-100 dark:bg-gray-800 hover:bg-gray-200'
+                          ? 'bg-primary text-primary-foreground shadow-md hover:bg-primary/90'
+                          : 'bg-secondary text-secondary-foreground hover:bg-secondary/80 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600'
                       }`}
                     >
                       <Icon className="w-4 h-4" />
                       {type.label}
-                      <Badge variant="secondary" className="ml-1">{type.count}</Badge>
+                      <Badge 
+                        variant={selectedType === type.value ? "secondary" : "outline"} 
+                        className={`ml-1 text-xs ${
+                          selectedType === type.value 
+                            ? 'bg-primary-foreground/20 text-primary-foreground' 
+                            : 'bg-background/50 text-foreground'
+                        }`}
+                      >
+                        {type.count}
+                      </Badge>
                     </button>
                   );
                 })}
@@ -186,16 +195,20 @@ const ContentLibraryPage: React.FC = () => {
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setViewMode('grid')}
-                  className={`p-2 rounded-lg ${
-                    viewMode === 'grid' ? 'bg-primary text-white' : 'bg-gray-100 hover:bg-gray-200'
+                  className={`p-2 rounded-lg transition-all duration-200 ${
+                    viewMode === 'grid' 
+                      ? 'bg-primary text-primary-foreground shadow-md hover:bg-primary/90' 
+                      : 'bg-secondary text-secondary-foreground hover:bg-secondary/80 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600'
                   }`}
                 >
                   <Grid className="w-5 h-5" />
                 </button>
                 <button
                   onClick={() => setViewMode('list')}
-                  className={`p-2 rounded-lg ${
-                    viewMode === 'list' ? 'bg-primary text-white' : 'bg-gray-100 hover:bg-gray-200'
+                  className={`p-2 rounded-lg transition-all duration-200 ${
+                    viewMode === 'list' 
+                      ? 'bg-primary text-primary-foreground shadow-md hover:bg-primary/90' 
+                      : 'bg-secondary text-secondary-foreground hover:bg-secondary/80 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600'
                   }`}
                 >
                   <List className="w-5 h-5" />
@@ -214,7 +227,7 @@ const ContentLibraryPage: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: content.id * 0.1 }}
             >
-              <Card className="hover:shadow-lg transition-shadow">
+              <Card className="hover:shadow-lg transition-all duration-300 bg-card/50 backdrop-blur-sm border-border/50 hover:border-border">
                 {viewMode === 'grid' ? (
                   <>
                     <img
@@ -224,16 +237,22 @@ const ContentLibraryPage: React.FC = () => {
                     />
                     <CardHeader>
                       <div className="flex items-center justify-between mb-2">
-                        <Badge variant={content.status === 'published' ? 'default' : 'secondary'}>
+                        <Badge 
+                          variant={content.status === 'published' ? 'default' : 'secondary'}
+                          className={content.status === 'published' 
+                            ? 'bg-green-600 text-white hover:bg-green-700' 
+                            : 'bg-yellow-600 text-white hover:bg-yellow-700'
+                          }
+                        >
                           {content.status}
                         </Badge>
-                        <div className="flex items-center gap-1 text-sm text-gray-500">
+                        <div className="flex items-center gap-1 text-sm text-muted-foreground dark:text-gray-300">
                           <Eye className="w-4 h-4" />
                           {content.views.toLocaleString()}
                         </div>
                       </div>
-                      <CardTitle className="text-lg">{content.title}</CardTitle>
-                      <CardDescription>
+                      <CardTitle className="text-lg text-foreground">{content.title}</CardTitle>
+                      <CardDescription className="text-muted-foreground dark:text-gray-300">
                         <div className="flex items-center gap-2 mt-2">
                           <User className="w-4 h-4" />
                           {content.author}
@@ -245,20 +264,30 @@ const ContentLibraryPage: React.FC = () => {
                     <CardContent>
                       <div className="flex flex-wrap gap-2 mb-4">
                         {content.tags.map((tag, i) => (
-                          <Badge key={i} variant="outline" className="text-xs">
+                          <Badge key={i} variant="outline" className="text-xs bg-background/50 text-foreground border-border">
                             {tag}
                           </Badge>
                         ))}
                       </div>
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                          <div className="text-sm text-gray-600">Engagement: {content.engagement}%</div>
+                          <div className="text-sm text-muted-foreground dark:text-gray-300 font-medium">
+                            Engagement: {content.engagement}%
+                          </div>
                         </div>
                         <div className="flex gap-2">
-                          <Button variant="ghost" size="sm">
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            className="hover:bg-accent hover:text-accent-foreground text-muted-foreground hover:text-foreground"
+                          >
                             <Edit className="w-4 h-4" />
                           </Button>
-                          <Button variant="ghost" size="sm">
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            className="hover:bg-destructive hover:text-destructive-foreground text-muted-foreground hover:text-destructive-foreground"
+                          >
                             <Trash2 className="w-4 h-4" />
                           </Button>
                         </div>
@@ -275,12 +304,18 @@ const ContentLibraryPage: React.FC = () => {
                       />
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
-                          <h3 className="font-semibold text-lg">{content.title}</h3>
-                          <Badge variant={content.status === 'published' ? 'default' : 'secondary'}>
+                          <h3 className="font-semibold text-lg text-foreground">{content.title}</h3>
+                          <Badge 
+                            variant={content.status === 'published' ? 'default' : 'secondary'}
+                            className={content.status === 'published' 
+                              ? 'bg-green-600 text-white hover:bg-green-700' 
+                              : 'bg-yellow-600 text-white hover:bg-yellow-700'
+                            }
+                          >
                             {content.status}
                           </Badge>
                         </div>
-                        <div className="flex items-center gap-4 text-sm text-gray-600">
+                        <div className="flex items-center gap-4 text-sm text-muted-foreground dark:text-gray-300">
                           <span className="flex items-center gap-1">
                             <User className="w-4 h-4" />
                             {content.author}
@@ -293,21 +328,29 @@ const ContentLibraryPage: React.FC = () => {
                             <Eye className="w-4 h-4" />
                             {content.views.toLocaleString()} views
                           </span>
-                          <span>Engagement: {content.engagement}%</span>
+                          <span className="font-medium">Engagement: {content.engagement}%</span>
                         </div>
                         <div className="flex gap-2 mt-2">
                           {content.tags.map((tag, i) => (
-                            <Badge key={i} variant="outline" className="text-xs">
+                            <Badge key={i} variant="outline" className="text-xs bg-background/50 text-foreground border-border">
                               {tag}
                             </Badge>
                           ))}
                         </div>
                       </div>
                       <div className="flex gap-2">
-                        <Button variant="ghost" size="sm">
+                        <Button 
+                          variant="ghost" 
+                          size="sm"
+                          className="hover:bg-accent hover:text-accent-foreground text-muted-foreground hover:text-foreground"
+                        >
                           <Edit className="w-4 h-4" />
                         </Button>
-                        <Button variant="ghost" size="sm">
+                        <Button 
+                          variant="ghost" 
+                          size="sm"
+                          className="hover:bg-destructive hover:text-destructive-foreground text-muted-foreground hover:text-destructive-foreground"
+                        >
                           <Trash2 className="w-4 h-4" />
                         </Button>
                       </div>

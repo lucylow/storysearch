@@ -15,8 +15,6 @@ import {
   MessageCircle,
   Users,
   Rocket,
-  Menu,
-  X,
   Mic,
   Brain,
   TrendingUp,
@@ -29,12 +27,7 @@ import {
 } from 'lucide-react';
 import AuthModal from './auth/AuthModal';
 import { useAuth } from '@/contexts/AuthContext';
-import LandingVoiceSearchDemo from './LandingVoiceSearchDemo';
-import LandingAIChatDemo from './LandingAIChatDemo';
-import LandingDiscoveryJourney from './LandingDiscoveryJourney';
-import LandingPredictiveSurfacing from './LandingPredictiveSurfacing';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-
 const StorySearchLanding = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -50,147 +43,6 @@ const StorySearchLanding = () => {
         <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-gradient-to-r from-indigo-400/15 to-blue-500/15 rounded-full blur-3xl animate-float" style={{animationDelay: '4s'}} />
       </div>
 
-      {/* Navigation */}
-      <nav className="relative z-50 px-4 sm:px-6 py-4">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <motion.div 
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="flex items-center space-x-3"
-          >
-            <motion.div 
-              className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-600 rounded-lg sm:rounded-xl flex items-center justify-center shadow-lg"
-              whileHover={{ scale: 1.05, rotate: 5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Search className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-            </motion.div>
-            <span className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
-              StorySearch AI
-            </span>
-          </motion.div>
-          
-          {/* Desktop Menu */}
-          <div className="hidden md:flex items-center space-x-8">
-            <motion.a 
-              href="#problem" 
-              className="text-slate-600 hover:text-blue-600 transition-colors font-medium relative group"
-              whileHover={{ y: -2 }}
-            >
-              The Problem
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 transition-all group-hover:w-full"></span>
-            </motion.a>
-            <motion.a 
-              href="#solution" 
-              className="text-slate-600 hover:text-blue-600 transition-colors font-medium relative group"
-              whileHover={{ y: -2 }}
-            >
-              Our Solution
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 transition-all group-hover:w-full"></span>
-            </motion.a>
-            <motion.a 
-              href="#capabilities" 
-              className="text-slate-600 hover:text-blue-600 transition-colors font-medium relative group"
-              whileHover={{ y: -2 }}
-            >
-              Capabilities
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 transition-all group-hover:w-full"></span>
-            </motion.a>
-          </div>
-          
-          {/* Desktop CTA */}
-          <div className="hidden md:flex items-center space-x-4">
-            {isAuthenticated ? (
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Link to="/app" className="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all duration-300">
-                  Dashboard
-                </Link>
-              </motion.div>
-            ) : (
-              <>
-                <motion.button 
-                  onClick={() => {
-                    setAuthMode('signin');
-                    setShowAuthModal(true);
-                  }}
-                  className="px-4 py-2 text-slate-600 hover:text-blue-600 transition-colors font-medium rounded-lg hover:bg-blue-50"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  Sign In
-                </motion.button>
-                <motion.button 
-                  onClick={() => {
-                    setAuthMode('signup');
-                    setShowAuthModal(true);
-                  }}
-                  className="px-6 py-2 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all duration-300"
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  Get Started Free
-                </motion.button>
-              </>
-            )}
-          </div>
-
-          {/* Mobile Menu Button */}
-          <motion.button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 text-slate-600 hover:text-blue-600 rounded-lg hover:bg-blue-50 transition-all duration-300"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <motion.div
-              animate={{ rotate: mobileMenuOpen ? 180 : 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </motion.div>
-          </motion.button>
-        </div>
-
-        {/* Mobile Menu */}
-        {mobileMenuOpen && (
-          <motion.div 
-            initial={{ opacity: 0, y: -20, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -20, scale: 0.95 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
-            className="md:hidden mt-4 p-6 bg-white/80 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl"
-          >
-            <div className="space-y-4">
-              <motion.a 
-                href="#problem" 
-                className="block text-slate-700 hover:text-blue-600 font-medium transition-colors"
-                whileHover={{ x: 5 }}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                The Problem
-              </motion.a>
-              <motion.a 
-                href="#solution" 
-                className="block text-slate-700 hover:text-blue-600 font-medium transition-colors"
-                whileHover={{ x: 5 }}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Our Solution
-              </motion.a>
-              <motion.a 
-                href="#capabilities" 
-                className="block text-slate-700 hover:text-blue-600 font-medium transition-colors"
-                whileHover={{ x: 5 }}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Capabilities
-              </motion.a>
-            </div>
-          </motion.div>
-        )}
-      </nav>
 
       {/* Hero Section - The Problem */}
       <section id="problem" className="relative px-6 py-20">
@@ -479,19 +331,19 @@ const StorySearchLanding = () => {
             </TabsList>
 
             <TabsContent value="voice" className="mt-8">
-              <LandingVoiceSearchDemo />
+              <AskAIDemo />
             </TabsContent>
 
             <TabsContent value="chat" className="mt-8">
-              <LandingAIChatDemo />
+              <AgenticDemo />
             </TabsContent>
 
             <TabsContent value="journey" className="mt-8">
-              <LandingDiscoveryJourney />
+              <AgenticDemo />
             </TabsContent>
 
             <TabsContent value="predictive" className="mt-8">
-              <LandingPredictiveSurfacing />
+              <PredictiveDemo />
             </TabsContent>
           </Tabs>
         </div>
