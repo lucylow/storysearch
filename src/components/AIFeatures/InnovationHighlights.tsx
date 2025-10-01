@@ -23,7 +23,8 @@ import {
   MessageCircle,
   Lightbulb,
   Settings,
-  Database
+  Database,
+  FileText
 } from 'lucide-react';
 
 interface TimelineNode {
@@ -53,7 +54,7 @@ const InnovationHighlights: React.FC = () => {
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [hoveredNode, setHoveredNode] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(containerRef, { once: true, threshold: 0.3 });
+  const isInView = useInView(containerRef, { once: true });
 
   const timelineNodes: TimelineNode[] = [
     {

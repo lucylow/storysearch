@@ -8,6 +8,8 @@ import {
   ThumbsUp,
   ThumbsDown,
   BookOpen,
+  ArrowRight,
+  Check,
   Lightbulb
 } from 'lucide-react';
 import { useAIAgent } from '../../hooks/useAIAgent';

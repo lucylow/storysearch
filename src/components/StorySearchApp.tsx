@@ -98,7 +98,6 @@ const StorySearchApp: React.FC = () => {
           onSearchModeChange={setSearchMode}
           onShowTips={() => setShowQuickTips(true)}
           onShowHelp={() => setShowKeyboardHelp(true)}
-          onShowCrawler={() => setShowCrawlerDashboard(true)}
         />
 
         {/* Mobile Navigation */}

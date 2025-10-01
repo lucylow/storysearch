@@ -9,7 +9,8 @@ import {
   MessageCircle,
   Book,
   Video,
-  ExternalLink
+  ExternalLink,
+  ArrowRight
 } from 'lucide-react';
 
 interface HelpTip {

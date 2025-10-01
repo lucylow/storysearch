@@ -25,7 +25,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import ResultCard from './ResultCard';
 import LoadingSpinner from '../ui/LoadingSpinner';
 import { EmptyState } from '../ui/Skeleton';
-import ContentVisualizationDashboard from '../Visualizations/ContentVisualizationDashboard';
 import type { SearchResult } from '../../services/storyblokService';
 
 const ResultsGrid: React.FC = () => {
@@ -419,6 +418,7 @@ const ResultsGrid: React.FC = () => {
       )}
 
       {/* Content Visualization Dashboard */}
+      {/* Temporarily disabled - component removed
       <AnimatePresence>
         {showVisualization && (
           <ContentVisualizationDashboard
@@ -428,6 +428,7 @@ const ResultsGrid: React.FC = () => {
           />
         )}
       </AnimatePresence>
+      */}
     </motion.div>
   );
 };

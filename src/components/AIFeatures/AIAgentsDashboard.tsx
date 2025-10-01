@@ -7,7 +7,10 @@ import {
   Compass,
   Sparkles,
   Brain,
-  Zap
+  Zap,
+  TrendingUp,
+  Settings,
+  Target
 } from 'lucide-react';
 import AskAI from './AskAI';
 import AgentStudio from './AgentStudio';

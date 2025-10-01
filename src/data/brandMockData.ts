@@ -20,7 +20,7 @@ export interface BrandContent {
   ai_summary: string;
 }
 
-export type BrandKey = 'nike' | 'blackpink' | 'ishowspeed' | 'default';
+export type BrandKey = 'nike' | 'blackpink' | 'ishowspeed' | 'default' | 'healthtech' | 'edulearn' | 'fashionforward' | 'financeflow' | 'gamershub';
 
 const typedMockData: BrandContent[] = mockDataJson as BrandContent[];
 

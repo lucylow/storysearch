@@ -5,7 +5,7 @@ import {
   Plus,
   Play,
   Pause,
-  Stop,
+  Square,
   Settings,
   Eye,
   EyeOff,
@@ -43,7 +43,6 @@ import CrawlerTargetCard from './CrawlerTargetCard';
 import CrawlSessionList from './CrawlSessionList';
 import CrawlResultsGrid from './CrawlResultsGrid';
 import CrawlerAnalytics from './CrawlerAnalytics';
-import CrawlerSettings from './CrawlerSettings';
 import { webCrawlerService, CrawlTarget, CrawlSession, CrawlResult, CrawlAnalytics } from '../../services/webCrawlerService';
 
 interface CrawlerDashboardProps {
@@ -403,7 +402,9 @@ const CrawlerDashboard: React.FC<CrawlerDashboardProps> = ({ onClose }) => {
               </TabsContent>
 
               <TabsContent value="settings" className="h-full p-4">
-                <CrawlerSettings />
+                <div className="p-8 text-center text-muted-foreground">
+                  Settings panel temporarily disabled
+                </div>
               </TabsContent>
             </div>
           </div>

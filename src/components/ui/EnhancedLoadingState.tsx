@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Loader2, Sparkles, Brain, Zap, Search } from 'lucide-react';
 
 interface EnhancedLoadingStateProps {
