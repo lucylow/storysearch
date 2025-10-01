@@ -144,18 +144,23 @@ function extractEntities(content: string): string[] {
 
 // Transform Storyblok story to Algolia record
 async function transformStoryToAlgoliaRecord(story: Record<string, unknown>): Promise<AlgoliaRecord> {
-  const contentText = convertRichTextToPlainText((story.content as Record<string, unknown>).long_text || (story.content as Record<string, unknown>).content);
+  const content = story.content as Record<string, unknown>;
+  const contentText = convertRichTextToPlainText(content?.long_text || content?.content || '');
   
   // Perform AI analysis
   const aiAnalysis = await analyzeContentWithAI(contentText, story.name as string);
   
   // Extract tags from content
-  const content = story.content as Record<string, unknown>;
   const tags = [
     ...((content.tags as string[]) || []),
     ...aiAnalysis.keyTopics,
     (content.component as string) || 'article'
   ];
+
+  // Safely extract image URL
+  const featuredImage = content.featured_image as Record<string, unknown> | undefined;
+  const imageField = content.image as Record<string, unknown> | undefined;
+  const imageUrl = (featuredImage?.filename as string) || (imageField?.filename as string) || '';
 
   return {
     objectID: (story.id as string).toString(),
@@ -163,7 +168,7 @@ async function transformStoryToAlgoliaRecord(story: Record<string, unknown>): Pr
     content_text: contentText,
     slug: story.slug as string,
     tags: [...new Set(tags)], // Remove duplicates
-    image: (content.featured_image as Record<string, unknown>)?.filename || (content.image as Record<string, unknown>)?.filename || '',
+    image: imageUrl,
     published_at: story.published_at as string,
     created_at: story.created_at as string,
     updated_at: story.updated_at as string,
@@ -353,7 +358,7 @@ serve(async (req) => {
     
     return new Response(JSON.stringify({
       success: false,
-      error: error.message,
+      error: error instanceof Error ? error.message : 'Unknown error occurred',
       timestamp: new Date().toISOString()
     }), {
       status: 500,
