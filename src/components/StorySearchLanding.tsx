@@ -29,6 +29,11 @@ import {
 } from 'lucide-react';
 import AuthModal from './auth/AuthModal';
 import { useAuth } from '@/contexts/AuthContext';
+import LandingVoiceSearchDemo from './LandingVoiceSearchDemo';
+import LandingAIChatDemo from './LandingAIChatDemo';
+import LandingDiscoveryJourney from './LandingDiscoveryJourney';
+import LandingPredictiveSurfacing from './LandingPredictiveSurfacing';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const StorySearchLanding = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -432,6 +437,63 @@ const StorySearchLanding = () => {
               </motion.div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Interactive Demo Section */}
+      <section className="px-6 py-20 bg-gradient-to-br from-background to-muted/20">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl md:text-5xl font-bold text-gradient-hero mb-4">
+              Experience StorySearch AI
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Try our interactive demos to see how AI transforms content discovery
+            </p>
+          </motion.div>
+
+          <Tabs defaultValue="voice" className="w-full">
+            <TabsList className="grid w-full grid-cols-4 mb-8">
+              <TabsTrigger value="voice" className="flex items-center space-x-2">
+                <Mic className="w-4 h-4" />
+                <span>Voice Search</span>
+              </TabsTrigger>
+              <TabsTrigger value="chat" className="flex items-center space-x-2">
+                <MessageCircle className="w-4 h-4" />
+                <span>AI Chat</span>
+              </TabsTrigger>
+              <TabsTrigger value="journey" className="flex items-center space-x-2">
+                <Bot className="w-4 h-4" />
+                <span>Agentic Discovery</span>
+              </TabsTrigger>
+              <TabsTrigger value="predictive" className="flex items-center space-x-2">
+                <TrendingUp className="w-4 h-4" />
+                <span>Predictive Surfacing</span>
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="voice" className="mt-8">
+              <LandingVoiceSearchDemo />
+            </TabsContent>
+
+            <TabsContent value="chat" className="mt-8">
+              <LandingAIChatDemo />
+            </TabsContent>
+
+            <TabsContent value="journey" className="mt-8">
+              <LandingDiscoveryJourney />
+            </TabsContent>
+
+            <TabsContent value="predictive" className="mt-8">
+              <LandingPredictiveSurfacing />
+            </TabsContent>
+          </Tabs>
         </div>
       </section>
 

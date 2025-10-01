@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import AppPage from "./pages/AppPage";
 import NotFound from "./pages/NotFound";
 import FloatingAIChatbot from "./components/ui/FloatingAIChatbot";
+import MainNavigation from "./components/UI/MainNavigation";
 import { AIContextProvider } from "./contexts/AIContext";
 import { BrandProvider } from "./contexts/BrandContext";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -34,6 +35,7 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
+            <MainNavigation />
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/app" element={<AppPage />} />
